@@ -14,6 +14,10 @@ public class ManejoDatos {
 	private HashMap<List<String>, Usuario> usuarios;
 	private HashMap<String, IActividad> actividades;
 	private HashMap<String, LearningPath> learningPaths;
+
+	//TODO: Cargar datos desde el JSON
+	
+	//TODO: Guardar datos en el JSON
 	
 	//Manejo de Usuarios////////////////////////////////////////
 	
