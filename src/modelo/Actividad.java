@@ -1,7 +1,9 @@
 package modelo;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Actividad implements Cloneable {
 	private String titulo;
@@ -15,6 +17,10 @@ public class Actividad implements Cloneable {
 	private List<Review> reviews;
 	private float ratingAcumulado;
 	private int numRatings;
+	private String id;
+	
+	//Un HashSet con todos los IDs que ya se han utilizado para actividades
+	private static Set<String> ids = new HashSet<String>( );
 	
 	public static final int FACIL = 1;
 	public static final int INTERMEDIO = 2;
@@ -34,6 +40,20 @@ public class Actividad implements Cloneable {
 		this.ratingAcumulado = 0;
 		this.ratingPromedio = 0;
 		this.numRatings = 0;
+		
+		//Para crear un identificador unico para la actividad
+		int numero = ( int ) ( Math.random( ) * 10e7 );
+        String codigo = "" + numero;
+        while( ids.contains( codigo ) )
+        {
+            numero = ( int ) ( Math.random( ) * 10e7 );
+            codigo = "" + numero;
+        }
+
+        while( codigo.length( ) < 7 )
+            codigo = "0" + codigo;
+        
+        this.id = codigo;
 	}
 	
 	public Actividad(String descripcion, String nivelDificultad, int duracionMin, boolean obligatorio,
@@ -124,6 +144,11 @@ public class Actividad implements Cloneable {
 	public List<Review> getReviews() {
 		return reviews;
 	}
+	
+
+	public String getId() {
+		return id;
+	}
 
 	public void addActividadPrevia(Actividad actividadPrevia)
 	{
@@ -131,6 +156,12 @@ public class Actividad implements Cloneable {
 		{
 			this.actPreviasSugeridas.add(actividadPrevia);
 		}
+	}
+	
+	public void registrarIDActividad(Actividad actividad)
+	{
+		String unID = actividad.getId();
+		ids.add(unID);
 	}
 	
 	public void addReview(Review review)
