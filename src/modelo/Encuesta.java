@@ -14,6 +14,7 @@ public class Encuesta extends Prueba {
 			int tiempoCompletarSugerido, String tipoActividad, List<PreguntaAbierta> preguntas) {
 		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad);
 		this.preguntas = preguntas;
+		this.setTipoActividad("Encuesta");
 	}
 	
 	public Encuesta(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
