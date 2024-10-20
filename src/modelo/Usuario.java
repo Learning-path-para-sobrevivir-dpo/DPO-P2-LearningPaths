@@ -2,7 +2,6 @@ package modelo;
 
 public abstract class Usuario {
 	
-	private String login;
 	private String correo;
 	private String contraseña;
 	public String tipo;
