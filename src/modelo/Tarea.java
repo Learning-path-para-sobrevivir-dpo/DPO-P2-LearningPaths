@@ -11,6 +11,7 @@ public class Tarea extends Actividad{
 		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipo);
 		this.contenido = contenido;
 		this.enviado = false;
+		this.setTipoActividad("Tarea");
 	}
 
 	public String getMedioEntrega() {
