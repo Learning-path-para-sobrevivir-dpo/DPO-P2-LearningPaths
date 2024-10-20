@@ -7,28 +7,29 @@ import java.util.Map;
 
 public class LearningPath {
 	
-	public String titulo;
-	public String descripcion;
-	public String objetivo;
-	public int nivelDificultad;
-	public int duracion;
-	public int rating;
-	public String fechaCreacion;
-	public String fechaModificacion;
-	public int version;
-	public Map<String, Progreso> progresosEstudiantiles;
-	public Profesor autor;
-	public List<Estudiante> estudiantes;
-public Map<String, Actividad> actividades;
+	private String titulo;
+	private String descripcion;
+	private String objetivo;
+	private int nivelDificultad;
+	private int duracion;
+	private int rating;
+	private String fechaCreacion;
+	private String fechaModificacion;
+	private int version;
+	private Map<String, Progreso> progresosEstudiantiles;
+	private Profesor autor;
+	private List<Estudiante> estudiantes;
+	//Mapa donde las actividades estan identificadas por un número que indica
+	//el orden sugerido para completar las actividades
+	private Map<Integer,Actividad> actividades;
 	
-	public LearningPath(String titulo, String descripcion, int nivelDificultad, int duracion, int rating,
-			String fechaCreacion, String fechaModificacion, int version, Map<String, Progreso> progresosEstudiantiles,
-			Profesor autor, List<Estudiante> estudiantes, Map<String, Actividad> actividades) {
+	public LearningPath(String titulo, String descripcion, String objetivo, int nivelDificultad, int rating,
+			String fechaCreacion, String fechaModificacion, int version, Profesor autor) {
 		this.titulo = titulo;
 		this.descripcion = descripcion;
 		this.objetivo = objetivo;
 		this.nivelDificultad = nivelDificultad;
-		this.duracion = duracion;
+		this.duracion = 0;
 		this.rating = rating;
 		this.fechaCreacion = fechaCreacion;
 		this.fechaModificacion = fechaModificacion;
@@ -36,8 +37,7 @@ public Map<String, Actividad> actividades;
 		this.progresosEstudiantiles = new HashMap<String, Progreso>();
 		this.autor = autor;
 		this.estudiantes = new ArrayList<Estudiante>();
-		this.actividades = new HashMap<String,IActividad>();
-		this.durActualizada = false;
+		this.actividades = new HashMap<Integer,Actividad>();
 	}
 	
 
@@ -122,40 +122,79 @@ public Map<String, Actividad> actividades;
 		this.estudiantes = estudiantes;
 	}
 
-	public Map<String, IActividad> getActividades() {
+	public Map<Integer, Actividad> getActividades() {
 		return actividades;
 	}
 
-	public void setActividades(Map<String, IActividad> actividades) {
+	public void setActividades(Map<Integer,Actividad> actividades) {
 		this.actividades = actividades;
+		this.calcularDuracion();
 	}
 	
 	public int getDuracion() {
-		if (!durActualizada) {
-			calcularDuracion();
-			}
 		return duracion;
 	}
 	
-    public void calcularDuracion() {
+	/**
+	 * Calcula la duración aproximada del Learning Path de acuerdo
+	 * a a la duración de sus actividades
+	 */
+    private void calcularDuracion() {
         int nuevaDuracion = 0;
 
-        for (IActividad act : actividades.values()) {
+        for (Actividad act : actividades.values()) {
             // Sumar la duración de cada actividad
-            nuevaDuracion += act.getDuracion();
+            nuevaDuracion += act.getDuracionMin();
         }
 
         // Actualizar duracion
         this.duracion = nuevaDuracion;
-        this.durActualizada = true;
     }
     
-    public void addActividad (IActividad act) {
-    	
-    	String nom = act.getNombre;
-    	actividades.put(nom, act);
-    	this.durActualizada = false;
-    	
+    /**
+     * Añade una actividad de últimas en el orden enumerado de actividades en el Learning Path
+     * @param act: actividad a añadir
+     */
+    public void addActividadDeUltimas(Actividad act)
+    {
+    	int numActividades = this.actividades.size();
+    	this.actividades.put(numActividades+1, act);
+    }
+    
+    /**
+     * Añade una actividad en la posición indicada siguiend el orden 
+     * enumerado de actividades en el Learning Path
+     * @param act: actividad a añadir
+     * @param pos: posición en la que se debe poner la actividad
+     */
+    public void addActividadPorPos (Actividad act, int pos) {
+    	int numActividades = this.actividades.size();
+    	if (pos > numActividades)
+    	{
+    		this.addActividadDeUltimas(act);
+    	}
+    	else if (pos > 0  && pos <= numActividades)
+    	{
+    		int i = pos;
+    		Actividad tempAct1 = this.actividades.get(i);
+    		Actividad tempAct2;
+    		this.actividades.replace(i, act);
+    		i++;
+    		int tamanio = this.actividades.size();
+    		while (i<=tamanio + 1)
+    		{
+    			if (i <= tamanio)
+    			{
+    				tempAct2 = this.actividades.get(i);
+        			this.actividades.replace(i, tempAct1);
+        			tempAct1 = tempAct2;
+    			} else
+    			{
+    				this.addActividadDeUltimas(tempAct1);
+    			}
+    			i++;
+    		} 
+    	}
     }
 
 }

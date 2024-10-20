@@ -2,6 +2,7 @@ package modelo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import excepciones.RespuestasInconsistentesPruebaException;
 
@@ -95,6 +96,37 @@ public class Examen extends Prueba{
 		}
 		this.preguntas = preguntasRespondidas;
 		this.setRespondida(true);
+	}
+	
+	@Override
+	public void responderPrueba() {
+		// TODO Auto-generated method stub
+		List<String> respuestas = new ArrayList<String>();
+		Scanner scanner = new Scanner(System.in);
+		for (PreguntaAbierta pregunta: preguntas)
+		{
+			System.out.println(pregunta.getEnunciado());
+			boolean entradaValida = false;
+			String respuesta = null;
+			while (!entradaValida)
+			{
+				System.out.println("Escriba su respuesta: ");
+				respuesta = scanner.nextLine();
+	            if (!respuesta.trim().isEmpty()) {
+	                entradaValida = true;
+	            } else {
+	                System.out.println("La entrada no puede estar vacía. Inténtalo de nuevo.");
+	            }
+			}
+			respuestas.add(respuesta);
+		}
+		scanner.close();
+		try {
+			this.responderExamen(respuestas);
+		} catch (RespuestasInconsistentesPruebaException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void calificar(List<String> respuestasCalificadas) throws RespuestasInconsistentesPruebaException{

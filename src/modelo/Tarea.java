@@ -38,4 +38,25 @@ public class Tarea extends Actividad{
 	public void setEnviado(boolean enviado) {
 		this.enviado = enviado;
 	}
+
+	@Override
+	public boolean completarActividad() {
+		// TODO Auto-generated method stub
+		boolean completada = false;
+		if (this.getEstado().equals("Enviada") || this.getEstado().equals("Exitosa"))
+		{
+			this.setCompletada(true);
+			completada = true;
+		}
+		return completada;
+	}
+
+	@Override
+	public void descompletarActividad() {
+		// TODO Auto-generated method stub
+		if (this.getEstado().equals("No Exitosa"))
+		{
+			this.setCompletada(false);
+		}
+	}
 }

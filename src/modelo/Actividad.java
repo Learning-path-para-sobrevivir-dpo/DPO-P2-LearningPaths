@@ -5,21 +5,22 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Actividad implements Cloneable {
-	private String titulo;
-	private String descripcion;
-	private int nivelDificultad;
-	private int duracionMin;
-	private boolean obligatorio;
-	private int tiempoCompletarSugerido;
-	private float ratingPromedio;
-	private List<Actividad> actPreviasSugeridas;
-	private List<Review> reviews;
+public abstract class Actividad implements Cloneable {
+	public String titulo;
+	public String descripcion;
+	public int nivelDificultad;
+	public int duracionMin;
+	public boolean obligatorio;
+	public int tiempoCompletarSugerido;
+	public float ratingPromedio;
+	public List<Actividad> actPreviasSugeridas;
+	public List<Review> reviews;
 	private float ratingAcumulado;
 	private int numRatings;
 	private String id;
-	private String tipoActividad;
+	public String tipoActividad;
 	private String estado;
+	private boolean completada;
 	
 	//Un HashSet con todos los IDs que ya se han utilizado para actividades
 	private static Set<String> ids = new HashSet<String>( );
@@ -44,6 +45,7 @@ public class Actividad implements Cloneable {
 		this.numRatings = 0;
 		this.setTipoActividad(tipo);
 		this.estado = "Sin completar";
+		this.completada = false;
 		
 		//Para crear un identificador unico para la actividad
 		int numero = ( int ) ( Math.random( ) * 10e7 );
@@ -145,6 +147,14 @@ public class Actividad implements Cloneable {
 		this.estado = estado;
 	}
 
+	public boolean isCompletada() {
+		return completada;
+	}
+
+	public void setCompletada(boolean completada) {
+		this.completada = completada;
+	}
+
 	public void addActividadPrevia(Actividad actividadPrevia)
 	{
 		if (actividadPrevia != null)
@@ -234,5 +244,17 @@ public class Actividad implements Cloneable {
 	{
 		return super.clone();
 	}
+	
+	/**
+	 * Método para completar una actividad, dado que se cumplan los requisitos
+	 * @return true si se marco con exito la actividad completada, false de lo contrario
+	 */
+	public abstract boolean completarActividad();
+	
+	/**
+	 * Método para profesores para marcar como no completadas las actividades 
+	 * en caso de que el estudiante no obtenga una buena calificación
+	 */
+	public abstract void descompletarActividad();
 
 }
