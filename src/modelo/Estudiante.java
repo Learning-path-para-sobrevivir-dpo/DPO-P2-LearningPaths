@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 import excepciones.YaExisteActividadEnProgresoException;
@@ -101,10 +102,33 @@ public class Estudiante extends Usuario {
         {
         	Prueba prueba = (Prueba) actividad;
         	prueba.responderPrueba();
-        } else if (tipoActividad.equals("Tarea"))
+        } 
+        else if (tipoActividad.equals("Tarea"))
         {
-        	System.out.println("Ingrese el medio de envio de la tarea");
-        }
+        	Scanner scanner = new Scanner(System.in);
+        	boolean entradaValida = false;
+			String respuesta = null;
+			while (!entradaValida)
+			{
+				System.out.println("Ingrese el medio de envio de la tarea: ");
+				respuesta = scanner.nextLine();
+	            if (!respuesta.trim().isEmpty()) {
+	                entradaValida = true;
+	            } else {
+	                System.out.println("La entrada no puede estar vacía. Inténtalo de nuevo.");
+	            }
+			}
+			Tarea tarea = (Tarea) actividad;
+			tarea.setMedioEntrega(respuesta);
+			scanner.close();
+        } 
+        
+        try {
+			completada = progreso.completarActividad(actividad);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         return completada;
     }
 }
