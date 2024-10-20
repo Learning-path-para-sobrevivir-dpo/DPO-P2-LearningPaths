@@ -6,10 +6,12 @@ import java.util.Map;
 
 public class Profesor extends Usuario{
 	
-	public Map<String, LearningPath> learningPathsCreados;
-	public Map<String, IActividad> actCreadas;
+
+	public Map<String, LearningPath> LearningPathsCreados;
+	public Map<String, Actividad> ActCreadas;
 	
-	public Profesor(String login, String correo, String contraseña, String tipo) {
+	public Profesor(String login, String correo, String contraseña, String tipo,
+			Map<String, LearningPath> learningPathsCreados, Map<String, Actividad> actCreadas) {
 		super(login, correo, contraseña, tipo);
 		learningPathsCreados = new HashMap<String,LearningPath>();
 		actCreadas = new HashMap<String,IActividad>();

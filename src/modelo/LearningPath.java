@@ -19,12 +19,11 @@ public class LearningPath {
 	public Map<String, Progreso> progresosEstudiantiles;
 	public Profesor autor;
 	public List<Estudiante> estudiantes;
-	public Map<String, IActividad> actividades;
-    private boolean durActualizada;
-
+public Map<String, Actividad> actividades;
 	
-	public LearningPath(String titulo, String descripcion, String objetivo, int nivelDificultad, int duracion, int rating,
-			String fechaCreacion, String fechaModificacion, int version, Profesor autor) {
+	public LearningPath(String titulo, String descripcion, int nivelDificultad, int duracion, int rating,
+			String fechaCreacion, String fechaModificacion, int version, Map<String, Progreso> progresosEstudiantiles,
+			Profesor autor, List<Estudiante> estudiantes, Map<String, Actividad> actividades) {
 		this.titulo = titulo;
 		this.descripcion = descripcion;
 		this.objetivo = objetivo;

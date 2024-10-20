@@ -8,13 +8,14 @@ import java.util.Map;
 public class Estudiante extends Usuario {
 	
 	private Map<String, Progreso> progresosLearningPaths;
-	private IActividad actProgreso;
-	private List<IActividad> actPendientes;
-	private List<IActividad> actCompletadas;
-	private Map<String, LearningPath> learningPaths;
+private Actividad actProgreso;
+	private List<Actividad> actPendientes;
+	private List<Actividad> actCompletadas;
+	private Map<String, LearningPath> LearningPaths;
 
-	public Estudiante(String login, String correo, String contraseña, String tipo,
-			IActividad actProgreso) {
+	public Estudiante(String login, String correo, String contraseña, String tipo, Map<String, Progreso> progresosLP,
+			Actividad actProgreso, List<Actividad> actPendientes, List<Actividad> actCompletadas,
+			Map<String, LearningPath> learningPaths) {
 		super(login, correo, contraseña, tipo);
 		this.progresosLearningPaths = new HashMap<String, Progreso>();
 		this.actProgreso = actProgreso;
