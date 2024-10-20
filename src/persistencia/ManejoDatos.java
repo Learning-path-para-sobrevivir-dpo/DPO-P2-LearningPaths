@@ -6,13 +6,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import modelo.IActividad;
+import modelo.Actividad;
 import modelo.LearningPath;
 import modelo.Usuario;
 
 public class ManejoDatos {
 	private HashMap<List<String>, Usuario> usuarios;
-	private HashMap<String, IActividad> actividades;
+	private HashMap<String, Actividad> actividades;
 	private HashMap<String, LearningPath> learningPaths;
 
 	//TODO: Cargar datos desde el JSON
@@ -103,13 +103,21 @@ public class ManejoDatos {
 	
 	//Manejo de Actividades///////////////////////////////////
 	
+	public void addActividad(Actividad actividad)
+	{
+		if (actividad != null)
+		{
+			
+		}
+	}
+	
 	/**
 	 * Encuentra una actividad por su nombre
 	 * @param nombreActividad: nombre de la actividad
 	 * @return La actividad buscada. Si no se encuentra retorna null.
 	 */
-	public IActividad getActividad(String nombreActividad) {
-		IActividad actividad = null;
+	public Actividad getActividad(String nombreActividad) {
+		Actividad actividad = null;
 		if (this.actividades.containsKey(nombreActividad))
 		{
 			actividad = this.actividades.get(nombreActividad);
@@ -118,6 +126,18 @@ public class ManejoDatos {
 	}
 	
 	//Manejo de Learning Paths /////////////////////////////////////
+	
+	/**
+	 * Añade un Learning path a los datos
+	 * @param path: learning path a añadir
+	 */
+	public void addLearningPath(LearningPath path)
+	{
+		if (path != null)
+		{
+			this.learningPaths.put(path.getTitulo(), path);
+		}
+	}
 	
 	/**
 	 * Encuentra un LearningPath dado su nombre
@@ -131,5 +151,17 @@ public class ManejoDatos {
 			path = this.learningPaths.get(nombreLearningPath);
 		}
 		return path;
+	}
+	
+	/**
+	 * Actualiza la información de un Learning Path
+	 * @param path: learning path actualizado
+	 */
+	public void actualizarLearningPath(LearningPath path)
+	{
+		if (path != null)
+		{
+			this.learningPaths.replace(path.getTitulo(), path);
+		}
 	}
 }

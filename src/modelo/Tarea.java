@@ -1,6 +1,6 @@
 package modelo;
 
-public class Tarea {
+public class Tarea extends Actividad{
 	
 	private boolean exito;
 	public String medioEntrega;

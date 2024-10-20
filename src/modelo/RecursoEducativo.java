@@ -1,6 +1,6 @@
 package modelo;
 
-public class RecursoEducativo implements IActividad {
+public class RecursoEducativo extends Actividad {
 	
 	public String tipo;
 	protected String enlace;
