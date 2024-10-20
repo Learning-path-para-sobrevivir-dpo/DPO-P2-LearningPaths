@@ -7,15 +7,15 @@ import java.util.Map;
 
 public class LearningPath {
 	
-	private String titulo;
-	private String descripcion;
-	private String objetivo;
-	private int nivelDificultad;
-	private int duracion;
-	private int rating;
-	private String fechaCreacion;
-	private String fechaModificacion;
-	private int version;
+	public String titulo;
+	public String descripcion;
+	public String objetivo;
+	public int nivelDificultad;
+	public int duracion;
+	public int rating;
+	public String fechaCreacion;
+	public String fechaModificacion;
+	public int version;
 	private Map<String, Progreso> progresosEstudiantiles;
 	private Profesor autor;
 	private List<Estudiante> estudiantes;
