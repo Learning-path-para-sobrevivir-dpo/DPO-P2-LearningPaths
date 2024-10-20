@@ -28,6 +28,30 @@ public abstract class Prueba extends Actividad{
 	public void setRespondida(boolean respondida) {
 		this.respondida = respondida;
 	}
+	
+	@Override
+	public boolean completarActividad() {
+		boolean completada = false;
+		if (this.respondida)
+		{
+			if (this.getEstado().equals("Enviada") || this.getEstado().equals("Exitosa"))
+			{
+				this.setCompletada(true);
+				completada = true;
+			}
+		}
+		return completada;
+	}
+	
+	@Override
+	public void descompletarActividad() {
+		if (this.getEstado().equals("No Exitosa"))
+		{
+			this.setCompletada(false);
+		}
+	}
 
 	public abstract void calcularCalificacion();
+	
+	public abstract void responderPrueba();
 }

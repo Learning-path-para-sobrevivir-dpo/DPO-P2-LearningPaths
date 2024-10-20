@@ -2,6 +2,7 @@ package modelo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import excepciones.RespuestasInconsistentesPruebaException;
 
@@ -13,12 +14,14 @@ public class Encuesta extends Prueba {
 			int tiempoCompletarSugerido, String tipoActividad, List<PreguntaAbierta> preguntas) {
 		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad);
 		this.preguntas = preguntas;
+		this.setTipoActividad("Encuesta");
 	}
 	
 	public Encuesta(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
 			int tiempoCompletarSugerido, String tipoActividad) {
 		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad);
 		this.preguntas = new ArrayList<PreguntaAbierta>();
+		this.setTipoActividad("Encuesta");
 	}
 	
 	public List<PreguntaAbierta> getPreguntas() {
@@ -64,6 +67,37 @@ public class Encuesta extends Prueba {
 		}
 		this.preguntas = preguntasRespondidas;
 		this.setRespondida(true);
+	}
+	
+	@Override
+	public void responderPrueba() {
+		// TODO Auto-generated method stub
+		List<String> respuestas = new ArrayList<String>();
+		Scanner scanner = new Scanner(System.in);
+		for (PreguntaAbierta pregunta: preguntas)
+		{
+			System.out.println(pregunta.getEnunciado());
+			boolean entradaValida = false;
+			String respuesta = null;
+			while (!entradaValida)
+			{
+				System.out.println("Escriba su respuesta: ");
+				respuesta = scanner.nextLine();
+	            if (!respuesta.trim().isEmpty()) {
+	                entradaValida = true;
+	            } else {
+	                System.out.println("La entrada no puede estar vacía. Inténtalo de nuevo.");
+	            }
+			}
+			respuestas.add(respuesta);
+		}
+		scanner.close();
+		try {
+			this.responderEncuesta(respuestas);
+		} catch (RespuestasInconsistentesPruebaException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override

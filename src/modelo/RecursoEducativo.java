@@ -22,6 +22,46 @@ public class RecursoEducativo extends Actividad {
 		this.contenido = contenido;
 		this.enlace = null;
 	}
+
+	public String getTipoRecurso() {
+		return tipoRecurso;
+	}
+
+	public void setTipoRecurso(String tipoRecurso) {
+		this.tipoRecurso = tipoRecurso;
+	}
+
+	public String getContenido() {
+		return contenido;
+	}
+
+	public void setContenido(String contenido) {
+		this.contenido = contenido;
+	}
+
+	public String getEnlace() {
+		return enlace;
+	}
+
+	public void setEnlace(String enlace) {
+		this.enlace = enlace;
+	}
+
+	@Override
+	public boolean completarActividad() {
+		// TODO Auto-generated method stub
+		boolean completada = true;
+		this.setCompletada(completada);
+		this.setEstado("Exitosa");
+		return completada;
+	}
+
+	@Override
+	public void descompletarActividad() {
+		// TODO Auto-generated method stub
+		this.setCompletada(false);
+		this.setEstado("");
+	}
 	
 	
 

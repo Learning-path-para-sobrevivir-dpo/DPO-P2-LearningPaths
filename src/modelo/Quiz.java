@@ -2,6 +2,7 @@ package modelo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import excepciones.RespuestasInconsistentesPruebaException;
 
@@ -16,6 +17,7 @@ public class Quiz extends Prueba{
 		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad);
 		this.calificacionMinima = calificacionMinima;
 		this.preguntas = preguntas;
+		this.setTipoActividad("Quiz");
 	}
 	
 	public Quiz(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
@@ -23,6 +25,7 @@ public class Quiz extends Prueba{
 		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad);
 		this.calificacionMinima = calificacionMinima;
 		this.preguntas = new ArrayList<PreguntaMultiple>();
+		this.setTipoActividad("Quiz");
 	}
 	
 	public float getCalificacionMinima() {
@@ -81,10 +84,18 @@ public class Quiz extends Prueba{
 			}
 			calificacionObtenida = respuestasCorrectas * 5 / cantidadPreguntas;
 			this.setCalificacion(calificacionObtenida);
+			if (this.getCalificacion() >= this.calificacionMinima)
+			{
+				this.setEstado("Exitosa");
+			}
+			else
+			{
+				this.setEstado("No Exitosa");
+			}
 		}
 	}
 
-	public void responderPrueba(List<Integer> respuestas) throws RespuestasInconsistentesPruebaException{
+	public void responderQuiz(List<Integer> respuestas) throws RespuestasInconsistentesPruebaException{
 		// TODO Auto-generated method stub
 		int numRespuestasEsperadas = this.preguntas.size();
 		if (numRespuestasEsperadas != respuestas.size())
@@ -106,6 +117,45 @@ public class Quiz extends Prueba{
 		}
 		this.preguntas = preguntasRespondidas;
 		this.setRespondida(true);
+		this.calcularCalificacion();
+	}
+
+	@Override
+	public void responderPrueba() {
+		// TODO Auto-generated method stub
+		List<Integer> respuestas = new ArrayList<Integer>();
+		Scanner scanner = new Scanner(System.in);
+		for (PreguntaMultiple pregunta: preguntas)
+		{
+			System.out.println(pregunta.getEnunciado());
+			int i = 0;
+			for (String opcion: pregunta.getOpciones())
+			{
+				System.out.println(Integer.toString(i) + ". " + opcion);
+				i++;
+			}
+			boolean entradaValida = false;
+			int respuesta = 1;
+			while (!entradaValida)
+			{
+				System.out.println("Escoja el número de su respuesta: ");
+				if (scanner.hasNextInt()) {
+	                respuesta = scanner.nextInt();
+	                entradaValida = true;
+	            } else {
+	                System.out.println("Eso no es una respuesta válida. Inténtalo de nuevo.");
+	                scanner.next(); // Descartar la entrada no válida
+	            }
+			}
+			respuestas.add(respuesta);
+		}
+		scanner.close();
+		try {
+			this.responderQuiz(respuestas);
+		} catch (RespuestasInconsistentesPruebaException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }
