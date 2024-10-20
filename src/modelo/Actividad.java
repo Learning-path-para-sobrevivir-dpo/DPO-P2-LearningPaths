@@ -18,6 +18,8 @@ public class Actividad implements Cloneable {
 	private float ratingAcumulado;
 	private int numRatings;
 	private String id;
+	private String tipoActividad;
+	private String estado;
 	
 	//Un HashSet con todos los IDs que ya se han utilizado para actividades
 	private static Set<String> ids = new HashSet<String>( );
@@ -27,7 +29,7 @@ public class Actividad implements Cloneable {
 	public static final int DIFICIL = 3;
 	
 	public Actividad(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
-			int tiempoCompletarSugerido) {
+			int tiempoCompletarSugerido, String tipo) {
 		super();
 		this.titulo = titulo;
 		this.descripcion = descripcion;
@@ -40,6 +42,8 @@ public class Actividad implements Cloneable {
 		this.ratingAcumulado = 0;
 		this.ratingPromedio = 0;
 		this.numRatings = 0;
+		this.setTipoActividad(tipo);
+		this.estado = "Sin completar";
 		
 		//Para crear un identificador unico para la actividad
 		int numero = ( int ) ( Math.random( ) * 10e7 );
@@ -54,31 +58,6 @@ public class Actividad implements Cloneable {
             codigo = "0" + codigo;
         
         this.id = codigo;
-	}
-	
-	public Actividad(String descripcion, String nivelDificultad, int duracionMin, boolean obligatorio,
-			int tiempoCompletarSugerido) {
-		super();
-		this.descripcion = descripcion;	
-		this.duracionMin = duracionMin;
-		this.obligatorio = obligatorio;
-		this.tiempoCompletarSugerido = tiempoCompletarSugerido;
-		this.actPreviasSugeridas = new ArrayList<Actividad>();
-		this.reviews = new ArrayList<Review>();
-		
-		if (nivelDificultad != null)
-		{
-			if (nivelDificultad.toLowerCase().equals("dificil"))
-			{
-				this.nivelDificultad = DIFICIL;
-			} else if (nivelDificultad.toLowerCase().equals("intermedio"))
-			{
-				this.nivelDificultad = INTERMEDIO;
-			} else
-			{
-				this.nivelDificultad = FACIL;
-			}
-		}
 	}
 	
 	public String getTitulo() {
@@ -149,6 +128,22 @@ public class Actividad implements Cloneable {
 	public String getId() {
 		return id;
 	}
+	
+	public String getTipoActividad() {
+		return tipoActividad;
+	}
+
+	public void setTipoActividad(String tipoActividad) {
+		this.tipoActividad = tipoActividad;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
 
 	public void addActividadPrevia(Actividad actividadPrevia)
 	{
@@ -158,12 +153,20 @@ public class Actividad implements Cloneable {
 		}
 	}
 	
-	public void registrarIDActividad(Actividad actividad)
+	/**
+	 * Registra los IDs usados cuando se cargan los datos en ManejoDeDatos
+	 * @param actividad: actividad cargada
+	 */
+	public static void registrarIDActividad(Actividad actividad)
 	{
 		String unID = actividad.getId();
 		ids.add(unID);
 	}
 	
+	/**
+	 * Añade un review a la actividad y actualiza el rating promedio de la actividad
+	 * @param review: review a agregar
+	 */
 	public void addReview(Review review)
 	{
 		if (review != null)
@@ -175,6 +178,10 @@ public class Actividad implements Cloneable {
 		}
 	}
 	
+	/**
+	 * Actualiza el rating promedio cuando un usuario le da un rating a una actividad
+	 * @param rating: rating dado
+	 */
 	public void addRating(float rating)
 	{
 		this.ratingAcumulado += rating;
@@ -182,6 +189,38 @@ public class Actividad implements Cloneable {
 		this.calcularRatingPromedio();
 	}
 	
+	/**
+	 * Elimina un review de la lista de reviews de la actividad. Actualiza el rating promedio
+	 * @param review: review a eliminar
+	 */
+	public void eliminarReview(Review review)
+	{
+		if (review != null)
+		{
+			int i = 0;
+			boolean eliminado = false;
+			int tamanio = this.reviews.size();
+			Review current;
+			while (!eliminado && i < tamanio)
+			{
+				current = this.reviews.get(i);
+				if (current.equals(review))
+				{
+					this.reviews.remove(i);
+					this.numRatings--;
+					this.ratingAcumulado -= review.getRating();
+					this.calcularRatingPromedio();
+					eliminado = true;
+				}
+				i++;
+			}
+		}
+	}
+	
+	/**
+	 * Funcion para calcular el rating promedio de la actividad en base a
+	 * los reviews y ratings dejados por usuarios
+	 */
 	private void calcularRatingPromedio()
 	{
 		if (this.numRatings != 0)
