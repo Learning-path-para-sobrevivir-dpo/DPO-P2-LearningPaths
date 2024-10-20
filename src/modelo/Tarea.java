@@ -47,6 +47,7 @@ public class Tarea extends Actividad{
 		{
 			this.setCompletada(true);
 			completada = true;
+			this.setEnviado(true);
 		}
 		return completada;
 	}
@@ -57,6 +58,7 @@ public class Tarea extends Actividad{
 		if (this.getEstado().equals("No Exitosa"))
 		{
 			this.setCompletada(false);
+			this.setEnviado(false);
 		}
 	}
 }
