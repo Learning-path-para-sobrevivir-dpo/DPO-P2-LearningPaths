@@ -38,6 +38,7 @@ public class Estudiante extends Usuario {
 
         Progreso newProgreso = new Progreso(nuevoLP, this);
         this.progresosLearningPaths.put(titulo, newProgreso);
+        nuevoLP.addProgresoEstudiante(newProgreso);
     }
 	
 	/**
