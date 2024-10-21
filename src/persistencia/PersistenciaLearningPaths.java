@@ -10,7 +10,7 @@ import modelo.LearningPath;
 
 public class PersistenciaLearningPaths {
 
-    private static final String ARCHIVO_LEARNING_PATHS = "learningPaths.json";
+    private static final String ARCHIVO_LEARNING_PATHS = "../../datos/learningPaths.json";
     
     // Cargar Learning Paths desde el archivo JSON
     public static HashMap<String, LearningPath> cargarLearningPaths() {
