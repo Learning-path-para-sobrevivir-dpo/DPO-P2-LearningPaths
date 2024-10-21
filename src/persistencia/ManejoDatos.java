@@ -15,8 +15,34 @@ public class ManejoDatos {
 	private HashMap<List<String>, Usuario> usuarios;
 	private HashMap<String, Actividad> actividades;
 	private HashMap<String, LearningPath> learningPaths;
-	// Métodos para cargar datos desde JSON
+	
     
+	public HashMap<List<String>, Usuario> getUsuarios() {
+		return usuarios;
+	}
+
+	public void setUsuarios(HashMap<List<String>, Usuario> usuarios) {
+		this.usuarios = usuarios;
+	}
+
+	public HashMap<String, Actividad> getActividades() {
+		return actividades;
+	}
+
+	public void setActividades(HashMap<String, Actividad> actividades) {
+		this.actividades = actividades;
+	}
+
+	public HashMap<String, LearningPath> getLearningPaths() {
+		return learningPaths;
+	}
+
+	public void setLearningPaths(HashMap<String, LearningPath> learningPaths) {
+		this.learningPaths = learningPaths;
+	}
+	
+	// Métodos para cargar datos desde JSON
+
 	public void cargarDatos(String archivoUsuarios) {
         PersistenciaUsuarios persistenciaUsuarios = new PersistenciaUsuarios();
         persistenciaUsuarios.cargarUsuarios(archivoUsuarios, this);
@@ -117,7 +143,7 @@ public class ManejoDatos {
 	{
 		if (actividad != null)
 		{
-			this.actividades.put(actividad.getNombre(), actividad);
+			this.actividades.put(actividad.getId(), actividad);
 		}
 	}
 	
