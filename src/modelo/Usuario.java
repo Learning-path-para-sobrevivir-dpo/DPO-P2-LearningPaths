@@ -61,15 +61,16 @@ public abstract class Usuario {
 		this.tipo = tipo;
 	}
 	
-	public void addReview(String contenido, String tipo) {
+	public void addReview(String contenido, Actividad actividad) {
 		
         LocalDate fechaActual = LocalDate.now();
         String fecha = fechaActual.toString();
         
-		Review review = new Review(fecha, contenido, this, tipo);
+		Review review = new Review(fecha, contenido, this);
 		
 		reviews.add(review);
-		 
+		
+		//Buscar actividad y añadir la reseña a la reseña a la respectiva actividad.
 		
 	}
 
