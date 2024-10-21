@@ -1,6 +1,5 @@
 package persistencia;
 
-
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,14 +9,38 @@ import java.util.Set;
 
 
 import modelo.Actividad;
-
 import modelo.LearningPath;
 import modelo.Usuario;
+
 
 public class ManejoDatos {
 	private HashMap<List<String>, Usuario> usuarios = PersistenciaUsuarios.cargarUsuarios();
     private HashMap<String, LearningPath> learningPaths = PersistenciaLearningPaths.cargarLearningPaths();
     private HashMap<String, Actividad> actividades = PersistenciaActividades.cargarActividades();
+    
+	public HashMap<List<String>, Usuario> getUsuarios() {
+		return usuarios;
+	}
+
+	public void setUsuarios(HashMap<List<String>, Usuario> usuarios) {
+		this.usuarios = usuarios;
+	}
+
+	public HashMap<String, Actividad> getActividades() {
+		return actividades;
+	}
+
+	public void setActividades(HashMap<String, Actividad> actividades) {
+		this.actividades = actividades;
+	}
+
+	public HashMap<String, LearningPath> getLearningPaths() {
+		return learningPaths;
+	}
+
+	public void setLearningPaths(HashMap<String, LearningPath> learningPaths) {
+		this.learningPaths = learningPaths;
+	}
 	
 	//Manejo de Usuarios////////////////////////////////////////
 	
@@ -167,4 +190,5 @@ public class ManejoDatos {
 			this.learningPaths.replace(path.getTitulo(), path);
 		}
 	}
+
 }

@@ -197,5 +197,16 @@ public class LearningPath {
     	}
     }
 
+	/**
+     * Añade un Estudiante inscrito y su progreso al Learning Path
+     * @param progreso: progreso del estudiante
+     */
+    public void addProgresoEstudiante(Progreso progreso)
+    {
+    	Estudiante estudiante = progreso.getEstudiante();
+    	this.estudiantes.add(estudiante);
+    	this.progresosEstudiantiles.put(estudiante.getLogin(), progreso);
+    }
+
 }
 
