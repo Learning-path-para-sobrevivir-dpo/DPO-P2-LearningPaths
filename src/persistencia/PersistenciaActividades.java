@@ -1,56 +1,34 @@
 package persistencia;
 
-import modelo.IActividad;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import modelo.Actividad;
+
+import java.io.*;
 import java.util.HashMap;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class PersistenciaActividades {
+	private static final String ARCHIVO_ACTIVIDADES = "actividades.json";
 
-    public void salvarActividades(String archivo, ManejoDatos datos) {
-        JSONArray actividadesArray = new JSONArray();
-        
-        for (IActividad actividad : datos.getActividades().values()) {
-            JSONObject actividadJson = new JSONObject();
-            actividadJson.put("nombre", actividad.getNombre());
-            actividadesArray.put(actividadJson);
-        }
-
-        try (FileWriter fileWriter = new FileWriter(new File(archivo))) {
-            fileWriter.write(actividadesArray.toString());
+    // Cargar Actividades desde el archivo JSON
+    public static HashMap<String, Actividad> cargarActividades() {
+        try (Reader reader = new FileReader(ARCHIVO_ACTIVIDADES)) {
+            Gson gson = new Gson();
+            return gson.fromJson(reader, new TypeToken<HashMap<String, Actividad>>(){}.getType());
         } catch (IOException e) {
             e.printStackTrace();
+            return new HashMap<>(); // Retornar un mapa vacío si hay error
         }
     }
 
-    public void cargarActividades(String archivo, ManejoDatos datos) {
-        File file = new File(archivo);
-        if (!file.exists()) {
-            return;
-        }
-
-        try (FileReader fileReader = new FileReader(file)) {
-            StringBuilder content = new StringBuilder();
-            int character;
-            while ((character = fileReader.read()) != -1) {
-                content.append((char) character);
-            }
-
-            JSONArray actividadesArray = new JSONArray(content.toString());
-            for (int i = 0; i < actividadesArray.length(); i++) {
-                JSONObject actividadJson = actividadesArray.getJSONObject(i);
-                String nombre = actividadJson.getString("nombre");
-                // TODO: completar esto dependiendo de como quede actividades
-                //IActividad actividad = new Actividad(nombre, ...); 
-                datos.addActividad(actividad); 
-            }
+    // Guardar Actividades en el archivo JSON
+    public static void guardarActividades(HashMap<String, Actividad> actividades) {
+        try (Writer writer = new FileWriter(ARCHIVO_ACTIVIDADES)) {
+            Gson gson = new Gson();
+            gson.toJson(actividades, writer);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 }
-

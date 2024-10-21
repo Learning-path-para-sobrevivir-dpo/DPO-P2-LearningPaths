@@ -1,59 +1,30 @@
 package persistencia;
 
-import modelo.Usuario;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.io.*;
 import java.util.HashMap;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.util.List;
 
 public class PersistenciaUsuarios {
+    private static final String FILE_PATH = "ruta/a/la/carpeta/usuarios.json"; //TODO: definir esto
 
-    public void salvarUsuarios(String archivo, ManejoDatos datos) {
-        JSONArray usuariosArray = new JSONArray();
-
-        for (Usuario usuario : datos.getUsuarios().values()) {
-            JSONObject usuarioJson = new JSONObject();
-            usuarioJson.put("login", usuario.getLogin());
-            usuarioJson.put("correo", usuario.getCorreo());
-            usuarioJson.put("contraseña", usuario.getContraseña());
-            usuarioJson.put("tipo", usuario.getTipo());
-            // TODO: completar atributos
-            usuariosArray.put(usuarioJson);
-        }
-
-        try (FileWriter fileWriter = new FileWriter(new File(archivo))) {
-            fileWriter.write(usuariosArray.toString());
+    // Cargar usuarios desde el archivo JSON
+    public static HashMap<List<String>, Usuario> cargarUsuarios() {
+        try (Reader reader = new FileReader(FILE_PATH)) {
+            Gson gson = new Gson();
+            return gson.fromJson(reader, new TypeToken<HashMap<List<String>, Usuario>>(){}.getType());
         } catch (IOException e) {
             e.printStackTrace();
+            return new HashMap<>(); // Retornar un mapa vacío si hay error
         }
     }
 
-    public void cargarUsuarios(String archivo, ManejoDatos datos) {
-        File file = new File(archivo);
-        if (!file.exists()) {
-            return; 
-        }
-
-        try (FileReader fileReader = new FileReader(file)) {
-            StringBuilder content = new StringBuilder();
-            int character;
-            while ((character = fileReader.read()) != -1) {
-                content.append((char) character);
-            }
-
-            JSONArray usuariosArray = new JSONArray(content.toString());
-            for (int i = 0; i < usuariosArray.length(); i++) {
-                JSONObject usuarioJson = usuariosArray.getJSONObject(i);
-                String login = usuarioJson.getString("login");
-                String correo = usuarioJson.getString("correo");
-                String contraseña = usuarioJson.getString("contraseña");
-                String tipo = usuarioJson.getString("tipo");
-                Usuario usuario = new Usuario(login, correo, contraseña, tipo); 
-                datos.addUsuario(usuario);
-            }
+    // Guardar usuarios en el archivo JSON
+    public static void guardarUsuarios(HashMap<List<String>, Usuario> usuarios) {
+        try (Writer writer = new FileWriter(FILE_PATH)) {
+            Gson gson = new Gson();
+            gson.toJson(usuarios, writer);
         } catch (IOException e) {
             e.printStackTrace();
         }

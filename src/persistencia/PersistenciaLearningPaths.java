@@ -1,19 +1,10 @@
 package persistencia;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
-///import org.json.JSONObject;
-
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.Type;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.io.*;
 import java.util.HashMap;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 import modelo.LearningPath;
 
@@ -21,32 +12,24 @@ public class PersistenciaLearningPaths {
 
     private static final String ARCHIVO_LEARNING_PATHS = "learningPaths.json";
     
-    private Gson gson;
-
-    public PersistenciaLearningPaths() {
-        this.gson = new GsonBuilder().setPrettyPrinting().create();
-    }
-
-    /**
-     * Guarda los LearningPaths en el archivo JSON.
-     * 
-     * @param learningPaths: HashMap que contiene los LearningPaths con su título como llave.
-     * @throws IOException Si ocurre un error al escribir en el archivo.
-     */
-    public void guardarLearningPaths(HashMap<String, LearningPath> learningPaths) throws IOException {
-        try (FileWriter writer = new FileWriter(ARCHIVO_LEARNING_PATHS)) {
-            gson.toJson(learningPaths, writer);
+    // Cargar Learning Paths desde el archivo JSON
+    public static HashMap<String, LearningPath> cargarLearningPaths() {
+        try (Reader reader = new FileReader(ARCHIVO_LEARNING_PATHS)) {
+            Gson gson = new Gson();
+            return gson.fromJson(reader, new TypeToken<HashMap<String, LearningPath>>(){}.getType());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new HashMap<>(); // Retornar un mapa vacío si hay error
         }
     }
 
-    /**
-     * Carga los LearningPaths desde el archivo JSON.
-     * 
-     * @return Un HashMap con los LearningPaths cargados desde el archivo JSON.
-     * @throws IOException Si ocurre un error al leer el archivo.
-     */
-    public HashMap<String, LearningPath> cargarLearningPaths() throws IOException {
-        try (FileReader reader = new FileReader(ARCHIVO_LEARNING_PATHS)) {
-            //TODO: hacer esto
+    // Guardar Learning Paths en el archivo JSON
+    public static void guardarLearningPaths(HashMap<String, LearningPath> learningPaths) {
+        try (Writer writer = new FileWriter(ARCHIVO_LEARNING_PATHS)) {
+            Gson gson = new Gson();
+            gson.toJson(learningPaths, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
