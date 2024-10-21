@@ -9,7 +9,7 @@ import java.io.*;
 import java.util.HashMap;
 
 public class PersistenciaActividades {
-	private static final String ARCHIVO_ACTIVIDADES = "actividades.json";
+	private static final String ARCHIVO_ACTIVIDADES = "../../datos/actividades.json";
 
     // Cargar Actividades desde el archivo JSON
     public static HashMap<String, Actividad> cargarActividades() {
