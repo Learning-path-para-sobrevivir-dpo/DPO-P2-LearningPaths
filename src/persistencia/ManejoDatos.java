@@ -1,23 +1,40 @@
 package persistencia;
 
+
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import modelo.Actividad;
+
+import modelo.IActividad;
+
 import modelo.LearningPath;
 import modelo.Usuario;
 
 public class ManejoDatos {
 	private HashMap<List<String>, Usuario> usuarios;
-	private HashMap<String, Actividad> actividades;
+
+	private HashMap<String, IActividad> actividades;
 	private HashMap<String, LearningPath> learningPaths;
 
-	//TODO: Cargar datos desde el JSON
+	// Métodos para cargar datos desde JSON
+    
+	public void cargarDatos(String archivoUsuarios) {
+        PersistenciaUsuarios persistenciaUsuarios = new PersistenciaUsuarios();
+        persistenciaUsuarios.cargarUsuarios(archivoUsuarios, this);
+    }
+
 	
-	//TODO: Guardar datos en el JSON
+	//Metodos para guardar datos en el JSON
+	
+	public void salvarDatos(String archivoUsuarios) {
+        PersistenciaUsuarios persistenciaUsuarios = new PersistenciaUsuarios();
+        persistenciaUsuarios.salvarUsuarios(archivoUsuarios, this);
+    }
+	
 	
 	//Manejo de Usuarios////////////////////////////////////////
 	
