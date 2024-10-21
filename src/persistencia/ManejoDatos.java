@@ -14,9 +14,16 @@ import modelo.Usuario;
 
 
 public class ManejoDatos {
-	private HashMap<List<String>, Usuario> usuarios = PersistenciaUsuarios.cargarUsuarios();
-    private HashMap<String, LearningPath> learningPaths = PersistenciaLearningPaths.cargarLearningPaths();
-    private HashMap<String, Actividad> actividades = PersistenciaActividades.cargarActividades();
+	private HashMap<List<String>, Usuario> usuarios;
+    private HashMap<String, LearningPath> learningPaths;
+    private HashMap<String, Actividad> actividades;
+	
+	public ManejoDatos() {
+		super();
+		this.usuarios = PersistenciaUsuarios.cargarUsuarios();;
+		this.learningPaths = PersistenciaLearningPaths.cargarLearningPaths();
+		this.actividades = PersistenciaActividades.cargarActividades();
+	}
     
 	public HashMap<List<String>, Usuario> getUsuarios() {
 		return usuarios;
