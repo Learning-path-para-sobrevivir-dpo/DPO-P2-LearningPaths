@@ -12,19 +12,21 @@ public class Examen extends Prueba{
 	private boolean calificado;
 
 	public Examen(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
-			int tiempoCompletarSugerido, String tipoActividad, List<PreguntaAbierta> preguntas) {
-		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad);
+			int tiempoCompletarSugerido, String tipoActividad, List<PreguntaAbierta> preguntas, String tipoPrueba) {
+		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, tipoPrueba);
 		this.preguntas = preguntas;
 		this.calificado = false;
-		this.setTipoActividad("Examen");
+		this.setTipoActividad("Prueba");
+		this.setTipoPrueba("Examen");
 	}
 
 	public Examen(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
-			int tiempoCompletarSugerido, String tipoActividad) {
-		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad);
+			int tiempoCompletarSugerido, String tipoActividad, String tipoPrueba) {
+		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, tipoPrueba);
 		this.preguntas = new ArrayList<PreguntaAbierta>();
 		this.calificado = false;
-		this.setTipoActividad("Examen");
+		this.setTipoActividad("Prueba");
+		this.setTipoPrueba("Examen");
 	}
 
 	public List<PreguntaAbierta> getPreguntas() {

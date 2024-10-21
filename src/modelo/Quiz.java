@@ -13,19 +13,21 @@ public class Quiz extends Prueba{
 	
 	public Quiz(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
 			int tiempoCompletarSugerido, String tipoActividad, float calificacionMinima,
-			List<PreguntaMultiple> preguntas) {
-		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad);
+			List<PreguntaMultiple> preguntas, String tipoPrueba) {
+		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, tipoPrueba);
 		this.calificacionMinima = calificacionMinima;
 		this.preguntas = preguntas;
-		this.setTipoActividad("Quiz");
+		this.setTipoActividad("Prueba");
+		this.setTipoPrueba("Quiz");
 	}
 	
 	public Quiz(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
-			int tiempoCompletarSugerido, String tipoActividad, float calificacionMinima) {
-		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad);
+			int tiempoCompletarSugerido, String tipoActividad, float calificacionMinima, String tipoPrueba) {
+		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, tipoPrueba);
 		this.calificacionMinima = calificacionMinima;
 		this.preguntas = new ArrayList<PreguntaMultiple>();
-		this.setTipoActividad("Quiz");
+		this.setTipoActividad("Prueba");
+		this.setTipoPrueba("Quiz");
 	}
 	
 	public float getCalificacionMinima() {
