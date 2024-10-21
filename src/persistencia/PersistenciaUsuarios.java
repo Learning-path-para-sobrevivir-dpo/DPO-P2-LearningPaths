@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class PersistenciaUsuarios {
-    private static final String ARCHIVO_USUARIOS = "usuarios.json"; //TODO: definir esto
+    private static final String ARCHIVO_USUARIOS = "../../datos/usuarios.json"
 
     // Cargar usuarios desde el archivo JSON
     public static HashMap<List<String>, Usuario> cargarUsuarios() {
