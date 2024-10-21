@@ -6,16 +6,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+
 import modelo.Actividad;
 import modelo.LearningPath;
 import modelo.Usuario;
 
 
 public class ManejoDatos {
-	private HashMap<List<String>, Usuario> usuarios;
-	private HashMap<String, Actividad> actividades;
-	private HashMap<String, LearningPath> learningPaths;
-	
+	private HashMap<List<String>, Usuario> usuarios = PersistenciaUsuarios.cargarUsuarios();
+    private HashMap<String, LearningPath> learningPaths = PersistenciaLearningPaths.cargarLearningPaths();
+    private HashMap<String, Actividad> actividades = PersistenciaActividades.cargarActividades();
     
 	public HashMap<List<String>, Usuario> getUsuarios() {
 		return usuarios;
@@ -41,20 +42,6 @@ public class ManejoDatos {
 		this.learningPaths = learningPaths;
 	}
 	
-	// Métodos para cargar datos desde JSON
-
-	public void cargarDatos(String archivoUsuarios) {
-        PersistenciaUsuarios persistenciaUsuarios = new PersistenciaUsuarios();
-        persistenciaUsuarios.cargarUsuarios(archivoUsuarios, this);
-    }
-	
-	//Metodos para guardar datos en el JSON
-	
-	public void salvarDatos(String archivoUsuarios) {
-        PersistenciaUsuarios persistenciaUsuarios = new PersistenciaUsuarios();
-        persistenciaUsuarios.salvarUsuarios(archivoUsuarios, this);
-    }
-	
 	//Manejo de Usuarios////////////////////////////////////////
 	
 	private List<String> crearLlaveUsuario(String login, String password)
@@ -75,6 +62,7 @@ public class ManejoDatos {
 		{
 			List<String> infoUsuario = crearLlaveUsuario(usuario.getLogin(), usuario.getContraseña());		
 			this.usuarios.put(infoUsuario, usuario);
+			PersistenciaUsuarios.guardarUsuarios(usuarios);
 		}
 	}
 	
@@ -143,7 +131,8 @@ public class ManejoDatos {
 	{
 		if (actividad != null)
 		{
-			this.actividades.put(actividad.getId(), actividad);
+			actividades.put(actividad.getId(), actividad);
+	        PersistenciaActividades.guardarActividades(actividades);
 		}
 	}
 	
@@ -172,6 +161,7 @@ public class ManejoDatos {
 		if (path != null)
 		{
 			this.learningPaths.put(path.getTitulo(), path);
+			PersistenciaLearningPaths.guardarLearningPaths(learningPaths);
 		}
 	}
 	
