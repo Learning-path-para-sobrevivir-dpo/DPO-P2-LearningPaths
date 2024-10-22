@@ -45,21 +45,30 @@ public abstract class Actividad implements Cloneable {
 		this.numRatings = 0;
 		this.setTipoActividad(tipo);
 		this.estado = "Sin completar";
-		this.completada = false;
-		
+		this.completada = false;       
+        this.id = this.generarID();
+	}
+	
+	private String generarID()
+	{
 		//Para crear un identificador unico para la actividad
 		int numero = ( int ) ( Math.random( ) * 10e7 );
-        String codigo = "" + numero;
-        while( ids.contains( codigo ) )
-        {
-            numero = ( int ) ( Math.random( ) * 10e7 );
-            codigo = "" + numero;
-        }
+		String codigo = "" + numero;
+		while( ids.contains( codigo ) )
+		{
+			numero = ( int ) ( Math.random( ) * 10e7 );
+			codigo = "" + numero;
+		}
 
-        while( codigo.length( ) < 7 )
-            codigo = "0" + codigo;
-        
-        this.id = codigo;
+		while( codigo.length( ) < 7 )
+			codigo = "0" + codigo;
+		
+		return codigo;
+	}
+	
+	public void actividadClonada()
+	{
+		this.id = this.generarID();
 	}
 	
 	public String getTitulo() {

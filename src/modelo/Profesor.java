@@ -23,7 +23,7 @@ public class Profesor extends Usuario{
 	 * Método crea una nueva actividad. Se debe buscar y actuar diferente segun el tipo de 
 	 * actividad a crear dado que Actividad es una clase abstracta.
 	 */
-	public void crearActividad(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+	public Actividad crearActividad(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
 	        int tiempoCompletarSugerido, String tipo) {
 
 		Actividad newAct = null;
@@ -83,6 +83,7 @@ public class Profesor extends Usuario{
 	    scanner.close();  
 
 	    actCreadas.add(newAct);
+	    return newAct;
 	}
 	
 
@@ -93,7 +94,7 @@ public class Profesor extends Usuario{
 	 * @param obj: objetivo del LearningPath
 	 * @param dificultad: nivel de dificultad
 	 */
-	public void crearLearningPath(String titulo, String descripcion, String obj, int dificultad) {
+	public LearningPath crearLearningPath(String titulo, String descripcion, String obj, int dificultad) {
 		
         LocalDate fechaActual = LocalDate.now();
         String fecha = fechaActual.toString();
@@ -101,6 +102,7 @@ public class Profesor extends Usuario{
         LearningPath path = new LearningPath(titulo, descripcion, obj, dificultad, 0, fecha, fecha, 1, this);
         learningPathsCreados.put(titulo, path);
         
+        return path;
 	}
 	
 	/**
@@ -128,8 +130,21 @@ public class Profesor extends Usuario{
 	    }
 	}
 
-	
-	
+	public Actividad clonarActividad(Actividad actividad) {
+		Actividad nuevaActividad = null;
+		try {
+			nuevaActividad = (Actividad) actividad.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (nuevaActividad != null)
+		{
+			nuevaActividad.actividadClonada();
+			this.actCreadas.add(nuevaActividad);
+		}
+		return nuevaActividad;
+	}
 	
 	
 }
