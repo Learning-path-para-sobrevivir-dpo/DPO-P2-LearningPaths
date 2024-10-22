@@ -6,15 +6,13 @@ public class Review {
 	public String contenido; 
 	public float rating;
 	public Usuario autor;
-	public String tipo;
 	
-	public Review(String fecha, String contenido, Usuario autor, String tipo) {
+	public Review(String fecha, String contenido, Usuario autor) {
 		super();
 		this.fecha = fecha;
 		this.contenido = contenido;
 		this.rating = 0;
 		this.autor = autor;
-		this.tipo = tipo;
 	}
 
 	public String getFecha() {
@@ -50,12 +48,4 @@ public class Review {
 		this.autor = autor;
 	} 
 	
-	public String getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
-	}
-
 }

@@ -3,6 +3,8 @@ package modelo;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import persistencia.ManejoDatos;
+
 
 public abstract class Usuario {
 	
@@ -61,15 +63,29 @@ public abstract class Usuario {
 		this.tipo = tipo;
 	}
 	
-	public void addReview(String contenido, String tipo) {
+	/**
+	 * Permite que el usuario registre una nueva reseña a una actividad específica.
+	 * @param contenido: contenido de la reseña
+	 * @param nombreAct: nombre de la actividad a la que se agregará la reseña
+	 * 
+	 */
+	public void addReview(String contenido, String nombreAct) {
 		
         LocalDate fechaActual = LocalDate.now();
         String fecha = fechaActual.toString();
+                
+        ManejoDatos manejoDatos = new ManejoDatos();
         
-		Review review = new Review(fecha, contenido, this, tipo);
+      //Buscar actividad y añadir la reseña a la reseña a la respectiva actividad.
+        
+        Actividad actividad = manejoDatos.getActividad(nombreAct);
+        
+		Review review = new Review(fecha, contenido, this);
 		
 		reviews.add(review);
-		 
+		
+		actividad.addReview(review);
+		
 		
 	}
 
