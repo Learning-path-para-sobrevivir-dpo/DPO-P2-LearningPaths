@@ -222,6 +222,11 @@ public class ManejoDatos {
 		}
 	}
 	
+	/**
+	 * Funcion para añadir las actividades a los paths.
+	 * Se toma la lista de ids de actividades del path y se añaden
+	 * las actividades en el orden de la lista
+	 */
 	private void addActividadesPaths()
 	{
 		Set<String> paths = this.learningPaths.keySet();
