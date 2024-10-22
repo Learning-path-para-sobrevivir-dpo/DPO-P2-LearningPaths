@@ -220,5 +220,22 @@ public class ManejoDatos {
 			this.learningPaths.replace(path.getTitulo(), path);
 		}
 	}
-
+	
+	private void addActividadesPaths()
+	{
+		Set<String> paths = this.learningPaths.keySet();
+		LearningPath path;
+		List<String> ids;
+		Actividad act;
+		for (Iterator<String> it = paths.iterator(); it.hasNext();)
+		{
+			path = this.learningPaths.get(it.next());
+			ids = path.getActividadesIDs();
+			for (int i = 0; i < ids.size(); i++)
+			{
+				act = this.getActividadPorID(ids.get(i));
+				path.addActividadDeUltimas(act);
+			}
+		}
+	}
 }
