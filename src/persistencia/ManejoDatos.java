@@ -21,8 +21,9 @@ public class ManejoDatos {
 	public ManejoDatos() {
 		super();
 		this.usuarios = PersistenciaUsuarios.cargarUsuarios();;
-		this.learningPaths = PersistenciaLearningPaths.cargarLearningPaths();
 		this.actividades = PersistenciaActividades.cargarActividades();
+		this.learningPaths = PersistenciaLearningPaths.cargarLearningPaths();
+		this.addActividadesPaths();
 	}
     
 	public HashMap<List<String>, Usuario> getUsuarios() {
