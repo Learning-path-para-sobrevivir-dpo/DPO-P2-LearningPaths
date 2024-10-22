@@ -17,6 +17,7 @@ public class ManejoDatos {
 	private HashMap<List<String>, Usuario> usuarios;
     private HashMap<String, LearningPath> learningPaths;
     private HashMap<String, Actividad> actividades;
+    private HashMap<String, Actividad> actividadesEstudiantes;
 	
 	public ManejoDatos() {
 		super();
@@ -50,8 +51,17 @@ public class ManejoDatos {
 		this.learningPaths = learningPaths;
 	}
 	
+	public HashMap<String, Actividad> getActividadesEstudiantes() {
+		return actividadesEstudiantes;
+	}
+
+	public void setActividadesEstudiantes(HashMap<String, Actividad> actividadesEstudiantes) {
+		this.actividadesEstudiantes = actividadesEstudiantes;
+	}
+	
 	//Manejo de Usuarios////////////////////////////////////////
 	
+
 	private List<String> crearLlaveUsuario(String login, String password)
 	{
 		List<String> infoUsuario = new ArrayList<String>();
