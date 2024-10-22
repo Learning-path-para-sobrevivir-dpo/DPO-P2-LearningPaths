@@ -140,6 +140,7 @@ public class Progreso {
 		{
 			try {
 				actNueva = (Actividad) this.learningPath.getActividades().get(i).clone();
+				actNueva.actividadClonadaProgreso();
 				Set<String> ids = this.idActividades.keySet();
 				if (ids.contains(actNueva.getId()))
 				{

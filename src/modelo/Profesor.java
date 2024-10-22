@@ -140,7 +140,7 @@ public class Profesor extends Usuario{
 		}
 		if (nuevaActividad != null)
 		{
-			nuevaActividad.actividadClonada();
+			nuevaActividad.actividadClonadaProfesor();
 			this.actCreadas.add(nuevaActividad);
 		}
 		return nuevaActividad;
