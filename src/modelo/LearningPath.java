@@ -137,6 +137,16 @@ public class LearningPath {
 		return duracion;
 	}
 	
+	public List<String> getActividadesIDs() {
+		return actividadesIDs;
+	}
+
+
+	public void setActividadesIDs(List<String> actividadesIDs) {
+		this.actividadesIDs = actividadesIDs;
+	}
+
+
 	/**
 	 * Calcula la duración aproximada del Learning Path de acuerdo
 	 * a a la duración de sus actividades
