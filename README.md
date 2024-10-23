@@ -14,4 +14,4 @@ https://github.com/user-attachments/assets/d8e9fb08-7132-4b5d-a5e9-369db8f76dbb
 
 
 ## Documentacion
-La explicación detallada del análisis y el diseño de la solución se encuentra en la carpeta [Documentos]()
+La explicación detallada del análisis y el diseño de la solución se encuentra en la carpeta [Documentos](https://github.com/Learning-path-para-sobrevivir-dpo/DPO-P1-LearningPaths/tree/master/Documentos)
