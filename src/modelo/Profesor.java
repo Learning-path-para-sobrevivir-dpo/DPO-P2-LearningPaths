@@ -98,7 +98,7 @@ public class Profesor extends Usuario{
         LocalDate fechaActual = LocalDate.now();
         String fecha = fechaActual.toString();
 		
-        LearningPath path = new LearningPath(titulo, descripcion, obj, dificultad, 0, fecha, fecha, 1, this);
+        LearningPath path = new LearningPath(titulo, descripcion, obj, dificultad, 0, fecha, fecha, 1, this.getTipo());
         learningPathsCreados.put(titulo, path);
         
 	}

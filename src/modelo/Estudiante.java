@@ -35,8 +35,8 @@ public class Estudiante extends Usuario {
         }
         //Si aún no está inscrito
         learningPaths.put(titulo, nuevoLP);
-
-        Progreso newProgreso = new Progreso(nuevoLP, this);
+        
+        Progreso newProgreso = new Progreso(titulo, this.getLogin());//Galarza: cambie nuevoLp por titulo, y agregue el getLogic() para que en el progreso guarde el usuario
         this.progresosLearningPaths.put(titulo, newProgreso);
         nuevoLP.addProgresoEstudiante(newProgreso);
     }

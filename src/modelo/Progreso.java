@@ -10,8 +10,8 @@ import excepciones.YaExisteActividadEnProgresoException;
 
 public class Progreso {
 	
-	private LearningPath learningPath;
-	private Estudiante estudiante;
+	private String learningPath; //cambie esto por string, el titulo del learningPath
+	private String estudiante; //Galarza: cambie estudiante a string de su usuario
 	private Map<Integer, Actividad> actividadesPath;
 	private List<Actividad> actObligatoriasPendientes;
 	private List<Actividad> actObligatoriasCompletadas;
@@ -22,7 +22,7 @@ public class Progreso {
 	private int progresoObligatorio;
 	private int progresoTotal;
 	
-	public Progreso(LearningPath learningPath, Estudiante estudiante) {
+	public Progreso(String learningPath, String estudiante) {
 		this.learningPath = learningPath;
 		this.estudiante = estudiante;
 		this.actividadesPath = new HashMap<Integer, Actividad>();
@@ -33,10 +33,10 @@ public class Progreso {
 		this.idActividades = new HashMap<String, Actividad>();
 		this.progresoObligatorio = 0;
 		this.progresoTotal = 0;
-		this.obtenerActividadesPath();
+		//this.obtenerActividadesPath(); Galarza: lo quite porque cambie obternerActividades, pero de por si o entinedo que hace
 	}
 
-	public Progreso(LearningPath learningPath, Estudiante estudiante, Map<Integer, Actividad> actividadesPath,
+	public Progreso(String learningPath,String estudiante, Map<Integer, Actividad> actividadesPath,
 			List<Actividad> actObligatoriasPendientes, List<Actividad> actObligatoriasCompletadas,
 			List<Actividad> actPendientes, List<Actividad> actCompletadas, Actividad actividadEnProgreso) {
 		super();
@@ -60,21 +60,25 @@ public class Progreso {
 		this.actividadesPath = actividadesPath;
 	}
 
-	public LearningPath getLearningPath() {
+	//modifique que dieran el nombre del learning path y no el learning path
+	public String getLearningPath() {
 		return learningPath;
 	}
 
-	public void setLearningPath(LearningPath learningPath) {
+	public void setLearningPath(String learningPath) {
 		this.learningPath = learningPath;
 	}
 
-	public Estudiante getEstudiante() {
+	//Galarza: cambie el get y set de estudiante para que de el usuario
+	
+	 public String getEstudiante() {
 		return estudiante;
 	}
 
-	public void setEstudiante(Estudiante estudiante) {
+	public void setEstudiante(String estudiante) {
 		this.estudiante = estudiante;
 	}
+	
 	
 	public List<Actividad> getActObligatoriasPendientes() {
 		return actObligatoriasPendientes;
@@ -129,17 +133,19 @@ public class Progreso {
 	}
 
 	/**
-	 * Clona todas las actividades de un Learning Path para poder ser completadas por el estudiante
+	 * Clona todas las actividades de un Learning Path para poder ser completadas por el estudiante //Galarza: modifique para que reciba el mapa de learning paths.
 	 */
-	public void obtenerActividadesPath()
+	public void obtenerActividadesPath(HashMap<String, LearningPath> learningPaths)
 	{
-		int tamanio = this.learningPath.getActividades().size();
+		String titulo = this.getLearningPath();
+		LearningPath learningPath = learningPaths.get(titulo);
+		int tamanio = learningPath.getActividades().size();
 		Actividad actNueva;
 		Actividad actVieja;
 		for (int i = 1; i <= tamanio; i++)
 		{
 			try {
-				actNueva = (Actividad) this.learningPath.getActividades().get(i).clone();
+				actNueva = (Actividad) learningPath.getActividades().get(i).clone();
 				Set<String> ids = this.idActividades.keySet();
 				if (ids.contains(actNueva.getId()))
 				{
@@ -149,9 +155,9 @@ public class Progreso {
 				}
 				this.actividadesPath.put(i, actNueva);
 				this.obtenerIDsActividades();
-				this.obtenerActPendientes();
+				this.obtenerActPendientes(learningPaths);
 				this.obtenerActObligatoriasPendientes();
-				this.obtenerActCompletadas();
+				this.obtenerActCompletadas(learningPaths);
 				this.obtenerActObligatoriasCompletadas();
 			} catch (CloneNotSupportedException e) {
 				e.printStackTrace();
@@ -169,9 +175,11 @@ public class Progreso {
 		}
 	}
 	
-	public void obtenerActPendientes() {
+	public void obtenerActPendientes(HashMap<String, LearningPath> learningPaths) { //Galarza: agregue atributo de hash map
+		String titulo = this.getLearningPath();
+		LearningPath learningPath = learningPaths.get(titulo);
 		List<Actividad> actividades = new ArrayList<Actividad>();
-		int tamanio = this.learningPath.getActividades().size();
+		int tamanio = learningPath.getActividades().size();
 		Actividad act;
 		for (int i = 1; i <= tamanio; i++)
 		{
@@ -196,9 +204,11 @@ public class Progreso {
 		this.actObligatoriasPendientes = actividades;
 	}
 	
-	public void obtenerActCompletadas() {
+	public void obtenerActCompletadas(HashMap<String, LearningPath> learningPaths) {
 		List<Actividad> actividades = new ArrayList<Actividad>();
-		int tamanio = this.learningPath.getActividades().size();
+		String titulo = this.getLearningPath();
+		LearningPath learningPath = learningPaths.get(titulo);
+		int tamanio = learningPath.getActividades().size();
 		Actividad act;
 		for (int i = 1; i <= tamanio; i++)
 		{

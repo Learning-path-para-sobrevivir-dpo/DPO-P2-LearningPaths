@@ -5,7 +5,7 @@ public class Review {
 	public String fecha;
 	public String contenido; 
 	public float rating;
-	public Usuario autor;
+	//Galarza: borre autor porque no lo considero necesrio
 	public String tipo;
 	
 	public Review(String fecha, String contenido, Usuario autor, String tipo) {
@@ -13,7 +13,7 @@ public class Review {
 		this.fecha = fecha;
 		this.contenido = contenido;
 		this.rating = 0;
-		this.autor = autor;
+		//this.autor = autor;
 		this.tipo = tipo;
 	}
 
@@ -42,14 +42,6 @@ public class Review {
 		this.rating = rating;
 	}
 
-	public Usuario getAutor() {
-		return autor;
-	}
-
-	public void setAutor(Usuario autor) {
-		this.autor = autor;
-	} 
-	
 	public String getTipo() {
 		return tipo;
 	}
