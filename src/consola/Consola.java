@@ -160,7 +160,6 @@ public class Consola {
                 System.out.println("Has seleccionado 'Estudiante: Inscribirse a Learning Path'");
                 
                 estudiante1.inscribirLearningPath(path1);
-                Progreso pEst1LP1 = new Progreso(path1, estudiante1);
                 
                
                 break;
