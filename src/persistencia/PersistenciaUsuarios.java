@@ -15,7 +15,7 @@ import modelo.*;
 
 public class PersistenciaUsuarios {
 
-    private static final String ARCHIVO_USUARIOS = "ruta/al/archivo/usuarios.json";
+    private static final String ARCHIVO_USUARIOS = "C:\\Users\\manue\\git\\DPO-P1-LearningPaths\\datos\\usuarios.json";
 
     public static HashMap<List<String>, Usuario> cargarUsuarios(HashMap<List<String>, Progreso> mapaProgresos,
                                                       HashMap<String, LearningPath> mapaLearningPaths,

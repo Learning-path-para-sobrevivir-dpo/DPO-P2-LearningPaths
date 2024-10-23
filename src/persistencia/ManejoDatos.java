@@ -151,36 +151,7 @@ public class ManejoDatos {
 		{
 			actividades.put(actividad.getId(), actividad);
 	        PersistenciaActividades.guardarActividades(actividades);
-	        List<Review> listaReviews = actividad.getReviews();
-            for (Review review : listaReviews) {
-                reviews.put(review.getContenido(), review);
-            }
-
-            if (actividad instanceof Prueba) {
-                Prueba prueba = (Prueba) actividad;
-                
-                if (actividad instanceof Encuesta) {
-                	Encuesta encuesta = (Encuesta) prueba;
-                	 List<PreguntaAbierta> listaPreguntas = encuesta.getPreguntas();
-                    for (Pregunta pregunta : listaPreguntas) {
-                            preguntas.put(pregunta.getEnunciado(), pregunta);
-                    }
-                } else if (actividad instanceof Examen) {
-                	Examen examen = (Examen) prueba;
-               	 List<PreguntaAbierta> listaPreguntas = examen.getPreguntas();
-                   for (Pregunta pregunta : listaPreguntas) {
-                           preguntas.put(pregunta.getEnunciado(), pregunta);
-                   }
-                } else if (actividad instanceof Quiz) {
-                	Quiz quiz = (Quiz) prueba;
-               	 List<PreguntaMultiple> listaPreguntas = quiz.getPreguntas();
-                   for (Pregunta pregunta : listaPreguntas) {
-                           preguntas.put(pregunta.getEnunciado(), pregunta);
-                   }
-                    }
-                }
-            }
-        }
+        }}
 	
 	/**
 	 * Encuentra una actividad por su nombre
@@ -236,5 +207,32 @@ public class ManejoDatos {
 			this.learningPaths.replace(path.getTitulo(), path);
 		}
 	}
-
+//Manejo de progreso, reviews, preguntas
+	
+	public void addProgreso(Progreso progreso)
+	{
+		if (progreso != null)
+		{
+			this.progresos.put(List.of(progreso.getLearningPath(),progreso.getEstudiante()), progreso);
+			persistenciaProgresos.guardarProgreso(progresos);
+		}
+	}
+	
+	public void addReview(Review review)
+	{
+		if (review != null)
+		{
+			this.reviews.put(review.getContenido(), review);
+			persistenciaReviews.guardarReviews(reviews);
+		}
+	}
+	
+	public void addPregunta(Pregunta pregunta)
+	{
+		if (pregunta != null)
+		{
+			this.preguntas.put(pregunta.getEnunciado(), pregunta);
+			PeristenciaPreguntas.guardarPreguntas(preguntas);;
+		}
+	}
 }

@@ -16,7 +16,7 @@ import org.json.JSONObject;
 
 public class PersistenciaLearningPaths {
 
-    private static final String ARCHIVO_LEARNINGPATHS = "C:\\\\ruta\\\\learningPaths.json";
+    private static final String ARCHIVO_LEARNINGPATHS = "\"C:\\\\Users\\\\manue\\\\git\\\\DPO-P1-LearningPaths\\\\datos\\\\learningPaths.json";
 
     // Método para cargar Learning Paths desde un archivo JSON
     public static HashMap<String, LearningPath> cargarLearningPaths(HashMap<List<String>, Progreso> progresosMap, HashMap<String, Actividad> actividadesMap) {
