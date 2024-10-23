@@ -69,17 +69,13 @@ public abstract class Usuario {
 	 * @param actID: ID de la actividad a la que se agregará la reseña
 	 * 
 	 */
-	public void addReview(String contenido, String actID) {
+	public void addReview(String contenido, Actividad actividad) {
 		
         LocalDate fechaActual = LocalDate.now();
         String fecha = fechaActual.toString();
-                
-        ManejoDatos manejoDatos = new ManejoDatos();
-        
+                        
       //Buscar actividad y añadir la reseña a la reseña a la respectiva actividad.
-        
-        Actividad actividad = manejoDatos.getActividadPorID(actID);
-        
+                
 		Review review = new Review(fecha, contenido, this);
 		
 		reviews.add(review);
