@@ -128,6 +128,16 @@ public class Profesor extends Usuario{
 	    }
 	}
 
+
+	public Map<String, LearningPath> getLearningPathsCreados() {
+		return this.learningPathsCreados;
+	}
+
+
+	public List<Actividad> getActCreadas() {
+		return this.actCreadas;
+	}
+
 	
 	
 	

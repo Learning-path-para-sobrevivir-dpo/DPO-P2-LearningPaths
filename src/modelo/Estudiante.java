@@ -1,11 +1,8 @@
 package modelo;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.Set;
 
 import excepciones.YaExisteActividadEnProgresoException;
 
@@ -132,4 +129,12 @@ public class Estudiante extends Usuario {
 		}
         return completada;
     }
+
+	public Map<String, Progreso> getProgresosLearningPaths() {
+		return this.progresosLearningPaths;
+	}
+
+	public Map<String, LearningPath> getLearningPaths() {
+		return this.learningPaths;
+	}
 }

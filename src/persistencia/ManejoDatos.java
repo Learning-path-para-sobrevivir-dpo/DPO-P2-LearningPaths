@@ -15,11 +15,25 @@ public class ManejoDatos {
     private HashMap<String, LearningPath> learningPaths;
     private HashMap<String, Actividad> actividades;
     private HashMap<String, Pregunta> preguntas;
-    private HashMap<String, Progreso> progresos;
+    private HashMap<List<String>, Progreso> progresos;
     private HashMap<String, Review> reviews;
     
     public ManejoDatos() {
-    	
+    	this.usuarios = new HashMap<List<String>, Usuario>();
+        this.learningPaths = new HashMap<String, LearningPath>();
+        this.actividades = new HashMap<String, Actividad>();
+        this.preguntas = new HashMap<String, Pregunta>();
+        this.progresos = new HashMap<List<String>, Progreso>();
+        this.reviews = new HashMap<String, Review>();
+    }
+    
+    public void cargarDatos() {
+    	this.reviews = persistenciaReviews.cargarReviews();
+    	this.preguntas = PeristenciaPreguntas.cargarPreguntas();
+    	this.actividades = PersistenciaActividades.cargarActividades(reviews, preguntas);
+    	this.progresos = persistenciaProgresos.cargarProgresos(actividades);
+    	this.learningPaths = PersistenciaLearningPaths.cargarLearningPaths(progresos,actividades);
+    	this.usuarios = PersistenciaUsuarios.cargarUsuarios(progresos, learningPaths, reviews, actividades);
     }
     
 	public HashMap<List<String>, Usuario> getUsuarios() {
@@ -137,8 +151,36 @@ public class ManejoDatos {
 		{
 			actividades.put(actividad.getId(), actividad);
 	        PersistenciaActividades.guardarActividades(actividades);
-		}
-	}
+	        List<Review> listaReviews = actividad.getReviews();
+            for (Review review : listaReviews) {
+                reviews.put(review.getContenido(), review);
+            }
+
+            if (actividad instanceof Prueba) {
+                Prueba prueba = (Prueba) actividad;
+                
+                if (actividad instanceof Encuesta) {
+                	Encuesta encuesta = (Encuesta) prueba;
+                	 List<PreguntaAbierta> listaPreguntas = encuesta.getPreguntas();
+                    for (Pregunta pregunta : listaPreguntas) {
+                            preguntas.put(pregunta.getEnunciado(), pregunta);
+                    }
+                } else if (actividad instanceof Examen) {
+                	Examen examen = (Examen) prueba;
+               	 List<PreguntaAbierta> listaPreguntas = examen.getPreguntas();
+                   for (Pregunta pregunta : listaPreguntas) {
+                           preguntas.put(pregunta.getEnunciado(), pregunta);
+                   }
+                } else if (actividad instanceof Quiz) {
+                	Quiz quiz = (Quiz) prueba;
+               	 List<PreguntaMultiple> listaPreguntas = quiz.getPreguntas();
+                   for (Pregunta pregunta : listaPreguntas) {
+                           preguntas.put(pregunta.getEnunciado(), pregunta);
+                   }
+                    }
+                }
+            }
+        }
 	
 	/**
 	 * Encuentra una actividad por su nombre

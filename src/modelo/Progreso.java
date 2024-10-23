@@ -2,6 +2,7 @@ package modelo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,6 +35,7 @@ public class Progreso {
 		this.progresoObligatorio = 0;
 		this.progresoTotal = 0;
 		//this.obtenerActividadesPath(); Galarza: lo quite porque cambie obternerActividades, pero de por si o entinedo que hace
+	
 	}
 
 	public Progreso(String learningPath,String estudiante, Map<Integer, Actividad> actividadesPath,
@@ -328,6 +330,11 @@ public class Progreso {
 		}
 		Actividad actividad = this.actividadesPath.get(numActividad);
 		return actividad;
+	}
+
+	public void setActividadEnProgreso(Actividad actividadEnProgreso2) {
+		this.actividadEnProgreso= actividadEnProgreso2;
+		
 	}
 	
 }

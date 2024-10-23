@@ -15,7 +15,7 @@ import modelo.*;
 
 public class PeristenciaPreguntas {
 
-    private static final String ARCHIVO_PREGUNTAS = "ruta/a/archivo/preguntas.json";
+    private static final String ARCHIVO_PREGUNTAS = "C:\\Users\\manue\\git\\DPO-P1-LearningPaths\\datos\\preguntas.json";
 
     
  // Cargar preguntas desde el archivo JSON
@@ -66,37 +66,44 @@ public class PeristenciaPreguntas {
         return preguntas;
     }
     // Guardar preguntas en el archivo JSON
-    public static void guardarPreguntas(HashMap<String, Pregunta> preguntas) {
-        JSONArray jsonPreguntas = new JSONArray();
+ 
+        public static void guardarPreguntas(HashMap<String, Pregunta> preguntas) {
+            try {
+                // Crear un JSONArray para almacenar las preguntas
+            JSONArray jsonPreguntas = new JSONArray();
 
-        // Iterar sobre el mapa de preguntas y convertir cada pregunta a JSON
-        for (Pregunta pregunta : preguntas.values()) {
-            JSONObject jsonPregunta = new JSONObject();
-            jsonPregunta.put("enunciado", pregunta.getEnunciado());
+            // Iterar sobre el mapa de preguntas y convertir cada pregunta a JSON
+            for (Pregunta pregunta : preguntas.values()) {
+                JSONObject jsonPregunta = new JSONObject();
+                jsonPregunta.put("enunciado", pregunta.getEnunciado());
 
-            if (pregunta instanceof PreguntaAbierta) {
-                jsonPregunta.put("tipoPregunta", "PreguntaAbierta");
-                PreguntaAbierta pa = (PreguntaAbierta) pregunta;
-                jsonPregunta.put("respuesta", pa.getRespuesta());
-                jsonPregunta.put("correcta", pa.isCorrecta());
+                if (pregunta instanceof PreguntaAbierta) {
+                    jsonPregunta.put("tipoPregunta", "PreguntaAbierta");
+                    PreguntaAbierta pa = (PreguntaAbierta) pregunta;
+                    jsonPregunta.put("respuesta", pa.getRespuesta());
+                    jsonPregunta.put("correcta", pa.isCorrecta());
 
-            } else if (pregunta instanceof PreguntaMultiple) {
-                jsonPregunta.put("tipoPregunta", "PreguntaMultiple");
-                PreguntaMultiple pm = (PreguntaMultiple) pregunta;
-                jsonPregunta.put("opciones", new JSONArray(pm.getOpciones()));
-                jsonPregunta.put("opcionCorrecta", pm.getOpcionCorrecta() + 1);
-                jsonPregunta.put("opcionSeleccionada", pm.getOpcionSeleccionada());
-            } else if (pregunta instanceof Pregunta) {
-            	jsonPregunta.put("tipoPregunta", "Pregunta");
+                } else if (pregunta instanceof PreguntaMultiple) {
+                    jsonPregunta.put("tipoPregunta", "PreguntaMultiple");
+                    PreguntaMultiple pm = (PreguntaMultiple) pregunta;
+                    jsonPregunta.put("opciones", new JSONArray(pm.getOpciones()));
+                    jsonPregunta.put("opcionCorrecta", pm.getOpcionCorrecta() + 1);
+                    jsonPregunta.put("opcionSeleccionada", pm.getOpcionSeleccionada());
+                } else {
+                    jsonPregunta.put("tipoPregunta", "Pregunta");
+                }
+                jsonPreguntas.put(jsonPregunta);
             }
-            jsonPreguntas.put(jsonPregunta);
-        }
 
-        // Escribir el JSON al archivo
-        try (FileWriter writer = new FileWriter(ARCHIVO_PREGUNTAS)) {
-            writer.write(jsonPreguntas.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
+            // Escribir el JSONArray al archivo
+            try (FileWriter file = new FileWriter(ARCHIVO_PREGUNTAS)) {
+                file.write(jsonPreguntas.toString(2)); // El segundo argumento es para pretty-printing
+                    file.flush();
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
-}
+

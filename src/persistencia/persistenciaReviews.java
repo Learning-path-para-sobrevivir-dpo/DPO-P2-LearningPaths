@@ -1,7 +1,6 @@
 package persistencia;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+
 
 import modelo.Review;
 
@@ -10,9 +9,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class persistenciaReviews {
 
-    private static final String ARCHIVO_REVIEWS = "C:\\\\Users\\\\manue\\\\git\\\\DPO-P1-LearningPaths\\\\datos\\\\reviews.json";
+    private static final String ARCHIVO_REVIEWS = "C:\\Users\\manue\\git\\DPO-P1-LearningPaths\\datos\\reviews.json";
 
     public static HashMap<String, Review> cargarReviews() {
         HashMap<String, Review> reviews = new HashMap<>();
