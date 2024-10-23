@@ -147,6 +147,11 @@ public class Profesor extends Usuario{
 		return nuevaActividad;
 	}
 	
+	/**
+	 * Obtiene una actividad del profesor dado su nombre
+	 * @param nombreActividad: nombre de la actividad
+	 * @return La actividad buscada. Null si no se encuentra
+	 */
 	public Actividad obtenerActividad(String nombreActividad){
 		Actividad act = null;
 		Iterator<Actividad> it = this.actCreadas.iterator();
@@ -164,6 +169,18 @@ public class Profesor extends Usuario{
 			act = null;
 		}
 		return act;
+	}
+	
+	/**
+	 * Obtiene un Learning Path del profesor dado su titulo
+	 * @param nombreLP: titulo del Learning Path
+	 * @return El Learning Path buscado. Es Null si el profesor no tiene un
+	 * learning path que coincida con la busqueda
+	 */
+	public LearningPath obtenerLearningPath(String nombreLP)
+	{
+		LearningPath lp = this.learningPathsCreados.get(nombreLP);
+		return lp;
 	}
 	
 }
