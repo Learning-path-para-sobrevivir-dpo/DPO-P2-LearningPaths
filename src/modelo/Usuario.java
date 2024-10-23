@@ -66,7 +66,7 @@ public abstract class Usuario {
         LocalDate fechaActual = LocalDate.now();
         String fecha = fechaActual.toString();
         
-		Review review = new Review(fecha, contenido, this, tipo);
+		Review review = new Review(fecha, contenido, tipo);
 		
 		reviews.add(review);
 		 

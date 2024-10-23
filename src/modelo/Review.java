@@ -8,7 +8,7 @@ public class Review {
 	//Galarza: borre autor porque no lo considero necesrio
 	public String tipo;
 	
-	public Review(String fecha, String contenido, Usuario autor, String tipo) {
+	public Review(String fecha, String contenido, String tipo) {
 		super();
 		this.fecha = fecha;
 		this.contenido = contenido;

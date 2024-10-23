@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import modelo.*;
 
 public abstract class Actividad implements Cloneable {
 	public String titulo;
@@ -256,5 +257,10 @@ public abstract class Actividad implements Cloneable {
 	 * en caso de que el estudiante no obtenga una buena calificación
 	 */
 	public abstract void descompletarActividad();
+
+	protected abstract void setReviews(List<Review> listaReviews);
+	{
+		this.reviews= listaReviews;
+	}
 
 }
