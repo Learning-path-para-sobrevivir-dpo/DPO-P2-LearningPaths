@@ -2,6 +2,7 @@ package consola;
 
 import java.util.Scanner;
 
+import excepciones.YaExisteActividadEnProgresoException;
 import modelo.Actividad;
 import modelo.Estudiante;
 import modelo.Examen;
@@ -70,7 +71,15 @@ public class Consola {
         
         //Asumimos que estudiante 1 ya está haciendo la actividad 1 de path0
         estudiante1.iniciarActividad(1, "Arte y Sociedad");
-        pEst1LP0.empezarActividad(examenArtSoc);
+        try {
+			pEst1LP0.empezarActividad(examenArtSoc);
+		} catch (YaExisteActividadEnProgresoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
         LearningPath path1 = new LearningPath("Estructuras de Datos en Java", "Curso que te enseña todo sobre Estructuras de Datos en Java",
         		"Conocer todo sobre Estructuras de Datos en Java", 1, 0,
@@ -80,7 +89,11 @@ public class Consola {
         Tarea tarea1 = new Tarea("Ejercicios Mapas Java", "Completar estos ejercicios de mapas", 1, 40, true,
         		10, "Tarea", "1. Hallar mapas de los datos. 2. Hacer un mapa con los datos de clase.");
 
-
+        datos.addActividad(tarea1);
+        datos.addActividad(recurso1);
+        datos.addActividad(examenArtSoc);
+        datos.addLearningPath(path0);
+        datos.addLearningPath(path1);
         
         // Procesamos la opción seleccionada
         switch (opcion) {
@@ -114,8 +127,7 @@ public class Consola {
                 System.out.println("Has seleccionado 'Profesor: Crear Actividad'");
                 Actividad quiz1 = profesor1.crearActividad("Quiz Datos Java", "Quiz sobre datos en Java", 2, 20, true,
             	        30, "Quiz");
-                datos.addActividad(tarea1);
-                datos.addActividad(recurso1);   
+                datos.addActividad(quiz1);   
                 break;
                 
             case 5:
@@ -160,7 +172,12 @@ public class Consola {
 
                 Actividad actCompletar = datos.getActividadPorID(examenArtSoc.getIdEstudiante());
                 estudiante1.completarActividad(1, "Arte y Sociedad");
-                pEst1LP0.completarActividad(actCompletar);
+			try {
+				pEst1LP0.completarActividad(actCompletar);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
                 
                 break;
                 
