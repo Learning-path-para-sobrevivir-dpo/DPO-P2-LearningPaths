@@ -420,11 +420,17 @@ public class Progreso {
 	private void calcularProgreso() {
 		int actTotales = this.actPendientes.size() + this.actCompletadas.size();
 		int actCompletadas = this.actCompletadas.size();
-		this.progresoTotal = (actCompletadas / actTotales) * 100;
+		if (actTotales != 0)
+		{
+			this.progresoTotal = (actCompletadas / actTotales) * 100;
+		}
 		
 		actTotales = this.actObligatoriasCompletadas.size() + this.actObligatoriasPendientes.size();
 		actCompletadas = this.actObligatoriasCompletadas.size();
-		this.progresoObligatorio = (actCompletadas / actTotales) * 100;
+		if (actTotales != 0)
+		{
+			this.progresoObligatorio = (actCompletadas / actTotales) * 100;
+		}
 	}
 	
 	/**
