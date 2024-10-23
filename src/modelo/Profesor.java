@@ -3,6 +3,7 @@ package modelo;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -146,5 +147,23 @@ public class Profesor extends Usuario{
 		return nuevaActividad;
 	}
 	
+	public Actividad obtenerActividad(String nombreActividad){
+		Actividad act = null;
+		Iterator<Actividad> it = this.actCreadas.iterator();
+		boolean encontrada = false;
+		while (!encontrada && it.hasNext())
+		{
+			act = it.next();
+			if (nombreActividad.equals(act.titulo))
+			{
+				encontrada = true;
+			}
+		}
+		if (!encontrada)
+		{
+			act = null;
+		}
+		return act;
+	}
 	
 }
