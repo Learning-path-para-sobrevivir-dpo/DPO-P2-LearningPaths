@@ -1,5 +1,7 @@
 package modelo;
 
+import java.util.List;
+
 public class Tarea extends Actividad{
 	
 	private String medioEntrega;
@@ -61,5 +63,9 @@ public class Tarea extends Actividad{
 			this.setCompletada(false);
 			this.setEnviado(false);
 		}
+	}
+	
+	protected void setReviews(List<Review> listaReviews) {
+		this.reviews= listaReviews; 	
 	}
 }

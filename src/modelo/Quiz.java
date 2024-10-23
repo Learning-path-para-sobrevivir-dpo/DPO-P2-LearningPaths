@@ -160,4 +160,8 @@ public class Quiz extends Prueba{
 		}
 	}
 	
+	protected void setReviews(List<Review> listaReviews) {
+		this.reviews= listaReviews; 	
+	}
+	
 }

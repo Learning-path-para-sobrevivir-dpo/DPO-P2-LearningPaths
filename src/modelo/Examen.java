@@ -158,5 +158,11 @@ public class Examen extends Prueba{
 			this.setCalificado(true);
 		}
 	}
+
+	@Override
+	protected void setReviews(List<Review> listaReviews) {
+		this.reviews= listaReviews;
+		
+	}
 	
 }

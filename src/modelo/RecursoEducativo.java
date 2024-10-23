@@ -1,5 +1,7 @@
 package modelo;
 
+import java.util.List;
+
 public class RecursoEducativo extends Actividad {
 	
 	private String tipoRecurso;
@@ -63,6 +65,9 @@ public class RecursoEducativo extends Actividad {
 		this.setEstado("");
 	}
 	
+	protected void setReviews(List<Review> listaReviews) {
+		this.reviews= listaReviews; 	
+	}
 	
 
 }
