@@ -14,6 +14,15 @@ public class Review {
 		this.rating = 0;
 		this.autor = autor;
 	}
+	
+	public Review(String fecha, String contenido, int rating, Usuario autor) {
+		super();
+		this.fecha = fecha;
+		this.contenido = contenido;
+		this.rating = rating;
+		this.autor = autor;
+	}
+	
 
 	public String getFecha() {
 		return fecha;

@@ -69,7 +69,7 @@ public abstract class Usuario {
 	 * @param actID: ID de la actividad a la que se agregará la reseña
 	 * 
 	 */
-	public void addReview(String contenido, Actividad actividad) {
+	public Review addReview(String contenido, Actividad actividad) {
 		
         LocalDate fechaActual = LocalDate.now();
         String fecha = fechaActual.toString();
@@ -81,6 +81,26 @@ public abstract class Usuario {
 		reviews.add(review);
 		
 		actividad.addReview(review);
+		
+		return review;
+		
+		
+	}
+	
+	public Review addReviewWithRating (String contenido, Actividad actividad, int rating) {
+		
+        LocalDate fechaActual = LocalDate.now();
+        String fecha = fechaActual.toString();
+                        
+      //Buscar actividad y añadir la reseña a la reseña a la respectiva actividad.
+                
+		Review review = new Review(fecha, contenido, rating, this);
+		
+		reviews.add(review);
+		
+		actividad.addReview(review);
+		
+		return review;
 		
 		
 	}
