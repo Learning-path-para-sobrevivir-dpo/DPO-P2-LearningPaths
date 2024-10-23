@@ -8,15 +8,19 @@ import java.util.List;
 import java.util.Set;
 
 
-import modelo.Actividad;
-import modelo.LearningPath;
-import modelo.Usuario;
-
+import modelo.*;
 
 public class ManejoDatos {
-	private HashMap<List<String>, Usuario> usuarios = PersistenciaUsuarios.cargarUsuarios();
-    private HashMap<String, LearningPath> learningPaths = PersistenciaLearningPaths.cargarLearningPaths();
-    private HashMap<String, Actividad> actividades = PersistenciaActividades.cargarActividades();
+	private HashMap<List<String>, Usuario> usuarios; 
+    private HashMap<String, LearningPath> learningPaths;
+    private HashMap<String, Actividad> actividades;
+    private HashMap<String, Pregunta> preguntas;
+    private HashMap<String, Progreso> progresos;
+    private HashMap<String, Review> reviews;
+    
+    public ManejoDatos() {
+    	
+    }
     
 	public HashMap<List<String>, Usuario> getUsuarios() {
 		return usuarios;

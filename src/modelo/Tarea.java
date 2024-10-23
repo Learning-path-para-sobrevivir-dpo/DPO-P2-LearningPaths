@@ -65,7 +65,7 @@ public class Tarea extends Actividad{
 		}
 	}
 	
-	protected void setReviews(List<Review> listaReviews) {
+	public void setReviews(List<Review> listaReviews) {
 		this.reviews= listaReviews; 	
 	}
 }

@@ -65,7 +65,7 @@ public class RecursoEducativo extends Actividad {
 		this.setEstado("");
 	}
 	
-	protected void setReviews(List<Review> listaReviews) {
+	public void setReviews(List<Review> listaReviews) {
 		this.reviews= listaReviews; 	
 	}
 	

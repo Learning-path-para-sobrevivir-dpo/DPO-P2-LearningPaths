@@ -160,7 +160,7 @@ public class Examen extends Prueba{
 	}
 
 	@Override
-	protected void setReviews(List<Review> listaReviews) {
+	public void setReviews(List<Review> listaReviews) {
 		this.reviews= listaReviews;
 		
 	}

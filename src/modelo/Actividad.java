@@ -258,6 +258,6 @@ public abstract class Actividad implements Cloneable {
 	 */
 	public abstract void descompletarActividad();
 
-	protected abstract void setReviews(List<Review> listaReviews);
+	public abstract void setReviews(List<Review> listaReviews);
 
 }

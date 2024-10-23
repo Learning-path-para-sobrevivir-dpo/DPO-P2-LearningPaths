@@ -111,7 +111,7 @@ public class Encuesta extends Prueba {
 		}
 	}
 
-	protected void setReviews(List<Review> listaReviews) {
+	public void setReviews(List<Review> listaReviews) {
 		this.reviews= listaReviews; 	
 	}
 	
