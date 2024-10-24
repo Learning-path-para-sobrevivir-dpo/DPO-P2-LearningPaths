@@ -1,5 +1,7 @@
 package modelo;
 
+import java.util.List;
+
 public abstract class Prueba extends Actividad{
 
 	private float calificacion;
@@ -64,4 +66,5 @@ public abstract class Prueba extends Actividad{
 	public abstract void calcularCalificacion();
 	
 	public abstract void responderPrueba();
+
 }

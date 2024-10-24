@@ -17,15 +17,15 @@ public class LearningPath {
 	public String fechaModificacion;
 	public int version;
 	private Map<String, Progreso> progresosEstudiantiles;
-	private Profesor autor;
-	private List<Estudiante> estudiantes;
+	private String autor;  //Cambie Profesor por String
+	private List<String> estudiantes; //Galarza: Cambie lista de estudiante por lista de strings
 	//Mapa donde las actividades estan identificadas por un número que indica
 	//el orden sugerido para completar las actividades
 	private Map<Integer,Actividad> actividades;
 	private List<String> actividadesIDs;
 	
 	public LearningPath(String titulo, String descripcion, String objetivo, int nivelDificultad, int rating,
-			String fechaCreacion, String fechaModificacion, int version, Profesor autor) {
+			String fechaCreacion, String fechaModificacion, int version, String autor) {
 		this.titulo = titulo;
 		this.descripcion = descripcion;
 		this.objetivo = objetivo;
@@ -37,7 +37,7 @@ public class LearningPath {
 		this.version = version;
 		this.progresosEstudiantiles = new HashMap<String, Progreso>();
 		this.autor = autor;
-		this.estudiantes = new ArrayList<Estudiante>();
+		this.estudiantes = new ArrayList<String>();
 		this.actividades = new HashMap<Integer,Actividad>();
 		this.actividadesIDs = new ArrayList<String>();
 	}
@@ -112,15 +112,15 @@ public class LearningPath {
 		return progresosEstudiantiles;
 	}
 
-	public Profesor getAutor() {
+	public String getAutor() {
 		return autor;
 	}
 
-	public List<Estudiante> getEstudiantes() {
+	public List<String> getEstudiantes() {
 		return estudiantes;
 	}
 
-	public void setEstudiantes(List<Estudiante> estudiantes) {
+	public void setEstudiantes(List<String> estudiantes) {
 		this.estudiantes = estudiantes;
 	}
 
@@ -217,9 +217,9 @@ public class LearningPath {
      */
     public void addProgresoEstudiante(Progreso progreso)
     {
-    	Estudiante estudiante = progreso.getEstudiante();
+    	String estudiante = progreso.getEstudiante();
     	this.estudiantes.add(estudiante);
-    	this.progresosEstudiantiles.put(estudiante.getLogin(), progreso);
+    	this.progresosEstudiantiles.put(estudiante, progreso);
     }
 
 }

@@ -76,7 +76,8 @@ public abstract class Usuario {
                         
       //Buscar actividad y añadir la reseña a la reseña a la respectiva actividad.
                 
-		Review review = new Review(fecha, contenido, this);
+		Review review = new Review(fecha, contenido, tipo);
+
 		
 		reviews.add(review);
 		

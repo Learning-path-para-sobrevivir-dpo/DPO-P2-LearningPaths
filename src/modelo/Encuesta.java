@@ -110,6 +110,10 @@ public class Encuesta extends Prueba {
 			this.setCalificacion(5);
 		}
 	}
+
+	public void setReviews(List<Review> listaReviews) {
+		this.reviews= listaReviews; 	
+	}
 	
 
 }

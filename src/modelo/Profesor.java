@@ -100,7 +100,7 @@ public class Profesor extends Usuario{
         LocalDate fechaActual = LocalDate.now();
         String fecha = fechaActual.toString();
 		
-        LearningPath path = new LearningPath(titulo, descripcion, obj, dificultad, 0, fecha, fecha, 1, this);
+        LearningPath path = new LearningPath(titulo, descripcion, obj, dificultad, 0, fecha, fecha, 1, this.getTipo());
         learningPathsCreados.put(titulo, path);
         
         return path;
@@ -129,6 +129,16 @@ public class Profesor extends Usuario{
 	        // Lanzar excepción si el LearningPath no fue creado por este profesor
 	        throw new IllegalArgumentException("LearningPath no encontrado: " + titulo);
 	    }
+	}
+
+
+	public Map<String, LearningPath> getLearningPathsCreados() {
+		return this.learningPathsCreados;
+	}
+
+
+	public List<Actividad> getActCreadas() {
+		return this.actCreadas;
 	}
 
 	public Actividad clonarActividad(Actividad actividad) {

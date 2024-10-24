@@ -8,7 +8,7 @@ public class PreguntaAbierta extends Pregunta {
 	public PreguntaAbierta(String enunciado) {
 		super(enunciado);
 		// TODO Auto-generated constructor stub
-		respuesta = null;
+		respuesta = "No hay respuesta";
 		correcta = false;
 	}
 

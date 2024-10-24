@@ -8,24 +8,34 @@ import java.util.List;
 import java.util.Set;
 
 
-import modelo.Actividad;
-import modelo.LearningPath;
-import modelo.Usuario;
-
+import modelo.*;
 
 public class ManejoDatos {
-	private HashMap<List<String>, Usuario> usuarios;
+	private HashMap<List<String>, Usuario> usuarios; 
     private HashMap<String, LearningPath> learningPaths;
     private HashMap<String, Actividad> actividades;
-    private HashMap<String, Actividad> actividadesEstudiantes;
-	
-	public ManejoDatos() {
-		super();
-		this.usuarios = PersistenciaUsuarios.cargarUsuarios();;
-		this.actividades = PersistenciaActividades.cargarActividades();
-		this.learningPaths = PersistenciaLearningPaths.cargarLearningPaths();
-		this.addActividadesPaths();
-	}
+    private HashMap<String, Pregunta> preguntas;
+    private HashMap<List<String>, Progreso> progresos;
+    private HashMap<String, Review> reviews;
+    
+    public ManejoDatos() {
+    	this.usuarios = new HashMap<List<String>, Usuario>();
+        this.learningPaths = new HashMap<String, LearningPath>();
+        this.actividades = new HashMap<String, Actividad>();
+        this.preguntas = new HashMap<String, Pregunta>();
+        this.progresos = new HashMap<List<String>, Progreso>();
+        this.reviews = new HashMap<String, Review>();
+    }
+    
+    public void cargarDatos() {
+    	this.reviews = PersistenciaReviews.cargarReviews();
+    	this.preguntas = PersistenciaPreguntas.cargarPreguntas();
+    	this.actividades = PersistenciaActividades.cargarActividades(reviews, preguntas);
+    	this.progresos = PersistenciaProgresos.cargarProgresos(actividades);
+    	this.learningPaths = PersistenciaLearningPaths.cargarLearningPaths(progresos,actividades);
+    	this.usuarios = PersistenciaUsuarios.cargarUsuarios(progresos, learningPaths, reviews, actividades);
+    }
+
     
 	public HashMap<List<String>, Usuario> getUsuarios() {
 		return usuarios;
@@ -151,8 +161,7 @@ public class ManejoDatos {
 		{
 			actividades.put(actividad.getId(), actividad);
 	        PersistenciaActividades.guardarActividades(actividades);
-		}
-	}
+        }}
 	
 	/**
 	 * Encuentra todas las actividades con un nombre
@@ -231,27 +240,33 @@ public class ManejoDatos {
 			this.learningPaths.replace(path.getTitulo(), path);
 		}
 	}
+
+//Manejo de progreso, reviews, preguntas
 	
-	/**
-	 * Funcion para añadir las actividades a los paths.
-	 * Se toma la lista de ids de actividades del path y se añaden
-	 * las actividades en el orden de la lista
-	 */
-	private void addActividadesPaths()
+	public void addProgreso(Progreso progreso)
 	{
-		Set<String> paths = this.learningPaths.keySet();
-		LearningPath path;
-		List<String> ids;
-		Actividad act;
-		for (Iterator<String> it = paths.iterator(); it.hasNext();)
+		if (progreso != null)
 		{
-			path = this.learningPaths.get(it.next());
-			ids = path.getActividadesIDs();
-			for (int i = 0; i < ids.size(); i++)
-			{
-				act = this.getActividadPorID(ids.get(i));
-				path.addActividadDeUltimas(act);
-			}
+			this.progresos.put(List.of(progreso.getLearningPath(),progreso.getEstudiante()), progreso);
+			PersistenciaProgresos.guardarProgreso(progresos);
+		}
+	}
+	
+	public void addReview(Review review)
+	{
+		if (review != null)
+		{
+			this.reviews.put(review.getContenido(), review);
+			PersistenciaReviews.guardarReviews(reviews);
+		}
+	}
+	
+	public void addPregunta(Pregunta pregunta)
+	{
+		if (pregunta != null)
+		{
+			this.preguntas.put(pregunta.getEnunciado(), pregunta);
+			PersistenciaPreguntas.guardarPreguntas(preguntas);;
 		}
 	}
 }
