@@ -136,10 +136,10 @@ public class Consola {
                 Actividad actAClonar = datos.getActividad(tarea1.getId());
                 System.out.println("Actividad a Clonar: "+ actAClonar);
                 
-                ///Actividad actClonada = profesor1.clonarActividad(actAClonar);
-                ///datos.addActividad(actClonada);
+                Actividad actClonada = profesor1.clonarActividad(actAClonar);
+                datos.addActividad(actClonada);
                 
-                ///System.out.println("Actividad se clonó correctamente: " + actClonada);
+                System.out.println("Actividad se clonó correctamente: " + actClonada);
                 break;
                
             case 6:
