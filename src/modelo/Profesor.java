@@ -143,7 +143,21 @@ public class Profesor extends Usuario{
 	}
 
 	
-	
+	public Actividad clonarActividad(Actividad actividad) {
+		Actividad nuevaActividad = null;
+		try {
+			nuevaActividad = (Actividad) actividad.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (nuevaActividad != null)
+		{
+			nuevaActividad.actividadClonadaProfesor();
+			this.actCreadas.add(nuevaActividad);
+		}
+		return nuevaActividad;
+	}
 	
 	
 }
