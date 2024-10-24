@@ -130,9 +130,53 @@ public class Consola {
                 
             case 4:
                 System.out.println("Has seleccionado 'Profesor: Crear Actividad'");
-                Actividad quiz1 = profesor1.crearActividad("Quiz Datos Java", "Quiz sobre datos en Java", 2, 20, true,
-            	        30, "Quiz");
-                datos.addActividad(quiz1);   
+                System.out.println("Cuál actividad: ");
+                System.out.println("1. Recurso Educativo");
+                System.out.println("2. Examen");
+                System.out.println("3. Quiz");
+                System.out.println("4. Encuesta");
+                System.out.println("5. Tarea");
+                
+                System.out.print("Opción: ");
+                int actop = scanner.nextInt();
+                
+                switch (actop) {
+                
+                case 1:
+                    
+                	Actividad rec = profesor1.crearRecursoEducativo("Recurso 1", "", 1, 1, false, 1, "", "", "", "");
+                	datos.addActividad(rec);
+                    break;
+                    
+                case 2: 
+                	
+                	Actividad exam = profesor1.crearExamen("Ex Prueba", "", 1, 20, true,
+                	        20, "Prueba", "Examen");
+                	datos.addActividad(exam);
+                    break;
+                    
+                case 3: 
+                	
+                	Actividad quiz = profesor1.crearQuiz("Quiz Prueba", "", 1, 30,true,
+                	        50, "Prueba","Quiz", 1);
+                	datos.addActividad(quiz);
+                    break;
+                    
+                case 4: 
+                	
+                	Actividad encuesta = profesor1.crearEncuesta("Encuesta Prueba", "", 2, 20, false,
+                	        10, "Prueba", "Encuesta");
+                	datos.addActividad(encuesta);
+                    break;
+                   
+                case 5: 
+                	
+                	Actividad tarea = profesor1.crearTarea("Quiz Datos Java", "Quiz sobre datos en Java", 2, 20, true,
+                	        30, "Quiz", "");
+                	datos.addActividad(tarea);
+                    break;
+                }
+                      
                 break;
                 
             case 5:
@@ -150,7 +194,7 @@ public class Consola {
             case 6:
                 System.out.println("Has seleccionado 'Profesor: Añadir Actividad a Learning Path'");
                 
-                String nomLP = path1.getTitulo();
+                String nomLP = path0.getTitulo();
                 LearningPath pathAñadir = datos.getLearningPath(nomLP);
                 
                 Actividad actAñadir = datos.getActividad(tarea1.getId());
@@ -212,4 +256,3 @@ public class Consola {
 
 
 }
-

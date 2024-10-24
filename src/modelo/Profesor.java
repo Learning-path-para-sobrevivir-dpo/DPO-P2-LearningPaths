@@ -18,11 +18,55 @@ public class Profesor extends Usuario{
 		actCreadas = new ArrayList<Actividad>();
 	}
 	
-
+	
 	/**
+	 * Métodos para crear todas las actividades diferentes
+	 */
+	public Actividad crearRecursoEducativo(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+	        int tiempoCompletarSugerido, String tipo, String tipoRecurso, String contenido, String enlace) {
+		
+		Actividad newAct = new RecursoEducativo(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, 
+                tiempoCompletarSugerido, tipo, tipoRecurso, contenido, enlace);
+		return newAct;
+	}
+	
+	public Actividad crearExamen(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+	        int tiempoCompletarSugerido, String tipo, String tipoPrueba) {
+		
+		Actividad newAct = new Examen(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
+    			tiempoCompletarSugerido, tipo, tipoPrueba);
+		
+		return newAct;
+	}
+	
+	public Actividad crearQuiz(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+	        int tiempoCompletarSugerido, String tipo, String tipoPrueba, float calificacionMinima) {
+		Actividad newAct = new Quiz(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,tiempoCompletarSugerido, tipo, calificacionMinima, tipoPrueba);
+		
+		return newAct;
+	}
+				
+	public Actividad crearEncuesta(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+	        int tiempoCompletarSugerido, String tipo, String tipoPrueba) {
+	
+		Actividad newAct = new Encuesta(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
+				tiempoCompletarSugerido, tipo, tipoPrueba);
+		return newAct;
+	}
+	
+	public Actividad crearTarea(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+	        int tiempoCompletarSugerido, String tipo, String contenido) {
+	
+		Actividad newAct = new Tarea(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
+    			tiempoCompletarSugerido, tipo, contenido);
+		return newAct;
+	}
+	
+	
+	/***
 	 * Método crea una nueva actividad. Se debe buscar y actuar diferente segun el tipo de 
 	 * actividad a crear dado que Actividad es una clase abstracta.
-	 */
+	 
 	public Actividad crearActividad(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
 	        int tiempoCompletarSugerido, String tipo) {
 
@@ -86,6 +130,7 @@ public class Profesor extends Usuario{
 	    
 	    return newAct;
 	}
+	***/
 	
 
 	/**
