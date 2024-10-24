@@ -3,6 +3,7 @@ package modelo;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -23,7 +24,7 @@ public class Profesor extends Usuario{
 	 * Método crea una nueva actividad. Se debe buscar y actuar diferente segun el tipo de 
 	 * actividad a crear dado que Actividad es una clase abstracta.
 	 */
-	public void crearActividad(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+	public Actividad crearActividad(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
 	        int tiempoCompletarSugerido, String tipo) {
 
 		Actividad newAct = null;
@@ -83,6 +84,7 @@ public class Profesor extends Usuario{
 	    scanner.close();  
 
 	    actCreadas.add(newAct);
+	    return newAct;
 	}
 	
 
@@ -93,7 +95,7 @@ public class Profesor extends Usuario{
 	 * @param obj: objetivo del LearningPath
 	 * @param dificultad: nivel de dificultad
 	 */
-	public void crearLearningPath(String titulo, String descripcion, String obj, int dificultad) {
+	public LearningPath crearLearningPath(String titulo, String descripcion, String obj, int dificultad) {
 		
         LocalDate fechaActual = LocalDate.now();
         String fecha = fechaActual.toString();
@@ -101,6 +103,7 @@ public class Profesor extends Usuario{
         LearningPath path = new LearningPath(titulo, descripcion, obj, dificultad, 0, fecha, fecha, 1, this.getTipo());
         learningPathsCreados.put(titulo, path);
         
+        return path;
 	}
 	
 	/**
@@ -138,8 +141,56 @@ public class Profesor extends Usuario{
 		return this.actCreadas;
 	}
 
+	public Actividad clonarActividad(Actividad actividad) {
+		Actividad nuevaActividad = null;
+		try {
+			nuevaActividad = (Actividad) actividad.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (nuevaActividad != null)
+		{
+			nuevaActividad.actividadClonadaProfesor();
+			this.actCreadas.add(nuevaActividad);
+		}
+		return nuevaActividad;
+	}
 	
+	/**
+	 * Obtiene una actividad del profesor dado su nombre
+	 * @param nombreActividad: nombre de la actividad
+	 * @return La actividad buscada. Null si no se encuentra
+	 */
+	public Actividad obtenerActividad(String nombreActividad){
+		Actividad act = null;
+		Iterator<Actividad> it = this.actCreadas.iterator();
+		boolean encontrada = false;
+		while (!encontrada && it.hasNext())
+		{
+			act = it.next();
+			if (nombreActividad.equals(act.titulo))
+			{
+				encontrada = true;
+			}
+		}
+		if (!encontrada)
+		{
+			act = null;
+		}
+		return act;
+	}
 	
-	
+	/**
+	 * Obtiene un Learning Path del profesor dado su titulo
+	 * @param nombreLP: titulo del Learning Path
+	 * @return El Learning Path buscado. Es Null si el profesor no tiene un
+	 * learning path que coincida con la busqueda
+	 */
+	public LearningPath obtenerLearningPath(String nombreLP)
+	{
+		LearningPath lp = this.learningPathsCreados.get(nombreLP);
+		return lp;
+	}
 	
 }

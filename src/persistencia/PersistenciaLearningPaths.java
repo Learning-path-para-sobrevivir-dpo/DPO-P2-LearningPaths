@@ -1,6 +1,5 @@
 package persistencia;
 
-
 import modelo.*;
 
 import java.io.FileWriter;
@@ -14,8 +13,8 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class PersistenciaLearningPaths {
 
+public class PersistenciaLearningPaths {
     private static final String ARCHIVO_LEARNINGPATHS = "datos/learningPaths.json";
 
     // Método para cargar Learning Paths desde un archivo JSON
@@ -145,7 +144,6 @@ public class PersistenciaLearningPaths {
             try (FileWriter file = new FileWriter(ARCHIVO_LEARNINGPATHS)) {
                 file.write(jsonLearningPaths.toString(4));
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }

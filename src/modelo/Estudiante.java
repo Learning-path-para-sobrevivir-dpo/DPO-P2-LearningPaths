@@ -71,7 +71,7 @@ public class Estudiante extends Usuario {
     			try {
 					progreso.empezarActividad(actividad);
 					inicioExitoso = true;
-				} catch (YaExisteActividadEnProgresoException e) {
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

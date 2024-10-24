@@ -2,7 +2,10 @@ package modelo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import java.util.HashSet;
+
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -22,6 +25,7 @@ public class Progreso {
 	private Map<String, Actividad> idActividades;
 	private int progresoObligatorio;
 	private int progresoTotal;
+	private List<String> idsActividadesCopiadas;
 	
 	public Progreso(String learningPath, String estudiante) {
 		this.learningPath = learningPath;
@@ -33,25 +37,37 @@ public class Progreso {
 		this.actividadEnProgreso = null;
 		this.idActividades = new HashMap<String, Actividad>();
 		this.progresoObligatorio = 0;
-		this.progresoTotal = 0;
-		//this.obtenerActividadesPath(); Galarza: lo quite porque cambie obternerActividades, pero de por si o entinedo que hace
-	
+		this.progresoTotal = 0;	
 	}
 
 	public Progreso(String learningPath,String estudiante, Map<Integer, Actividad> actividadesPath,
 			List<Actividad> actObligatoriasPendientes, List<Actividad> actObligatoriasCompletadas,
 			List<Actividad> actPendientes, List<Actividad> actCompletadas, Actividad actividadEnProgreso) {
+
+		this.obtenerActividadesPath();
+		this.idsActividadesCopiadas = new ArrayList<String>();
+	}
+
+	/**
+	 * Constructor de progreso para manejo de datos
+	 * @param learningPath
+	 * @param estudiante
+	 * @param idsActividadesCopiadas
+	 */
+	public Progreso(LearningPath learningPath, Estudiante estudiante, List<String> idsActividadesCopiadas) {
 		super();
 		this.learningPath = learningPath;
 		this.estudiante = estudiante;
-		this.actividadesPath = actividadesPath;
-		this.actObligatoriasPendientes = actObligatoriasPendientes;
-		this.actObligatoriasCompletadas = actObligatoriasCompletadas;
-		this.actPendientes = actPendientes;
-		this.actCompletadas = actCompletadas;
-		this.actividadEnProgreso = actividadEnProgreso;
+		this.progresoObligatorio = 0;
+		this.progresoTotal = 0;
+		this.idsActividadesCopiadas = idsActividadesCopiadas;
+		this.actividadesPath = new HashMap<Integer, Actividad>();
+		this.actCompletadas = new ArrayList<Actividad>();
+		this.actPendientes = new ArrayList<Actividad>();
+		this.actObligatoriasCompletadas = new ArrayList<Actividad>();
+		this.actividadEnProgreso = null;
+		this.idActividades = new HashMap<String, Actividad>();
 	}
-
 
 
 	public Map<Integer, Actividad> getActividadesPath() {
@@ -134,6 +150,16 @@ public class Progreso {
 		return progresoTotal;
 	}
 
+	public List<String> getIdsActividadesCopiadas() {
+		return idsActividadesCopiadas;
+	}
+
+
+	public void setIdsActividadesCopiadas(List<String> idsActividadesCopiadas) {
+		this.idsActividadesCopiadas = idsActividadesCopiadas;
+	}
+
+
 	/**
 	 * Clona todas las actividades de un Learning Path para poder ser completadas por el estudiante //Galarza: modifique para que reciba el mapa de learning paths.
 	 */
@@ -144,16 +170,22 @@ public class Progreso {
 		int tamanio = learningPath.getActividades().size();
 		Actividad actNueva;
 		Actividad actVieja;
+		HashMap<Integer, Actividad> nuevasActividades = new HashMap<Integer, Actividad>();
 		for (int i = 1; i <= tamanio; i++)
 		{
 			try {
 				actNueva = (Actividad) learningPath.getActividades().get(i).clone();
+				actNueva.actividadClonadaProgreso();
+
 				Set<String> ids = this.idActividades.keySet();
 				if (ids.contains(actNueva.getId()))
 				{
 					actVieja = this.idActividades.get(actNueva.getId());
-					actNueva.setEstado(actVieja.getEstado());
-					actNueva.setCompletada(actVieja.isCompletada());
+					nuevasActividades.put(i, actVieja);
+				}
+				else
+				{
+					nuevasActividades.put(i, actNueva);
 				}
 				this.actividadesPath.put(i, actNueva);
 				this.obtenerIDsActividades();
@@ -161,22 +193,65 @@ public class Progreso {
 				this.obtenerActObligatoriasPendientes();
 				this.obtenerActCompletadas(learningPaths);
 				this.obtenerActObligatoriasCompletadas();
+
 			} catch (CloneNotSupportedException e) {
 				e.printStackTrace();
 			}
 		}
+		this.actividadesPath = nuevasActividades;
+		this.obtenerIDsActividades();
+		this.obtenerActPendientes();
+		this.obtenerActObligatoriasPendientes();
+		this.obtenerActCompletadas();
+		this.obtenerActObligatoriasCompletadas();
+		this.calcularProgreso();
 	}
 	
+	/**
+	 * Añade las actividades clonadas del progreso desde manejo de datos.
+	 * Actualiza todos los valores del progreso
+	 * @param actividadesClonadas: lista de actividades clonadas a añadir al progreso
+	 */
+	public void añadirActividadesClonadas (List<Actividad> actividadesClonadas) {
+		Actividad actividad;
+		int i = 1;
+		HashMap<Integer, Actividad> nuevasActividades = new HashMap<Integer, Actividad>();
+		for (Iterator<Actividad> it = actividadesClonadas.iterator(); it.hasNext();) {
+			actividad = it.next();
+			nuevasActividades.put(i, actividad);
+			i++;
+		}
+		this.obtenerIDsActividades();
+		this.obtenerActPendientes();
+		this.obtenerActObligatoriasPendientes();
+		this.obtenerActCompletadas();
+		this.obtenerActObligatoriasCompletadas();
+		this.calcularProgreso();
+	}
+	
+	/**
+	 * Actualiza el mapa de actividades por ID y la lista de ids de las copias de Actividades
+	 */
 	public void obtenerIDsActividades() {
 		int tamanio = this.actividadesPath.size();
 		Actividad act;
+		Map <String, Actividad> idAct = new HashMap<String, Actividad>();
+		List<String> ids = new ArrayList<String>();
 		for (int i = 1; i <= tamanio; i++)
 		{
 			act = this.actividadesPath.get(i);
-			this.idActividades.put(act.getId(), act);
+			idAct.put(act.getId(), act);
+			ids.add(act.getIdEstudiante());
 		}
+		this.idActividades = idAct;
+		//Actualizar las IDs de Estudiante las actividades clonadas
+		this.idsActividadesCopiadas = ids;
 	}
 	
+/**
+	 * Saca las actividades pendientes de las instancias clonadas de las
+	 * actividades del Learning Path
+	 */
 	public void obtenerActPendientes(HashMap<String, LearningPath> learningPaths) { //Galarza: agregue atributo de hash map
 		String titulo = this.getLearningPath();
 		LearningPath learningPath = learningPaths.get(titulo);
@@ -194,6 +269,10 @@ public class Progreso {
 		this.actPendientes = actividades;
 	}
 	
+	/**
+	 * Saca las actividades obligatorias pendientes de las instancias clonadas de las
+	 * actividades del Learning Path
+	 */
 	public void obtenerActObligatoriasPendientes() {
 		List<Actividad> actividades = new ArrayList<Actividad>();
 		for (Actividad act: this.actPendientes)
@@ -206,7 +285,12 @@ public class Progreso {
 		this.actObligatoriasPendientes = actividades;
 	}
 	
+	/**
+	 * Saca las actividades completadas de las instancias clonadas de las
+	 * actividades del Learning Path
+	 */
 	public void obtenerActCompletadas(HashMap<String, LearningPath> learningPaths) {
+
 		List<Actividad> actividades = new ArrayList<Actividad>();
 		String titulo = this.getLearningPath();
 		LearningPath learningPath = learningPaths.get(titulo);
@@ -223,6 +307,10 @@ public class Progreso {
 		this.actCompletadas = actividades;
 	}
 	
+	/**
+	 * Saca las actividades obligatorias completadas de las instancias clonadas de las
+	 * actividades del Learning Path
+	 */
 	public void obtenerActObligatoriasCompletadas() {
 		List<Actividad> actividades = new ArrayList<Actividad>();
 		for (Actividad act: this.actCompletadas)
@@ -235,7 +323,11 @@ public class Progreso {
 		this.actObligatoriasCompletadas = actividades;
 	}
 	
-	public void eliminarActividadPendiente(Actividad act) {
+	/**
+	 * Elimina una actividad de la lista de actividades pendientes
+	 * @param act: actividad a eliminar de la lista
+	 */
+	private void eliminarActividadPendiente(Actividad act) {
 		if (this.actPendientes.contains(act))
 		{
 			int pos = this.actPendientes.indexOf(act);
@@ -247,8 +339,14 @@ public class Progreso {
 			this.actObligatoriasPendientes.remove(pos);
 		}
 	}
-	
-	public void addActividadPendiente(Actividad act)
+	 /**
+	  * Añade una actividad a la lista de actividades pendientes.
+	  * Esto especialmente se usa cuando un profesor marca como no exitosa
+	  * una actividad y pone la actividad como pendiente para que el 
+	  * estudiante la repita
+	  * @param act: actividad a añadir a pendientes
+	  */
+	private void addActividadPendiente(Actividad act)
 	{
 		if (!this.actPendientes.contains(act))
 		{
@@ -260,7 +358,11 @@ public class Progreso {
 		}
 	}
 	
-	public void eliminarActividadCompletada(Actividad act)
+	/**
+	 * Elimina una acticvidad de la lista de actividades completadas
+	 * @param act: actividad a eliminar
+	 */
+	private void eliminarActividadCompletada(Actividad act)
 	{
 		if (this.actCompletadas.contains(act))
 		{
@@ -274,7 +376,11 @@ public class Progreso {
 		}
 	}
 	
-	public void addActividadCompletada(Actividad act)
+	/**
+	 * Añade una actividad a la lista de actividades completadas
+	 * @param act: actividad a añadir
+	 */
+	private void addActividadCompletada(Actividad act)
 	{
 		if (!this.actCompletadas.contains(act))
 		{
@@ -286,14 +392,31 @@ public class Progreso {
 		}
 	}
 	
-	public void empezarActividad(Actividad act) throws YaExisteActividadEnProgresoException {
+	/**
+	 * Empieza una actividad 
+	 * @param act: actividad a empezar
+	 * @throws YaExisteActividadEnProgresoException cuando se intenta iniciar
+	 * una actividad sin completar la que ya estaba en progreso
+	 */
+	public void empezarActividad(Actividad act) throws YaExisteActividadEnProgresoException, Exception {
 		if (this.actividadEnProgreso != null)
 		{
 			throw new YaExisteActividadEnProgresoException(this.actividadEnProgreso);
 		}
+		if (!this.idsActividadesCopiadas.contains(act.getIdEstudiante()) && !this.idActividades.containsKey(act.getId()))
+		{
+			throw new Exception("Se intento empezar una actividad que no hace parte del Learning Path");
+		}
 		this.actividadEnProgreso = act;
 	}
 	
+	/**
+	 * Marca como completada una actividad
+	 * @param act: actividad a marcar como completada
+	 * @return true si se completa exitosamente, false de lo contrario
+	 * @throws Exception: si se intenta completar una actividad diferente
+	 * a la actividad que esta en progreso
+	 */
 	public boolean completarActividad(Actividad act) throws Exception {
 		boolean completada = false;
 		if (!act.equals(this.actividadEnProgreso))
@@ -304,25 +427,45 @@ public class Progreso {
 		eliminarActividadPendiente(act);
 		addActividadCompletada(act);
 		this.calcularProgreso();
+		this.actividadEnProgreso = null;
 		return completada;
 	}
 	
+	/**
+	 * Marca como no completada una actividad. Esto es exclusivo para los profesores
+	 * para manejar las actividades de los estudiantes
+	 * @param act: actividad a marcar como no completada
+	 */
 	public void descompletarActividad(Actividad act){
 		eliminarActividadCompletada(act);
 		addActividadPendiente(act);
 		this.calcularProgreso();
 	}
 	
+	/**
+	 * Calcula el progreso del estudiante en el Learning Path
+	 */
 	private void calcularProgreso() {
 		int actTotales = this.actPendientes.size() + this.actCompletadas.size();
 		int actCompletadas = this.actCompletadas.size();
-		this.progresoTotal = (actCompletadas / actTotales) * 100;
+		if (actTotales != 0)
+		{
+			this.progresoTotal = (actCompletadas / actTotales) * 100;
+		}
 		
 		actTotales = this.actObligatoriasCompletadas.size() + this.actObligatoriasPendientes.size();
 		actCompletadas = this.actObligatoriasCompletadas.size();
-		this.progresoObligatorio = (actCompletadas / actTotales) * 100;
+		if (actTotales != 0)
+		{
+			this.progresoObligatorio = (actCompletadas / actTotales) * 100;
+		}
 	}
 	
+	/**
+	 * Obtiene una actividad por el número en el que esta guardada en el Learning Path
+	 * @param numActividad: número de la actividad en el Learning Path
+	 * @return La actividad buscada. Es null si no se encuentra
+	 */
 	public Actividad obtenerActividadPorNum(int numActividad) {
 		if (numActividad > this.actividadesPath.size() || numActividad < 1)
 		{
@@ -337,4 +480,13 @@ public class Progreso {
 		
 	}
 	
+	/**
+	 * Retorna una lista de las instancias clonadas del Learning Path y modificadas por el estudiante
+	 * @return lista de actividades del progreso (copias de las originales del Learning Path)
+	 */
+	public List<Actividad> returnActividadesClonadas()
+	{
+		return (List<Actividad>) this.actividadesPath.values();
+	}
+
 }
