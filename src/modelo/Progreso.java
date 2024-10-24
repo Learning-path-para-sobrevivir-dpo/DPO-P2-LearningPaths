@@ -257,13 +257,14 @@ public class Progreso {
 			int pos = this.actPendientes.indexOf(act);
 			this.actPendientes.remove(pos);
 		}
+		if (this.actObligatoriasPendientes != null) {
 		if (this.actObligatoriasPendientes.contains(act))
 		{
 			int pos = this.actObligatoriasPendientes.indexOf(act);
 			this.actObligatoriasPendientes.remove(pos);
 		}
 	}
-	
+	}
 	public void addActividadPendiente(Actividad act)
 	{
 		if (!this.actPendientes.contains(act))
