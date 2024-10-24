@@ -28,10 +28,10 @@ public class ManejoDatos {
     }
     
     public void cargarDatos() {
-    	this.reviews = persistenciaReviews.cargarReviews();
-    	this.preguntas = PeristenciaPreguntas.cargarPreguntas();
+    	this.reviews = PersistenciaReviews.cargarReviews();
+    	this.preguntas = PersistenciaPreguntas.cargarPreguntas();
     	this.actividades = PersistenciaActividades.cargarActividades(reviews, preguntas);
-    	this.progresos = persistenciaProgresos.cargarProgresos(actividades);
+    	this.progresos = PersistenciaProgresos.cargarProgresos(actividades);
     	this.learningPaths = PersistenciaLearningPaths.cargarLearningPaths(progresos,actividades);
     	this.usuarios = PersistenciaUsuarios.cargarUsuarios(progresos, learningPaths, reviews, actividades);
     }
@@ -214,7 +214,7 @@ public class ManejoDatos {
 		if (progreso != null)
 		{
 			this.progresos.put(List.of(progreso.getLearningPath(),progreso.getEstudiante()), progreso);
-			persistenciaProgresos.guardarProgreso(progresos);
+			PersistenciaProgresos.guardarProgreso(progresos);
 		}
 	}
 	
@@ -223,7 +223,7 @@ public class ManejoDatos {
 		if (review != null)
 		{
 			this.reviews.put(review.getContenido(), review);
-			persistenciaReviews.guardarReviews(reviews);
+			PersistenciaReviews.guardarReviews(reviews);
 		}
 	}
 	
@@ -232,7 +232,7 @@ public class ManejoDatos {
 		if (pregunta != null)
 		{
 			this.preguntas.put(pregunta.getEnunciado(), pregunta);
-			PeristenciaPreguntas.guardarPreguntas(preguntas);;
+			PersistenciaPreguntas.guardarPreguntas(preguntas);;
 		}
 	}
 }

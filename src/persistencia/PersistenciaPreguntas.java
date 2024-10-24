@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 import modelo.*;
 
-public class PeristenciaPreguntas {
+public class PersistenciaPreguntas {
 
     private static final String ARCHIVO_PREGUNTAS = "datos/preguntas.json";
 

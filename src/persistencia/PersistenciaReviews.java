@@ -12,7 +12,7 @@ import java.util.HashMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class persistenciaReviews {
+public class PersistenciaReviews {
 
     private static final String ARCHIVO_REVIEWS = "datos/reviews.json";
 

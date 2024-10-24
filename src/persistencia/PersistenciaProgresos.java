@@ -13,7 +13,7 @@ import modelo.*;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-public class persistenciaProgresos {
+public class PersistenciaProgresos {
 
     private static final String ARCHIVO_PROGRESO = "datos/progreso.json";
 
