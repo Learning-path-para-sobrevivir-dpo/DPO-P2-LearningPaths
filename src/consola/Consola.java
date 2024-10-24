@@ -145,6 +145,7 @@ public class Consola {
                     
                 	Actividad rec = profesor1.crearRecursoEducativo("Recurso 1", "", 1, 1, false, 1, "", "", "", "");
                 	datos.addActividad(rec);
+                	System.out.println("Se creó el recurso educativo"+ rec.getTitulo());
                     break;
                     
                 case 2: 
@@ -152,6 +153,7 @@ public class Consola {
                 	Actividad exam = profesor1.crearExamen("Ex Prueba", "", 1, 20, true,
                 	        20, "Prueba", "Examen");
                 	datos.addActividad(exam);
+                	System.out.println("Se creó el examen"+ exam.getTitulo());
                     break;
                     
                 case 3: 
@@ -159,6 +161,7 @@ public class Consola {
                 	Actividad quiz = profesor1.crearQuiz("Quiz Prueba", "", 1, 30,true,
                 	        50, "Prueba","Quiz", 1);
                 	datos.addActividad(quiz);
+                	System.out.println("Se creó el quiz"+ quiz.getTitulo());
                     break;
                     
                 case 4: 
@@ -166,6 +169,7 @@ public class Consola {
                 	Actividad encuesta = profesor1.crearEncuesta("Encuesta Prueba", "", 2, 20, false,
                 	        10, "Prueba", "Encuesta");
                 	datos.addActividad(encuesta);
+                	System.out.println("Se creó la encuesta"+ encuesta.getTitulo());
                     break;
                    
                 case 5: 
@@ -173,6 +177,7 @@ public class Consola {
                 	Actividad tarea = profesor1.crearTarea("Quiz Datos Java", "Quiz sobre datos en Java", 2, 20, true,
                 	        30, "Quiz", "");
                 	datos.addActividad(tarea);
+                	System.out.println("Se creó la tarea"+ tarea.getTitulo());
                     break;
                 }
                       
