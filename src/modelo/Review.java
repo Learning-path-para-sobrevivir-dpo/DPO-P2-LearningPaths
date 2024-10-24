@@ -4,7 +4,7 @@ public class Review {
 	
 	public String fecha;
 	public String contenido; 
-	public float rating;
+	public double rating;
 	public String tipo;
 	
 	public Review(String fecha, String contenido, String tipo) {
@@ -32,11 +32,11 @@ public class Review {
 	}
 
 
-	public float getRating() {
+	public double getRating() {
 		return rating;
 	}
 
-	public void setRating(float rating) {
+	public void setRating(double rating) {
 		this.rating = rating;
 	}
 

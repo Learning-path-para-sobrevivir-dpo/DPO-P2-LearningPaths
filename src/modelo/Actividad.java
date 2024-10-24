@@ -193,9 +193,9 @@ public abstract class Actividad implements Cloneable {
 	 * Actualiza el rating promedio cuando un usuario le da un rating a una actividad
 	 * @param rating: rating dado
 	 */
-	public void addRating(float rating)
+	public void addRating(double d)
 	{
-		this.ratingAcumulado += rating;
+		this.ratingAcumulado += d;
 		this.numRatings +=1;
 		this.calcularRatingPromedio();
 	}
@@ -259,5 +259,4 @@ public abstract class Actividad implements Cloneable {
 	public abstract void descompletarActividad();
 
 	public abstract void setReviews(List<Review> listaReviews);
-
 }

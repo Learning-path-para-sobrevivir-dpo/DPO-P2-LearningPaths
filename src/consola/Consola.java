@@ -133,13 +133,13 @@ public class Consola {
             case 5:
                 System.out.println("Has seleccionado 'Profesor: Clonar Actividad'");
                 
-                Actividad actAClonar = datos.getActividadPorID(tarea1.getId());
+                Actividad actAClonar = datos.getActividad(tarea1.getId());
                 System.out.println("Actividad a Clonar: "+ actAClonar);
                 
-                Actividad actClonada = profesor1.clonarActividad(actAClonar);
-                datos.addActividad(actClonada);
+                ///Actividad actClonada = profesor1.clonarActividad(actAClonar);
+                ///datos.addActividad(actClonada);
                 
-                System.out.println("Actividad se clonó correctamente: " + actClonada);
+                ///System.out.println("Actividad se clonó correctamente: " + actClonada);
                 break;
                
             case 6:
@@ -148,7 +148,7 @@ public class Consola {
                 String nomLP = path1.getTitulo();
                 LearningPath pathAñadir = datos.getLearningPath(nomLP);
                 
-                Actividad actAñadir = datos.getActividadPorID(tarea1.getId());
+                Actividad actAñadir = datos.getActividad(tarea1.getId());
 
                 profesor1.addActividadToLearningPath(pathAñadir, actAñadir, 1);
                 
@@ -159,9 +159,10 @@ public class Consola {
             case 7:
                 System.out.println("Has seleccionado 'Estudiante: Inscribirse a Learning Path'");
                 
+                estudiante1.inscribirLearningPath(path1);
                 LearningPath pathInscribir = datos.getLearningPath(path1.getTitulo());
                 estudiante1.inscribirLearningPath(pathInscribir);
-                
+
                 System.out.println("Quedó inscrito al Path" + pathInscribir.getTitulo());
                
                 break;
@@ -171,7 +172,7 @@ public class Consola {
                 
                 //Asumimos que el estudiante 1 va a completar una actividad de Path 0
 
-                Actividad actCompletar = datos.getActividadPorID(examenArtSoc.getIdEstudiante());
+                Actividad actCompletar = datos.getActividad(examenArtSoc.getId());
                 estudiante1.completarActividad(1, "Arte y Sociedad");
 			try {
 				pEst1LP0.completarActividad(actCompletar);
@@ -185,8 +186,8 @@ public class Consola {
             case 9:
                 System.out.println("Has seleccionado 'Dejar Review'");
                 
-                Review revArtSoc = estudiante1.addReviewWithRating("El examen fue muy difícil y no evaluaba lo que vimos en clase.", examenArtSoc, 1);
-                Actividad actReviewed = datos.getActividadPorID(examenArtSoc.getId());
+                Review revArtSoc = estudiante1.addReviewRating("El examen fue muy difícil y no evaluaba lo que vimos en clase.", examenArtSoc.getTipoActividad(), 1.0);
+                Actividad actReviewed = datos.getActividad(examenArtSoc.getId());
                 actReviewed.addReview(revArtSoc);
                 actReviewed.addRating(revArtSoc.getRating());
                 System.out.println("Reseña "+ revArtSoc.getContenido()+ " añadida a: "+ actReviewed.getTitulo());
