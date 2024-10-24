@@ -22,6 +22,7 @@ public class Progreso {
 	private Map<String, Actividad> idActividades;
 	private int progresoObligatorio;
 	private int progresoTotal;
+	private List<String> idsActividadesCopiadas;
 	
 	public Progreso(String learningPath, String estudiante) {
 		this.learningPath = learningPath;
@@ -34,6 +35,7 @@ public class Progreso {
 		this.idActividades = new HashMap<String, Actividad>();
 		this.progresoObligatorio = 0;
 		this.progresoTotal = 0;
+		this.idsActividadesCopiadas = new ArrayList<String>();
 		//this.obtenerActividadesPath(); Galarza: lo quite porque cambie obternerActividades, pero de por si o entinedo que hace
 	
 	}
@@ -133,6 +135,13 @@ public class Progreso {
 	public int getProgresoTotal() {
 		return progresoTotal;
 	}
+	
+	public List<String> getIdsActividadesCopiadas() {
+		return idsActividadesCopiadas;
+	}
+	public void setIdsActividadesCopiadas(List<String> idsActividadesCopiadas) {
+		this.idsActividadesCopiadas = idsActividadesCopiadas;
+	}
 
 	/**
 	 * Clona todas las actividades de un Learning Path para poder ser completadas por el estudiante //Galarza: modifique para que reciba el mapa de learning paths.
@@ -144,27 +153,34 @@ public class Progreso {
 		int tamanio = learningPath.getActividades().size();
 		Actividad actNueva;
 		Actividad actVieja;
+		HashMap<Integer, Actividad> nuevasActividades = new HashMap<Integer, Actividad>();
 		for (int i = 1; i <= tamanio; i++)
 		{
 			try {
 				actNueva = (Actividad) learningPath.getActividades().get(i).clone();
+				actNueva.actividadClonadaProgreso();
 				Set<String> ids = this.idActividades.keySet();
 				if (ids.contains(actNueva.getId()))
 				{
 					actVieja = this.idActividades.get(actNueva.getId());
-					actNueva.setEstado(actVieja.getEstado());
-					actNueva.setCompletada(actVieja.isCompletada());
+					nuevasActividades.put(i, actVieja);
 				}
-				this.actividadesPath.put(i, actNueva);
-				this.obtenerIDsActividades();
-				this.obtenerActPendientes(learningPaths);
-				this.obtenerActObligatoriasPendientes();
-				this.obtenerActCompletadas(learningPaths);
-				this.obtenerActObligatoriasCompletadas();
+				else
+				{
+					nuevasActividades.put(i, actNueva);
+				}
+				
 			} catch (CloneNotSupportedException e) {
 				e.printStackTrace();
 			}
 		}
+		this.actividadesPath = nuevasActividades;
+		this.obtenerIDsActividades();
+		this.obtenerActPendientes(learningPaths);
+		this.obtenerActObligatoriasPendientes();
+		this.obtenerActCompletadas(learningPaths);
+		this.obtenerActObligatoriasCompletadas();
+		this.calcularProgreso();
 	}
 	
 	public void obtenerIDsActividades() {
