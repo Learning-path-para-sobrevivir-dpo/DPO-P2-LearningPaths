@@ -159,8 +159,10 @@ public class Consola {
             case 7:
                 System.out.println("Has seleccionado 'Estudiante: Inscribirse a Learning Path'");
                 
-                estudiante1.inscribirLearningPath(path1);
+                LearningPath pathInscribir = datos.getLearningPath(path1.getTitulo());
+                estudiante1.inscribirLearningPath(pathInscribir);
                 
+                System.out.println("Quedó inscrito al Path" + pathInscribir.getTitulo());
                
                 break;
                 
