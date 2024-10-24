@@ -32,10 +32,15 @@ public class Consola {
     }
 
     public void iniciarAplicacion(ManejoDatos datos, Scanner scanner) {
-        this.mostrarMenuInicio(datos, scanner);  
+   
+        int op = 1;
+        while (op!=0) {
+        	this.mostrarMenuInicio(datos, scanner); 
+        	op = this.mostrarMenuInicio(datos, scanner);
+        }
     }
 
-    public void mostrarMenuInicio(ManejoDatos datos, Scanner scanner) {
+    public int mostrarMenuInicio(ManejoDatos datos, Scanner scanner) {
         System.out.println("Bienvenido a ......");
         System.out.println("Seleccione lo que quiere hacer: ");
         System.out.println("1. Iniciar Sesión");
@@ -159,7 +164,6 @@ public class Consola {
             case 7:
                 System.out.println("Has seleccionado 'Estudiante: Inscribirse a Learning Path'");
                 
-                estudiante1.inscribirLearningPath(path1);
                 LearningPath pathInscribir = datos.getLearningPath(path1.getTitulo());
                 estudiante1.inscribirLearningPath(pathInscribir);
 
@@ -203,6 +207,7 @@ public class Consola {
                 System.out.println("Opción no válida");
                 break;
         }
+        return opcion;
     }
 
 
