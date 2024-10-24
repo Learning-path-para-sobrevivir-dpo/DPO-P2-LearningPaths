@@ -67,6 +67,7 @@ public class Consola {
         LearningPath path0 = new LearningPath ("Arte y Sociedad", "Curso creativo de arte", "Aprender sobre arte y sociedad", 
         		1, 0, "10/03/2024", "13/05/2024", 2, profesor1.getLogin());
         estudiante1.inscribirLearningPath(path0);
+        datos.addLearningPath(path0);
         Progreso pEst1LP0 = new Progreso(path0.getTitulo(), estudiante1.getLogin());
         
         //Add actividad a Path0
