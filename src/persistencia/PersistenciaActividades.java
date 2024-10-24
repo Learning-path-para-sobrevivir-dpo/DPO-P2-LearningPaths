@@ -16,7 +16,7 @@ import org.json.JSONObject;
 
 public class PersistenciaActividades {
 
-    private static final String ARCHIVO_ACTIVIDADES = "C:\\Users\\manue\\git\\DPO-P1-LearningPaths\\datos\\actividades.json";
+    private static final String ARCHIVO_ACTIVIDADES = "datos/actividades.json";
 
     // Cargar actividades desde el archivo JSON en un HashMap
     public static HashMap<String, Actividad> cargarActividades(HashMap<String, Review> reviewsMap, HashMap<String, Pregunta> preguntasMap) {
@@ -211,8 +211,7 @@ public class PersistenciaActividades {
 
             // Escribir el JSONArray al archivo
             try (FileWriter file = new FileWriter(ARCHIVO_ACTIVIDADES)) {
-                file.write(jsonActividades.toString());
-                file.flush();
+                file.write(jsonActividades.toString(4));
             }
 
         } catch (IOException e) {

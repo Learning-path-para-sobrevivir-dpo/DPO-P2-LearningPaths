@@ -15,7 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 public class persistenciaProgresos {
 
-    private static final String ARCHIVO_PROGRESO = "C:\\Users\\manue\\git\\DPO-P1-LearningPaths\\datos\\progreso.json";
+    private static final String ARCHIVO_PROGRESO = "datos/progreso.json";
 
     public static HashMap<List<String>, Progreso> cargarProgresos(Map<String, Actividad> mapaActividades) {
         HashMap<List<String>, Progreso> progresos = new HashMap<>();
@@ -116,30 +116,35 @@ public class persistenciaProgresos {
 
                 // Convertir actObligatoriasPendientes a JSONArray de IDs de actividades
                 JSONArray jsonActObligatoriasPendientes = new JSONArray();
+                
+                if (progreso.getActObligatoriasPendientes() != null) {
                 for (Actividad actividad : progreso.getActObligatoriasPendientes()) {
                     jsonActObligatoriasPendientes.put(actividad.getId());
-                }
+                }}
                 jsonProgreso.put("actObligatoriasPendientes", jsonActObligatoriasPendientes);
 
                 // Convertir actObligatoriasCompletadas a JSONArray de IDs de actividades
                 JSONArray jsonActObligatoriasCompletadas = new JSONArray();
+                if (progreso.getActObligatoriasCompletadas() != null) {
                 for (Actividad actividad : progreso.getActObligatoriasCompletadas()) {
                     jsonActObligatoriasCompletadas.put(actividad.getId());
-                }
+                }}
                 jsonProgreso.put("actObligatoriasCompletadas", jsonActObligatoriasCompletadas);
 
                 // Convertir actPendientes a JSONArray de IDs de actividades
                 JSONArray jsonActPendientes = new JSONArray();
+                if (progreso.getActPendientes() != null) {
                 for (Actividad actividad : progreso.getActPendientes()) {
                     jsonActPendientes.put(actividad.getId());
-                }
+                }}
                 jsonProgreso.put("actPendientes", jsonActPendientes);
 
                 // Convertir actCompletadas a JSONArray de IDs de actividades
                 JSONArray jsonActCompletadas = new JSONArray();
+                if (progreso.getActCompletadas() != null) {
                 for (Actividad actividad : progreso.getActCompletadas()) {
                     jsonActCompletadas.put(actividad.getId());
-                }
+                }}
                 jsonProgreso.put("actCompletadas", jsonActCompletadas);
 
                 // Convertir actividadEnProgreso a ID de actividad (si no es null)
@@ -151,9 +156,10 @@ public class persistenciaProgresos {
 
                 // Convertir idActividades a JSONObject de IDs de actividades
                 JSONObject jsonIdActividades = new JSONObject();
+                if (progreso.getIdActividades() != null) {
                 for (Map.Entry<String, Actividad> idActEntry : progreso.getIdActividades().entrySet()) {
                     jsonIdActividades.put(idActEntry.getKey(), idActEntry.getValue().getId());
-                }
+                }}
                 jsonProgreso.put("idActividades", jsonIdActividades);
 
                 // Agregar progreso JSON al array de progresos

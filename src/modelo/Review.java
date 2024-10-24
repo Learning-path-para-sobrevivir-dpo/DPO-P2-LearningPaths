@@ -5,7 +5,6 @@ public class Review {
 	public String fecha;
 	public String contenido; 
 	public float rating;
-	//Galarza: borre autor porque no lo considero necesrio
 	public String tipo;
 	
 	public Review(String fecha, String contenido, String tipo) {
@@ -13,7 +12,6 @@ public class Review {
 		this.fecha = fecha;
 		this.contenido = contenido;
 		this.rating = 0;
-		//this.autor = autor;
 		this.tipo = tipo;
 	}
 

@@ -11,8 +11,7 @@ public class Estudiante extends Usuario {
 	private Map<String, Progreso> progresosLearningPaths;
 	private Map<String, LearningPath> learningPaths;
 
-	public Estudiante(String login, String correo, String contraseña, String tipo,
-			Actividad actProgreso) {
+	public Estudiante(String login, String correo, String contraseña, String tipo) {
 		super(login, correo, contraseña, tipo);
 		this.progresosLearningPaths = new HashMap<String, Progreso>();
 		this.learningPaths = new HashMap<String, LearningPath>();

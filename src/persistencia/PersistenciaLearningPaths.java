@@ -16,7 +16,7 @@ import org.json.JSONObject;
 
 public class PersistenciaLearningPaths {
 
-    private static final String ARCHIVO_LEARNINGPATHS = "\"C:\\\\Users\\\\manue\\\\git\\\\DPO-P1-LearningPaths\\\\datos\\\\learningPaths.json";
+    private static final String ARCHIVO_LEARNINGPATHS = "datos/learningPaths.json";
 
     // Método para cargar Learning Paths desde un archivo JSON
     public static HashMap<String, LearningPath> cargarLearningPaths(HashMap<List<String>, Progreso> progresosMap, HashMap<String, Actividad> actividadesMap) {
@@ -143,8 +143,7 @@ public class PersistenciaLearningPaths {
 
             // Escribir el JSONArray al archivo
             try (FileWriter file = new FileWriter(ARCHIVO_LEARNINGPATHS)) {
-                file.write(jsonLearningPaths.toString());
-                file.flush();
+                file.write(jsonLearningPaths.toString(4));
             }
 
         } catch (IOException e) {

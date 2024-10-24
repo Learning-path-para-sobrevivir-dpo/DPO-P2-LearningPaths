@@ -7,6 +7,8 @@ import org.json.JSONObject;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +17,7 @@ import modelo.*;
 
 public class PersistenciaUsuarios {
 
-    private static final String ARCHIVO_USUARIOS = "C:\\Users\\manue\\git\\DPO-P1-LearningPaths\\datos\\usuarios.json";
+    private static final String ARCHIVO_USUARIOS = "datos/usuarios.json";
 
     public static HashMap<List<String>, Usuario> cargarUsuarios(HashMap<List<String>, Progreso> mapaProgresos,
                                                       HashMap<String, LearningPath> mapaLearningPaths,
@@ -25,8 +27,8 @@ public class PersistenciaUsuarios {
 
         try {
             // Leer el archivo JSON
-            FileReader reader = new FileReader(ARCHIVO_USUARIOS);
-            JSONArray jsonUsuarios = new JSONArray(reader);
+        	String content = new String(Files.readAllBytes(Paths.get(ARCHIVO_USUARIOS))); 
+            JSONArray jsonUsuarios = new JSONArray(content);
 
             // Iterar sobre el JSONArray y convertir cada objeto JSON a Usuario
             for (int i = 0; i < jsonUsuarios.length(); i++) {
@@ -35,9 +37,9 @@ public class PersistenciaUsuarios {
                 String tipo = jsonUsuario.getString("tipo");
 
                 Usuario usuario;
-                if ("Estudiante".equals(tipo)) {
+                if ("estudiante".equals(tipo)) {
                     usuario = cargarEstudiante(jsonUsuario, mapaProgresos, mapaLearningPaths);
-                } else if ("Profesor".equals(tipo)) {
+                } else if ("profesor".equals(tipo) ) {
                     usuario = cargarProfesor(jsonUsuario, mapaLearningPaths, mapaActividades);
                 } else {
                     throw new IllegalArgumentException("Tipo de usuario desconocido: " + tipo);
@@ -45,8 +47,6 @@ public class PersistenciaUsuarios {
 
                 usuarios.put(List.of(usuario.getLogin(),usuario.getContraseña()), usuario);
             }
-
-            reader.close();
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
@@ -61,7 +61,7 @@ public class PersistenciaUsuarios {
         String correo = jsonUsuario.getString("correo");
         String contraseña = jsonUsuario.getString("contraseña");
 
-        Estudiante estudiante = new Estudiante(login, correo, contraseña, "Estudiante", null);
+        Estudiante estudiante = new Estudiante(login, correo, contraseña, "Estudiante");
 
         // Cargar progresos de Learning Paths
         JSONArray jsonProgresos = jsonUsuario.getJSONArray("progresosLearningPaths");

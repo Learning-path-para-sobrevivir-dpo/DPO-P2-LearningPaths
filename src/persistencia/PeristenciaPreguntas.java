@@ -15,7 +15,7 @@ import modelo.*;
 
 public class PeristenciaPreguntas {
 
-    private static final String ARCHIVO_PREGUNTAS = "C:\\Users\\manue\\git\\DPO-P1-LearningPaths\\datos\\preguntas.json";
+    private static final String ARCHIVO_PREGUNTAS = "datos/preguntas.json";
 
     
  // Cargar preguntas desde el archivo JSON
@@ -97,8 +97,7 @@ public class PeristenciaPreguntas {
 
             // Escribir el JSONArray al archivo
             try (FileWriter file = new FileWriter(ARCHIVO_PREGUNTAS)) {
-                file.write(jsonPreguntas.toString(2)); // El segundo argumento es para pretty-printing
-                    file.flush();
+                file.write(jsonPreguntas.toString(4)); 
                 }
 
             } catch (IOException e) {

@@ -14,7 +14,7 @@ import org.json.JSONObject;
 
 public class persistenciaReviews {
 
-    private static final String ARCHIVO_REVIEWS = "C:\\Users\\manue\\git\\DPO-P1-LearningPaths\\datos\\reviews.json";
+    private static final String ARCHIVO_REVIEWS = "datos/reviews.json";
 
     public static HashMap<String, Review> cargarReviews() {
         HashMap<String, Review> reviews = new HashMap<>();
@@ -69,8 +69,7 @@ public class persistenciaReviews {
 
             // Escribir el JSONArray al archivo
             try (FileWriter file = new FileWriter(ARCHIVO_REVIEWS)) {
-                file.write(jsonReviews.toString());
-                file.flush();
+                file.write(jsonReviews.toString(4));
             }
 
         } catch (IOException e) {
