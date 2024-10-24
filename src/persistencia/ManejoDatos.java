@@ -35,7 +35,6 @@ public class ManejoDatos {
     	this.learningPaths = PersistenciaLearningPaths.cargarLearningPaths(progresos,actividades);
     	this.usuarios = PersistenciaUsuarios.cargarUsuarios(progresos, learningPaths, reviews, actividades);
     }
-
     
 	public HashMap<List<String>, Usuario> getUsuarios() {
 		return usuarios;
@@ -61,17 +60,8 @@ public class ManejoDatos {
 		this.learningPaths = learningPaths;
 	}
 	
-	public HashMap<String, Actividad> getActividadesEstudiantes() {
-		return actividadesEstudiantes;
-	}
-
-	public void setActividadesEstudiantes(HashMap<String, Actividad> actividadesEstudiantes) {
-		this.actividadesEstudiantes = actividadesEstudiantes;
-	}
-	
 	//Manejo de Usuarios////////////////////////////////////////
 	
-
 	private List<String> crearLlaveUsuario(String login, String password)
 	{
 		List<String> infoUsuario = new ArrayList<String>();
@@ -164,38 +154,15 @@ public class ManejoDatos {
         }}
 	
 	/**
-	 * Encuentra todas las actividades con un nombre
+	 * Encuentra una actividad por su nombre
 	 * @param nombreActividad: nombre de la actividad
-	 * @return Una lista de actividades que tengan el nombre buscado
+	 * @return La actividad buscada. Si no se encuentra retorna null.
 	 */
-	public List<Actividad> getActividadPorNombre(String nombreActividad) {
-		List<Actividad> actividades = new ArrayList<Actividad>();
+	public Actividad getActividad(String nombreActividad) {
 		Actividad actividad = null;
-		Set<String> ids = this.actividades.keySet();
-		Iterator<String> iterador = ids.iterator();
-		while (iterador.hasNext())
+		if (this.actividades.containsKey(nombreActividad))
 		{
-			String id = iterador.next();
-			actividad = this.actividades.get(id);
-			if (actividad != null && actividad.getTitulo().equals(nombreActividad))
-			{
-				actividades.add(actividad);
-			}
-		}
-		return actividades;
-	}
-	
-	/**
-	 * Encuentra una actividad dado su ID
-	 * @param id: id de la actividad
-	 * @return La actividad que tiene el id dado. Si no se encuentra, retorna null
-	 */
-	public Actividad getActividadPorID(String id)
-	{
-		Actividad actividad = null;
-		if (this.actividades.containsKey(id))
-		{
-			actividad = this.actividades.get(id);
+			actividad = this.actividades.get(nombreActividad);
 		}
 		return actividad;
 	}
@@ -240,7 +207,6 @@ public class ManejoDatos {
 			this.learningPaths.replace(path.getTitulo(), path);
 		}
 	}
-
 //Manejo de progreso, reviews, preguntas
 	
 	public void addProgreso(Progreso progreso)

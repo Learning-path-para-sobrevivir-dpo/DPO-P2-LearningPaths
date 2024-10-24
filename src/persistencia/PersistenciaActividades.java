@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 
 public class PersistenciaActividades {
+
     private static final String ARCHIVO_ACTIVIDADES = "datos/actividades.json";
 
     // Cargar actividades desde el archivo JSON en un HashMap
@@ -125,16 +126,16 @@ public class PersistenciaActividades {
                 // Agregar la actividad al HashMap usando el id como llave
                 actividades.put(id, actividad);
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return actividades;
+        return actividades;  // Devolver el mapa de actividades
     }
 
     // Guardar actividades en el archivo JSON desde un HashMap
     public static void guardarActividades(HashMap<String, Actividad> actividades) {
-
         try {
             // Crear un JSONArray para almacenar las actividades
             JSONArray jsonActividades = new JSONArray();
@@ -217,4 +218,5 @@ public class PersistenciaActividades {
             e.printStackTrace();
         }
     }
+
 }

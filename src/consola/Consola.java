@@ -54,15 +54,15 @@ public class Consola {
 
         
         //Elementos a utilizar para probar el programa
-        Estudiante estudiante1 = new Estudiante("Juliana Hernandez", "j.hernandez@gmail.com", "Juli091103", "Estudiante", null);
+        Estudiante estudiante1 = new Estudiante("Juliana Hernandez", "j.hernandez@gmail.com", "Juli091103", "Estudiante");
         Profesor profesor1 = new Profesor("Marta Martínez", "m.martinez@gmail.com", 
         		"Mart123", "Profesor");
         
         //Se crea un LP al que la estudiante ya está inscrita
         LearningPath path0 = new LearningPath ("Arte y Sociedad", "Curso creativo de arte", "Aprender sobre arte y sociedad", 
-        		1, 0, "10/03/2024", "13/05/2024", 2, profesor1);
+        		1, 0, "10/03/2024", "13/05/2024", 2, profesor1.getLogin());
         estudiante1.inscribirLearningPath(path0);
-        Progreso pEst1LP0 = new Progreso(path0, estudiante1);
+        Progreso pEst1LP0 = new Progreso(path0.getTitulo(), estudiante1.getLogin());
         
         //Add actividad a Path0
         Examen examenArtSoc = new Examen("Final Arte y Sociedad", "Examen final de art y soc.", 3,
@@ -83,7 +83,7 @@ public class Consola {
         
         LearningPath path1 = new LearningPath("Estructuras de Datos en Java", "Curso que te enseña todo sobre Estructuras de Datos en Java",
         		"Conocer todo sobre Estructuras de Datos en Java", 1, 0,
-    			"22/10/2024", "22/10/2024", 1, profesor1);
+    			"22/10/2024", "22/10/2024", 1, profesor1.getLogin());
         RecursoEducativo recurso1 = new RecursoEducativo("Listas y Arreglos", "Video sobre listas y arreglos en Java", 1, 40,
         		false, 60, "Recurso Educativo", "Video", "Enlace a video sobre listas y arreglos en Java", "www.youtube.com/listasyarreglosjava");
         Tarea tarea1 = new Tarea("Ejercicios Mapas Java", "Completar estos ejercicios de mapas", 1, 40, true,

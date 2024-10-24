@@ -22,7 +22,6 @@ public class LearningPath {
 	//Mapa donde las actividades estan identificadas por un número que indica
 	//el orden sugerido para completar las actividades
 	private Map<Integer,Actividad> actividades;
-	private List<String> actividadesIDs;
 	
 	public LearningPath(String titulo, String descripcion, String objetivo, int nivelDificultad, int rating,
 			String fechaCreacion, String fechaModificacion, int version, String autor) {
@@ -39,7 +38,6 @@ public class LearningPath {
 		this.autor = autor;
 		this.estudiantes = new ArrayList<String>();
 		this.actividades = new HashMap<Integer,Actividad>();
-		this.actividadesIDs = new ArrayList<String>();
 	}
 	
 
@@ -137,16 +135,6 @@ public class LearningPath {
 		return duracion;
 	}
 	
-	public List<String> getActividadesIDs() {
-		return actividadesIDs;
-	}
-
-
-	public void setActividadesIDs(List<String> actividadesIDs) {
-		this.actividadesIDs = actividadesIDs;
-	}
-
-
 	/**
 	 * Calcula la duración aproximada del Learning Path de acuerdo
 	 * a a la duración de sus actividades
@@ -171,7 +159,6 @@ public class LearningPath {
     {
     	int numActividades = this.actividades.size();
     	this.actividades.put(numActividades+1, act);
-    	this.actividadesIDs.add(act.getId());
     }
     
     /**
@@ -192,7 +179,6 @@ public class LearningPath {
     		Actividad tempAct1 = this.actividades.get(i);
     		Actividad tempAct2;
     		this.actividades.replace(i, act);
-    		this.actividadesIDs.add(i-1, act.getId());
     		i++;
     		int tamanio = this.actividades.size();
     		while (i<=tamanio + 1)
