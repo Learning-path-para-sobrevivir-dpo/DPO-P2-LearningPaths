@@ -242,6 +242,8 @@ public class Consola {
                 Actividad actReviewed = datos.getActividad(examenArtSoc.getId());
                 actReviewed.addReview(revArtSoc);
                 actReviewed.addRating(revArtSoc.getRating());
+                datos.addActividad(actReviewed);
+                datos.addReview(revArtSoc);
                 System.out.println("Reseña "+ revArtSoc.getContenido()+ " añadida a: "+ actReviewed.getTitulo());
                 
                 break;

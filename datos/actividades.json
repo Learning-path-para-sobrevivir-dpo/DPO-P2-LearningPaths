@@ -1,0 +1,41 @@
+[
+    {
+        "descripcion": "Video sobre listas y arreglos en Java",
+        "tipoRecurso": "Video",
+        "contenido": "Enlace a video sobre listas y arreglos en Java",
+        "nivelDificultad": 1,
+        "reviews": [],
+        "tiempoCompletarSugerido": 60,
+        "titulo": "Listas y Arreglos",
+        "duracionMin": 40,
+        "id": "51840878",
+        "obligatorio": false,
+        "tipoActividad": "Recurso Educativo"
+    },
+    {
+        "descripcion": "Completar estos ejercicios de mapas",
+        "contenido": "1. Hallar mapas de los datos. 2. Hacer un mapa con los datos de clase.",
+        "nivelDificultad": 1,
+        "reviews": [],
+        "tiempoCompletarSugerido": 10,
+        "titulo": "Ejercicios Mapas Java",
+        "duracionMin": 40,
+        "id": "59980067",
+        "obligatorio": true,
+        "tipoActividad": "Tarea"
+    },
+    {
+        "descripcion": "Examen final de art y soc.",
+        "calificado": false,
+        "nivelDificultad": 3,
+        "reviews": ["El examen fue muy difícil y no evaluaba lo que vimos en clase."],
+        "tiempoCompletarSugerido": 60,
+        "tipoPrueba": "Examen",
+        "titulo": "Final Arte y Sociedad",
+        "duracionMin": 60,
+        "preguntas": [],
+        "id": "42673763",
+        "obligatorio": true,
+        "tipoActividad": "Prueba"
+    }
+]

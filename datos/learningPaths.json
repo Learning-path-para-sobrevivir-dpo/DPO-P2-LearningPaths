@@ -1,0 +1,35 @@
+[
+    {
+        "descripcion": "Curso que te enseña todo sobre Estructuras de Datos en Java",
+        "fechaModificacion": "22/10/2024",
+        "nivelDificultad": 1,
+        "rating": 0,
+        "titulo": "Estructuras de Datos en Java",
+        "estudiantes": [],
+        "actividades": {},
+        "version": 1,
+        "autor": "Marta Martínez",
+        "objetivo": "Conocer todo sobre Estructuras de Datos en Java",
+        "progresosEstudiantiles": {},
+        "duracion": 0,
+        "fechaCreacion": "22/10/2024"
+    },
+    {
+        "descripcion": "Curso creativo de arte",
+        "fechaModificacion": "2024-10-23",
+        "nivelDificultad": 2,
+        "rating": 0,
+        "titulo": "Arte y Sociedad",
+        "estudiantes": ["Juliana Hernandez"],
+        "actividades": {"1": "42673763"},
+        "version": 1,
+        "autor": "profesor",
+        "objetivo": "Aprender sobre arte y sociedad",
+        "progresosEstudiantiles": {"Juliana Hernandez": [
+            "Arte y Sociedad",
+            "Juliana Hernandez"
+        ]},
+        "duracion": 0,
+        "fechaCreacion": "2024-10-23"
+    }
+]
