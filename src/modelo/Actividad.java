@@ -19,12 +19,14 @@ public abstract class Actividad implements Cloneable {
 	private float ratingAcumulado;
 	private int numRatings;
 	private String id;
+	private String idEstudiante;
 	public String tipoActividad;
 	private String estado;
 	private boolean completada;
 	
 	//Un HashSet con todos los IDs que ya se han utilizado para actividades
 	private static Set<String> ids = new HashSet<String>( );
+	private static Set<String> idsEstudiantes = new HashSet<String>( );
 	
 	public static final int FACIL = 1;
 	public static final int INTERMEDIO = 2;
@@ -47,28 +49,54 @@ public abstract class Actividad implements Cloneable {
 		this.setTipoActividad(tipo);
 		this.estado = "Sin completar";
 		this.completada = false;
-		
-		//Para crear un identificador unico para la actividad
-		int numero = ( int ) ( Math.random( ) * 10e7 );
-        String codigo = "" + numero;
-        while( ids.contains( codigo ) )
-        {
-            numero = ( int ) ( Math.random( ) * 10e7 );
-            codigo = "" + numero;
-        }
-
-        while( codigo.length( ) < 7 )
-            codigo = "0" + codigo;
-        
-        this.id = codigo;
+		this.completada = false;       
+		this.id = this.generarID(false);
+        this.idEstudiante = "";
 	}
 	
-	public String getTitulo() {
-		return titulo;
+	
+	private String generarID(boolean isIDEstudiante)
+	{
+		//Para crear un identificador unico para la actividad
+		int numero = ( int ) ( Math.random( ) * 10e7 );
+		String codigo = "" + numero;
+		Set<String> idsbuscados;
+		if (isIDEstudiante)
+		{
+			idsbuscados = idsEstudiantes;
+		}
+		else
+		{
+			idsbuscados = ids;
+		}
+		while( idsbuscados.contains( codigo ) )
+		{
+			numero = ( int ) ( Math.random( ) * 10e7 );
+			codigo = "" + numero;
+		}
+
+		while( codigo.length( ) < 7 )
+			codigo = "0" + codigo;
+
+		return codigo;
+	}
+	
+	public void actividadClonadaProfesor()
+	{
+		this.id = this.generarID(false);
+	}
+	
+	public void actividadClonadaProgreso()
+	{
+		this.idEstudiante = this.generarID(true);
 	}
 
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
+	}
+	
+	public String getTitulo() {
+		return this.titulo;
 	}
 
 	public String getDescripcion() {
@@ -155,6 +183,11 @@ public abstract class Actividad implements Cloneable {
 	public void setCompletada(boolean completada) {
 		this.completada = completada;
 	}
+	
+	public String getIdEstudiante() {
+		return idEstudiante;
+	}
+
 
 	public void addActividadPrevia(Actividad actividadPrevia)
 	{
@@ -172,6 +205,10 @@ public abstract class Actividad implements Cloneable {
 	{
 		String unID = actividad.getId();
 		ids.add(unID);
+		if (!actividad.getIdEstudiante().equals(""))
+		{
+			idsEstudiantes.add(actividad.getIdEstudiante());
+		}
 	}
 	
 	/**
