@@ -2,6 +2,7 @@ package persistencia;
 
 
 import modelo.*;
+import modelo.actividades.Actividad;
 
 import java.io.FileWriter;
 import java.io.IOException;

@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.Scanner;
 
 import excepciones.YaExisteActividadEnProgresoException;
+import modelo.actividades.Actividad;
+import modelo.actividades.Prueba;
+import modelo.actividades.Tarea;
 
 public class Estudiante extends Usuario {
 	

@@ -3,16 +3,16 @@ package consola;
 import java.util.Scanner;
 
 import excepciones.YaExisteActividadEnProgresoException;
-import modelo.Actividad;
 import modelo.Estudiante;
-import modelo.Examen;
 import modelo.LearningPath;
 import modelo.Profesor;
 import modelo.Progreso;
-import modelo.Quiz;
-import modelo.RecursoEducativo;
 import modelo.Review;
-import modelo.Tarea;
+import modelo.actividades.Actividad;
+import modelo.actividades.Examen;
+import modelo.actividades.Quiz;
+import modelo.actividades.RecursoEducativo;
+import modelo.actividades.Tarea;
 import persistencia.ManejoDatos;
 
 public class Consola {

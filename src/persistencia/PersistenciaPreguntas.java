@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.ArrayList;
 
 import modelo.*;
+import modelo.actividades.Pregunta;
+import modelo.actividades.PreguntaAbierta;
+import modelo.actividades.PreguntaMultiple;
 
 public class PersistenciaPreguntas {
 

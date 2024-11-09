@@ -1,6 +1,8 @@
-package modelo;
+package modelo.actividades;
 
 import java.util.List;
+
+import excepciones.TipoDePreguntaInvalidaException;
 
 public abstract class Prueba extends Actividad{
 
@@ -62,6 +64,21 @@ public abstract class Prueba extends Actividad{
 			this.setCompletada(false);
 		}
 	}
+	
+	/**
+	 * Añade una pregunta a la prueba
+	 * @param pregunta pregunta a añadir
+	 * @throws TipoDePreguntaInvalidaException se lanza si el tipo de pregunta
+	 * a añadir no es el tipo esperado para la prueba
+	 */
+	public abstract void addPregunta(Pregunta pregunta) throws TipoDePreguntaInvalidaException;
+	
+	/**
+	 * Elimina una pregunta por su número/posicion. Si numPregunta es mayor
+	 * o es menor o igual a 0, no se elimina nada
+	 * @param numPregunta número de la pregunta a eliminar
+	 */
+	public abstract void eliminarPregunta(int numPregunta);
 
 	public abstract void calcularCalificacion();
 	

@@ -1,4 +1,4 @@
-package modelo;
+package modelo.actividades;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +14,22 @@ public class PreguntaMultiple extends Pregunta{
 		this.opciones = opciones;
 		this.opcionCorrecta = opcionCorrecta - 1;
 		this.opcionSeleccionada = -1;
+		this.setTipo("Pregunta Multiple");
 	}
 	
 	public PreguntaMultiple(String enunciado) {
 		super(enunciado);
 		this.opciones = new ArrayList<String>();
 		this.opcionCorrecta = -1;
+		this.setTipo("Pregunta Multiple");
+	}
+	
+	public PreguntaMultiple(String enunciado, int numero) {
+		super(enunciado);
+		this.opciones = new ArrayList<String>();
+		this.opcionCorrecta = -1;
+		this.setNumero(numero);
+		this.setTipo("Pregunta Multiple");
 	}
 
 	public List<String> getOpciones() {

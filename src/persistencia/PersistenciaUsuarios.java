@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import modelo.*;
+import modelo.actividades.Actividad;
 
 public class PersistenciaUsuarios {
 

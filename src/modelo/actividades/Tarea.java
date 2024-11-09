@@ -1,6 +1,8 @@
-package modelo;
+package modelo.actividades;
 
 import java.util.List;
+
+import modelo.Review;
 
 public class Tarea extends Actividad{
 	

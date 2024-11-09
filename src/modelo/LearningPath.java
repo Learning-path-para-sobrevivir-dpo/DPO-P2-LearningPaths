@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import modelo.actividades.Actividad;
+
 public class LearningPath {
 	
 	public String titulo;

@@ -7,6 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import modelo.actividades.Actividad;
+import modelo.actividades.Encuesta;
+import modelo.actividades.Examen;
+import modelo.actividades.Quiz;
+import modelo.actividades.RecursoEducativo;
+import modelo.actividades.Tarea;
+
 public class Profesor extends Usuario{
 	
 	public Map<String, LearningPath> learningPathsCreados;

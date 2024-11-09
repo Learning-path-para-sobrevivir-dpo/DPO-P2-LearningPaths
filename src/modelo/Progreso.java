@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import excepciones.YaExisteActividadEnProgresoException;
+import modelo.actividades.Actividad;
 
 public class Progreso {
 	

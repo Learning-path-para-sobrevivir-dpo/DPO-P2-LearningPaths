@@ -1,4 +1,4 @@
-package modelo;
+package modelo.actividades;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -188,7 +188,10 @@ public abstract class Actividad implements Cloneable {
 		return idEstudiante;
 	}
 
-
+	/**
+	 * Añade una actividad previa sugerida para la actividad
+	 * @param actividadPrevia: actividad previa sugerida
+	 */
 	public void addActividadPrevia(Actividad actividadPrevia)
 	{
 		if (actividadPrevia != null)
@@ -278,7 +281,7 @@ public abstract class Actividad implements Cloneable {
 	}
 	
 	@Override
-	protected Object clone() throws CloneNotSupportedException
+	public Object clone() throws CloneNotSupportedException
 	{
 		return super.clone();
 	}

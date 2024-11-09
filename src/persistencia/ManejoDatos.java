@@ -9,6 +9,8 @@ import java.util.Set;
 
 
 import modelo.*;
+import modelo.actividades.Actividad;
+import modelo.actividades.Pregunta;
 
 public class ManejoDatos {
 	private HashMap<List<String>, Usuario> usuarios; 

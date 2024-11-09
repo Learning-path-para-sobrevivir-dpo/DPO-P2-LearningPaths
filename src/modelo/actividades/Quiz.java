@@ -1,10 +1,12 @@
-package modelo;
+package modelo.actividades;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import excepciones.RespuestasInconsistentesPruebaException;
+import excepciones.TipoDePreguntaInvalidaException;
+import modelo.Review;
 
 public class Quiz extends Prueba{
 
@@ -16,7 +18,7 @@ public class Quiz extends Prueba{
 			List<PreguntaMultiple> preguntas, String tipoPrueba) {
 		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, tipoPrueba);
 		this.calificacionMinima = calificacionMinima;
-		this.preguntas = preguntas;
+		this.setPreguntas(preguntas);
 		this.setTipoActividad("Prueba");
 		this.setTipoPrueba("Quiz");
 	}
@@ -37,32 +39,45 @@ public class Quiz extends Prueba{
 	public void setCalificacionMinima(float calificacionMinima) {
 		this.calificacionMinima = calificacionMinima;
 	}
+	
+	public void setPreguntas(List<PreguntaMultiple> preguntas)
+	{
+		int i = 1;
+		for(PreguntaMultiple pregunta: preguntas)
+		{
+			pregunta.setNumero(i);
+			i++;
+		}
+		this.preguntas = preguntas;
+	}
 
 	public List<PreguntaMultiple> getPreguntas() {
 		return preguntas;
 	}
 	
-	/**
-	 * Añade una pregunta de opción múltiple a la lista de preguntas del quiz
-	 * @param pregunta: 
-	 */
-	public void addPregunta(PreguntaMultiple pregunta) {
-		if (pregunta != null)
+	@Override
+	public void addPregunta(Pregunta pregunta) throws TipoDePreguntaInvalidaException {
+		if (!(pregunta instanceof PreguntaMultiple))
 		{
-			this.preguntas.add(pregunta);
+			throw new TipoDePreguntaInvalidaException(pregunta.getTipo(), this.getTipoPrueba());
+		}
+		
+		int numPregunta = pregunta.getNumero();
+		if (numPregunta <= 0 || numPregunta > this.preguntas.size())
+		{
+			pregunta.setNumero(this.preguntas.size());
+			this.preguntas.add((PreguntaMultiple) pregunta);
+		}
+		else
+		{
+			this.preguntas.add(numPregunta - 1, (PreguntaMultiple) pregunta);
 		}
 	}
 	
-	public void addPreguntaPorPosicion(PreguntaMultiple pregunta, int pos) {
-		if (pregunta != null)
-		{
-			this.preguntas.add(pos, pregunta);
-		}
-	}
-	
+	@Override
 	public void eliminarPregunta(int numPregunta)
 	{
-		if (numPregunta > 0)
+		if (numPregunta > 0 && numPregunta <= this.preguntas.size())
 		{
 			this.preguntas.remove(numPregunta - 1);
 		}

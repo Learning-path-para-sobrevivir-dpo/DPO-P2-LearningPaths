@@ -1,6 +1,15 @@
 package persistencia;
 
 import modelo.*;
+import modelo.actividades.Actividad;
+import modelo.actividades.Encuesta;
+import modelo.actividades.Examen;
+import modelo.actividades.Pregunta;
+import modelo.actividades.PreguntaAbierta;
+import modelo.actividades.PreguntaMultiple;
+import modelo.actividades.Quiz;
+import modelo.actividades.RecursoEducativo;
+import modelo.actividades.Tarea;
 
 import java.io.*;
 import java.nio.file.Files;

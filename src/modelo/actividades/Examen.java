@@ -1,10 +1,12 @@
-package modelo;
+package modelo.actividades;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import excepciones.RespuestasInconsistentesPruebaException;
+import excepciones.TipoDePreguntaInvalidaException;
+import modelo.Review;
 
 public class Examen extends Prueba{
 
@@ -14,7 +16,7 @@ public class Examen extends Prueba{
 	public Examen(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
 			int tiempoCompletarSugerido, String tipoActividad, List<PreguntaAbierta> preguntas, String tipoPrueba) {
 		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, tipoPrueba);
-		this.preguntas = preguntas;
+		setPreguntas(preguntas);
 		this.calificado = false;
 		this.setTipoActividad("Prueba");
 		this.setTipoPrueba("Examen");
@@ -28,22 +30,45 @@ public class Examen extends Prueba{
 		this.setTipoActividad("Prueba");
 		this.setTipoPrueba("Examen");
 	}
+	
+	public void setPreguntas(List<PreguntaAbierta> preguntas)
+	{
+		int i = 1;
+		for(PreguntaAbierta pregunta: preguntas)
+		{
+			pregunta.setNumero(i);
+			i++;
+		}
+		this.preguntas = preguntas;
+	}
 
 	public List<PreguntaAbierta> getPreguntas() {
 		return preguntas;
 	}
-
-	public void addPregunta(PreguntaAbierta pregunta) {
-		this.preguntas.add(pregunta);
+	
+	@Override
+	public void addPregunta(Pregunta pregunta) throws TipoDePreguntaInvalidaException {
+		int numPregunta = pregunta.getNumero();
+		
+		if (!(pregunta instanceof PreguntaAbierta))
+		{
+			throw new TipoDePreguntaInvalidaException(pregunta.getTipo(), this.getTipoActividad());
+		}
+		
+		if (numPregunta <= 0 || numPregunta > this.preguntas.size())
+		{
+			pregunta.setNumero(this.preguntas.size());
+			this.preguntas.add((PreguntaAbierta) pregunta);
+		} 
+		else
+		{
+			this.preguntas.add(numPregunta - 1, (PreguntaAbierta) pregunta);
+		}
 	}
 	
-	public void addPreguntaPorPosicion(PreguntaAbierta pregunta, int pos) {
-		this.preguntas.add(pos, pregunta);
-	}
-	
-	public void eliminarPregunta(int numPregunta)
-	{
-		if (numPregunta > 0)
+	@Override
+	public void eliminarPregunta(int numPregunta) {
+		if (numPregunta > 0 && numPregunta <= this.preguntas.size())
 		{
 			this.preguntas.remove(numPregunta - 1);
 		}
