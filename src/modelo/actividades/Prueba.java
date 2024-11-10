@@ -81,7 +81,5 @@ public abstract class Prueba extends Actividad{
 	public abstract void eliminarPregunta(int numPregunta);
 
 	public abstract void calcularCalificacion();
-	
-	public abstract void responderPrueba();
 
 }

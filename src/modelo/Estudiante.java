@@ -101,27 +101,23 @@ public class Estudiante extends Usuario {
         if (tipoActividad.equals("Examen") || tipoActividad.equals("Quiz") || tipoActividad.equals("Encuesta"))
         {
         	Prueba prueba = (Prueba) actividad;
-        	prueba.responderPrueba();
+        	if (prueba.isRespondida())
+        	{
+        		completada = true;
+        	}
         } 
         else if (tipoActividad.equals("Tarea"))
         {
-        	Scanner scanner = new Scanner(System.in);
-        	boolean entradaValida = false;
-			String respuesta = null;
-			while (!entradaValida)
-			{
-				System.out.println("Ingrese el medio de envio de la tarea: ");
-				respuesta = scanner.nextLine();
-	            if (!respuesta.trim().isEmpty()) {
-	                entradaValida = true;
-	            } else {
-	                System.out.println("La entrada no puede estar vacía. Inténtalo de nuevo.");
-	            }
-			}
 			Tarea tarea = (Tarea) actividad;
-			tarea.setMedioEntrega(respuesta);
-			scanner.close();
-        } 
+			if (tarea.isEnviado() && tarea.getMedioEntrega() != null)
+			{
+				completada = true;
+			}
+        }
+        else if (tipoActividad.equals("Recurso Educativo"))
+        {
+        	completada = true;
+        }
         
         try {
 			completada = progreso.completarActividad(actividad);

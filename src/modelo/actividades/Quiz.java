@@ -136,44 +136,6 @@ public class Quiz extends Prueba{
 		this.setRespondida(true);
 		this.calcularCalificacion();
 	}
-
-	@Override
-	public void responderPrueba() {
-		// TODO Auto-generated method stub
-		List<Integer> respuestas = new ArrayList<Integer>();
-		Scanner scanner = new Scanner(System.in);
-		for (PreguntaMultiple pregunta: preguntas)
-		{
-			System.out.println(pregunta.getEnunciado());
-			int i = 0;
-			for (String opcion: pregunta.getOpciones())
-			{
-				System.out.println(Integer.toString(i) + ". " + opcion);
-				i++;
-			}
-			boolean entradaValida = false;
-			int respuesta = 1;
-			while (!entradaValida)
-			{
-				System.out.println("Escoja el número de su respuesta: ");
-				if (scanner.hasNextInt()) {
-	                respuesta = scanner.nextInt();
-	                entradaValida = true;
-	            } else {
-	                System.out.println("Eso no es una respuesta válida. Inténtalo de nuevo.");
-	                scanner.next(); // Descartar la entrada no válida
-	            }
-			}
-			respuestas.add(respuesta);
-		}
-		scanner.close();
-		try {
-			this.responderQuiz(respuestas);
-		} catch (RespuestasInconsistentesPruebaException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 	
 	public void setReviews(List<Review> listaReviews) {
 		this.reviews= listaReviews; 	

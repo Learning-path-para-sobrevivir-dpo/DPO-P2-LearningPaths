@@ -69,37 +69,6 @@ public class Encuesta extends Prueba {
 	}
 	
 	@Override
-	public void responderPrueba() {
-		// TODO Auto-generated method stub
-		List<String> respuestas = new ArrayList<String>();
-		Scanner scanner = new Scanner(System.in);
-		for (PreguntaAbierta pregunta: preguntas)
-		{
-			System.out.println(pregunta.getEnunciado());
-			boolean entradaValida = false;
-			String respuesta = null;
-			while (!entradaValida)
-			{
-				System.out.println("Escriba su respuesta: ");
-				respuesta = scanner.nextLine();
-	            if (!respuesta.trim().isEmpty()) {
-	                entradaValida = true;
-	            } else {
-	                System.out.println("La entrada no puede estar vacía. Inténtalo de nuevo.");
-	            }
-			}
-			respuestas.add(respuesta);
-		}
-		scanner.close();
-		try {
-			this.responderEncuesta(respuestas);
-		} catch (RespuestasInconsistentesPruebaException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	@Override
 	public void addPregunta(Pregunta pregunta) throws TipoDePreguntaInvalidaException {
 		int numPregunta = pregunta.getNumero();
 		
