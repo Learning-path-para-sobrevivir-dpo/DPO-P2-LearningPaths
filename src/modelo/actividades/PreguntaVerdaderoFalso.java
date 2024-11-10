@@ -12,6 +12,14 @@ public class PreguntaVerdaderoFalso extends Pregunta{
 		this.setTipo("Pregunta Verdadero Falso");
 	}
 	
+	public PreguntaVerdaderoFalso(String enunciado) {
+		super(enunciado);
+		this.opcionSeleccionada = false;
+		this.setTipo("Pregunta Verdadero Falso");
+		this.setNumero(0);
+	}
+
+	
 	public PreguntaVerdaderoFalso(String enunciado, int numero) {
 		super(enunciado, numero);
 		this.opcionSeleccionada = false;
