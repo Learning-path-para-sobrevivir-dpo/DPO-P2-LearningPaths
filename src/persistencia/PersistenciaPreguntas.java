@@ -15,6 +15,7 @@ import modelo.*;
 import modelo.actividades.Pregunta;
 import modelo.actividades.PreguntaAbierta;
 import modelo.actividades.PreguntaMultiple;
+import modelo.actividades.PreguntaVerdaderoFalso;
 
 public class PersistenciaPreguntas {
 
@@ -53,6 +54,12 @@ public class PersistenciaPreguntas {
                         pm.setOpcionSeleccionada(jsonPregunta.getInt("opcionSeleccionada"));
                         pregunta = pm;
                         break;
+                    case "PreguntaVerdaderoFalso":
+                    	boolean respuestaCorrecta = jsonPregunta.getBoolean("respuestaCorrecta");
+                    	PreguntaVerdaderoFalso pvf = new PreguntaVerdaderoFalso(enunciado, respuestaCorrecta);
+                    	pvf.setOpcionSeleccionada(jsonPregunta.getBoolean("opcionSeleccionada"));
+                    	pregunta = pvf;
+                    	break;
                     case "Pregunta":
                     	pregunta = new Pregunta(enunciado); 	
                     default:
@@ -92,6 +99,12 @@ public class PersistenciaPreguntas {
                     jsonPregunta.put("opciones", new JSONArray(pm.getOpciones()));
                     jsonPregunta.put("opcionCorrecta", pm.getOpcionCorrecta() + 1);
                     jsonPregunta.put("opcionSeleccionada", pm.getOpcionSeleccionada());
+                } 
+                else if (pregunta instanceof PreguntaVerdaderoFalso) {
+                    jsonPregunta.put("tipoPregunta", "PreguntaVerdaderoFalso");
+                    PreguntaVerdaderoFalso pvf = (PreguntaVerdaderoFalso) pregunta;
+                    jsonPregunta.put("respuestaCorrecta", pvf.isRespuestaCorrecta());
+                    jsonPregunta.put("opcionSeleccionada", pvf.isOpcionSeleccionada());
                 } else {
                     jsonPregunta.put("tipoPregunta", "Pregunta");
                 }

@@ -7,7 +7,10 @@ import modelo.actividades.Examen;
 import modelo.actividades.Pregunta;
 import modelo.actividades.PreguntaAbierta;
 import modelo.actividades.PreguntaMultiple;
+import modelo.actividades.PreguntaVerdaderoFalso;
 import modelo.actividades.Quiz;
+import modelo.actividades.QuizOpcionMultiple;
+import modelo.actividades.QuizVerdaderoFalso;
 import modelo.actividades.RecursoEducativo;
 import modelo.actividades.Tarea;
 
@@ -69,7 +72,7 @@ public class PersistenciaActividades {
                                 }
                                 actividad = new Encuesta(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, listaPreguntas, tipoPrueba);
                                 break;
-                            case "Quiz":
+                            case "Quiz Opcion Multiple":
                             	JSONArray jsonPreguntas3 = jsonActividad.getJSONArray("preguntas");
                             	List<PreguntaMultiple> listaPreguntas3 = new ArrayList<>();
                                 for (int j = 0; j < jsonPreguntas3.length(); j++) {
@@ -81,8 +84,23 @@ public class PersistenciaActividades {
                                     }
                                 }
                             	float calificacionMinima = jsonActividad.getFloat("calificacionMinima");
-                                actividad = new Quiz(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
+                                actividad = new QuizOpcionMultiple(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
                             			tiempoCompletarSugerido, tipoActividad, calificacionMinima, listaPreguntas3, tipoPrueba);
+                                break;
+                            case "Quiz Verdadero Falso":
+                            	JSONArray jsonPreguntas4 = jsonActividad.getJSONArray("preguntas");
+                            	List<PreguntaVerdaderoFalso> listaPreguntas4 = new ArrayList<>();
+                                for (int j = 0; j < jsonPreguntas4.length(); j++) {
+                                    String enunciadoPregunta = jsonPreguntas4.getString(j);
+                                    // Buscar la pregunta en el HashMap de preguntas usando el enunciado como clave
+                                    Pregunta pregunta = preguntasMap.get(enunciadoPregunta );
+                                    if (pregunta != null) {
+                                        listaPreguntas4.add((PreguntaVerdaderoFalso) pregunta);
+                                    }
+                                }
+                            	float calificacionMinima2 = jsonActividad.getFloat("calificacionMinima");
+                                actividad = new QuizVerdaderoFalso(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
+                            			tiempoCompletarSugerido, tipoActividad, calificacionMinima2, tipoPrueba,  listaPreguntas4);
                                 break;
                             case "Examen":
                             	JSONArray jsonPreguntas2 = jsonActividad.getJSONArray("preguntas");
@@ -173,14 +191,26 @@ public class PersistenciaActividades {
                     }
                     jsonActividad.put("preguntas", jsonPreguntas);
 
-                } else if (actividad instanceof Quiz) {
-                    Quiz quiz = (Quiz) actividad;
+                } else if (actividad instanceof QuizOpcionMultiple) {
+                    QuizOpcionMultiple quiz = (QuizOpcionMultiple) actividad;
                     jsonActividad.put("tipoPrueba", "Quiz");
                     jsonActividad.put("calificacionMinima", quiz.getCalificacionMinima());
 
                     // Convertir las preguntas de Quiz
                     JSONArray jsonPreguntas = new JSONArray();
                     for (PreguntaMultiple pregunta : quiz.getPreguntas()) {
+                        jsonPreguntas.put(pregunta.getEnunciado());
+                    }
+                    jsonActividad.put("preguntas", jsonPreguntas);
+                    
+                } else if (actividad instanceof QuizVerdaderoFalso) {
+                	QuizVerdaderoFalso quiz = (QuizVerdaderoFalso) actividad;
+                    jsonActividad.put("tipoPrueba", "Quiz");
+                    jsonActividad.put("calificacionMinima", quiz.getCalificacionMinima());
+
+                    // Convertir las preguntas de Quiz
+                    JSONArray jsonPreguntas = new JSONArray();
+                    for (PreguntaVerdaderoFalso pregunta : quiz.getPreguntas()) {
                         jsonPreguntas.put(pregunta.getEnunciado());
                     }
                     jsonActividad.put("preguntas", jsonPreguntas);
