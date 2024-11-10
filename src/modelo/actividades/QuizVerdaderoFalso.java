@@ -3,8 +3,8 @@ package modelo.actividades;
 import java.util.ArrayList;
 import java.util.List;
 
+import excepciones.RespuestasInconsistentesPruebaException;
 import excepciones.TipoDePreguntaInvalidaException;
-import modelo.Review;
 
 public class QuizVerdaderoFalso extends Quiz {
 	
@@ -95,6 +95,31 @@ public class QuizVerdaderoFalso extends Quiz {
 				this.setEstado("No Exitosa");
 			}
 		}
+	}
+	
+	public void responderQuiz(List<Boolean> respuestas) throws RespuestasInconsistentesPruebaException{
+		// TODO Auto-generated method stub
+		int numRespuestasEsperadas = this.preguntas.size();
+		if (numRespuestasEsperadas != respuestas.size())
+		{
+			throw new RespuestasInconsistentesPruebaException(numRespuestasEsperadas, respuestas.size());
+		}
+		List<PreguntaVerdaderoFalso> preguntasRespondidas = new ArrayList<PreguntaVerdaderoFalso>();
+		PreguntaVerdaderoFalso preguntaRespondida;
+		for (int i = 0; i < numRespuestasEsperadas; i++)
+		{
+			try {
+				preguntaRespondida = (PreguntaVerdaderoFalso) this.preguntas.get(i).clone();
+				preguntaRespondida.setOpcionSeleccionada(respuestas.get(i));
+				preguntasRespondidas.add(preguntaRespondida);
+			} catch (CloneNotSupportedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		this.preguntas = preguntasRespondidas;
+		this.setRespondida(true);
+		this.calcularCalificacion();
 	}
 
 }

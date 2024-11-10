@@ -5,7 +5,6 @@ import java.util.List;
 
 import excepciones.RespuestasInconsistentesPruebaException;
 import excepciones.TipoDePreguntaInvalidaException;
-import modelo.Review;
 
 public class QuizOpcionMultiple extends Quiz {
 	
