@@ -11,6 +11,8 @@ import modelo.actividades.Actividad;
 import modelo.actividades.Encuesta;
 import modelo.actividades.Examen;
 import modelo.actividades.Quiz;
+import modelo.actividades.QuizOpcionMultiple;
+import modelo.actividades.QuizVerdaderoFalso;
 import modelo.actividades.RecursoEducativo;
 import modelo.actividades.Tarea;
 
@@ -48,8 +50,16 @@ public class Profesor extends Usuario{
 	
 	public Actividad crearQuiz(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
 	        int tiempoCompletarSugerido, String tipo, String tipoPrueba, float calificacionMinima) {
-		Actividad newAct = new Quiz(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,tiempoCompletarSugerido, tipo, calificacionMinima, tipoPrueba);
+		Actividad newAct = null;
 		
+		if (tipoPrueba == "Quiz Opcion Multiple")
+		{
+			newAct = new QuizOpcionMultiple(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,tiempoCompletarSugerido, tipo, calificacionMinima, tipoPrueba);
+		}
+		else if (tipoPrueba == "Quiz Verdadero Falso")
+		{
+			newAct = new QuizVerdaderoFalso(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipo, calificacionMinima, tipoPrueba);
+		}
 		return newAct;
 	}
 				

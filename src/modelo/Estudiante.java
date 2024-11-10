@@ -98,7 +98,7 @@ public class Estudiante extends Usuario {
         }
         String tipoActividad = actividad.getTipoActividad();
         Progreso progreso = this.progresosLearningPaths.get(nombrePath);
-        if (tipoActividad.equals("Examen") || tipoActividad.equals("Quiz") || tipoActividad.equals("Encuesta"))
+        if (tipoActividad.equals("Prueba"))
         {
         	Prueba prueba = (Prueba) actividad;
         	if (prueba.isRespondida())
