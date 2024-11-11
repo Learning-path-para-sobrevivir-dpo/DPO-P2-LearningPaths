@@ -36,122 +36,125 @@ public class PersistenciaActividades {
         try {
             // Leer todo el contenido del archivo JSON
             String content = new String(Files.readAllBytes(Paths.get(ARCHIVO_ACTIVIDADES)));
+            
+            if (!content.isBlank())
+            {
+            	// Convertir el contenido en un JSONArray
+            	JSONArray jsonActividades = new JSONArray(content);
 
-            // Convertir el contenido en un JSONArray
-            JSONArray jsonActividades = new JSONArray(content);
+            	// Iterar sobre cada objeto en el JSONArray
+            	for (int i = 0; i < jsonActividades.length(); i++) {
+            		JSONObject jsonActividad = jsonActividades.getJSONObject(i);
 
-            // Iterar sobre cada objeto en el JSONArray
-            for (int i = 0; i < jsonActividades.length(); i++) {
-                JSONObject jsonActividad = jsonActividades.getJSONObject(i);
+            		// Obtener los datos de la actividad
+            		String titulo = jsonActividad.getString("titulo");
+            		String descripcion = jsonActividad.getString("descripcion");
+            		int nivelDificultad = jsonActividad.getInt("nivelDificultad");
+            		int duracionMin = jsonActividad.getInt("duracionMin");
+            		boolean obligatorio = jsonActividad.getBoolean("obligatorio");
+            		int tiempoCompletarSugerido = jsonActividad.getInt("tiempoCompletarSugerido");
+            		String tipoActividad = jsonActividad.getString("tipoActividad");
 
-                // Obtener los datos de la actividad
-                String titulo = jsonActividad.getString("titulo");
-                String descripcion = jsonActividad.getString("descripcion");
-                int nivelDificultad = jsonActividad.getInt("nivelDificultad");
-                int duracionMin = jsonActividad.getInt("duracionMin");
-                boolean obligatorio = jsonActividad.getBoolean("obligatorio");
-                int tiempoCompletarSugerido = jsonActividad.getInt("tiempoCompletarSugerido");
-                String tipoActividad = jsonActividad.getString("tipoActividad");
+            		// Crear una instancia de Actividad
+            		Actividad actividad;
+            		switch (tipoActividad) {
+            		case "Prueba":
+            			String tipoPrueba = jsonActividad.getString("tipoPrueba");
+            			switch (tipoPrueba) {
+            			case "Encuesta":
+            				JSONArray jsonPreguntas = jsonActividad.getJSONArray("preguntas");
+            				List<PreguntaAbierta> listaPreguntas = new ArrayList<>();
+            				for (int j = 0; j < jsonPreguntas.length(); j++) {
+            					String enunciadoPregunta = jsonPreguntas.getString(j);
+            					// Buscar la pregunta en el HashMap de preguntas usando el enunciado como clave
+            					Pregunta pregunta = preguntasMap.get(enunciadoPregunta );
+            					if (pregunta != null) {
+            						listaPreguntas.add((PreguntaAbierta) pregunta);
+            					}
+            				}
+            				actividad = new Encuesta(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, listaPreguntas, tipoPrueba);
+            				break;
+            			case "Quiz Opcion Multiple":
+            				JSONArray jsonPreguntas3 = jsonActividad.getJSONArray("preguntas");
+            				List<PreguntaMultiple> listaPreguntas3 = new ArrayList<>();
+            				for (int j = 0; j < jsonPreguntas3.length(); j++) {
+            					String enunciadoPregunta = jsonPreguntas3.getString(j);
+            					// Buscar la pregunta en el HashMap de preguntas usando el enunciado como clave
+            					Pregunta pregunta = preguntasMap.get(enunciadoPregunta );
+            					if (pregunta != null) {
+            						listaPreguntas3.add((PreguntaMultiple) pregunta);
+            					}
+            				}
+            				float calificacionMinima = jsonActividad.getFloat("calificacionMinima");
+            				actividad = new QuizOpcionMultiple(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
+            						tiempoCompletarSugerido, tipoActividad, calificacionMinima, listaPreguntas3, tipoPrueba);
+            				break;
+            			case "Quiz Verdadero Falso":
+            				JSONArray jsonPreguntas4 = jsonActividad.getJSONArray("preguntas");
+            				List<PreguntaVerdaderoFalso> listaPreguntas4 = new ArrayList<>();
+            				for (int j = 0; j < jsonPreguntas4.length(); j++) {
+            					String enunciadoPregunta = jsonPreguntas4.getString(j);
+            					// Buscar la pregunta en el HashMap de preguntas usando el enunciado como clave
+            					Pregunta pregunta = preguntasMap.get(enunciadoPregunta );
+            					if (pregunta != null) {
+            						listaPreguntas4.add((PreguntaVerdaderoFalso) pregunta);
+            					}
+            				}
+            				float calificacionMinima2 = jsonActividad.getFloat("calificacionMinima");
+            				actividad = new QuizVerdaderoFalso(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
+            						tiempoCompletarSugerido, tipoActividad, calificacionMinima2, tipoPrueba,  listaPreguntas4);
+            				break;
+            			case "Examen":
+            				JSONArray jsonPreguntas2 = jsonActividad.getJSONArray("preguntas");
+            				List<PreguntaAbierta> listaPreguntas2 = new ArrayList<>();
+            				for (int j = 0; j < jsonPreguntas2.length(); j++) {
+            					String enunciadoPregunta = jsonPreguntas2.getString(j);
+            					Pregunta pregunta = preguntasMap.get(enunciadoPregunta );
+            					if (pregunta != null) {
+            						listaPreguntas2.add((PreguntaAbierta) pregunta);
+            					}
+            				}
+            				actividad = new Examen(titulo, descripcion, nivelDificultad, duracionMin,
+            						obligatorio, tiempoCompletarSugerido, tipoActividad, listaPreguntas2, tipoPrueba);
+            				Boolean calificado = jsonActividad.getBoolean("calificado");
+            				((Examen) actividad).setCalificado(calificado);
+            				break;
+            			default:
+            				throw new IllegalArgumentException("Tipo de actividad desconocido: " + tipoActividad);
+            			}
+            			break;
+            		case "Tarea":
+            			String contenido = jsonActividad.getString("contenido");
+            			actividad = new Tarea(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, contenido);
+            			break;
+            		case "Recurso Educativo":
+            			String contenido2 = jsonActividad.getString("contenido");
+            			String tipoRecurso =  jsonActividad.getString("tipoRecurso");
+            			actividad = new RecursoEducativo(titulo, descripcion, nivelDificultad, duracionMin,
+            					obligatorio, tiempoCompletarSugerido, tipoActividad, tipoRecurso, contenido2);
+            			break;
+            		default:
+            			throw new IllegalArgumentException("Tipo de actividad desconocido: " + tipoActividad);
+            		}
 
-                // Crear una instancia de Actividad
-                Actividad actividad;
-                switch (tipoActividad) {
-                    case "Prueba":
-                        String tipoPrueba = jsonActividad.getString("tipoPrueba");
-                        switch (tipoPrueba) {
-                            case "Encuesta":
-                            	JSONArray jsonPreguntas = jsonActividad.getJSONArray("preguntas");
-                            	List<PreguntaAbierta> listaPreguntas = new ArrayList<>();
-                                for (int j = 0; j < jsonPreguntas.length(); j++) {
-                                    String enunciadoPregunta = jsonPreguntas.getString(j);
-                                    // Buscar la pregunta en el HashMap de preguntas usando el enunciado como clave
-                                    Pregunta pregunta = preguntasMap.get(enunciadoPregunta );
-                                    if (pregunta != null) {
-                                        listaPreguntas.add((PreguntaAbierta) pregunta);
-                                    }
-                                }
-                                actividad = new Encuesta(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, listaPreguntas, tipoPrueba);
-                                break;
-                            case "Quiz Opcion Multiple":
-                            	JSONArray jsonPreguntas3 = jsonActividad.getJSONArray("preguntas");
-                            	List<PreguntaMultiple> listaPreguntas3 = new ArrayList<>();
-                                for (int j = 0; j < jsonPreguntas3.length(); j++) {
-                                    String enunciadoPregunta = jsonPreguntas3.getString(j);
-                                    // Buscar la pregunta en el HashMap de preguntas usando el enunciado como clave
-                                    Pregunta pregunta = preguntasMap.get(enunciadoPregunta );
-                                    if (pregunta != null) {
-                                        listaPreguntas3.add((PreguntaMultiple) pregunta);
-                                    }
-                                }
-                            	float calificacionMinima = jsonActividad.getFloat("calificacionMinima");
-                                actividad = new QuizOpcionMultiple(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
-                            			tiempoCompletarSugerido, tipoActividad, calificacionMinima, listaPreguntas3, tipoPrueba);
-                                break;
-                            case "Quiz Verdadero Falso":
-                            	JSONArray jsonPreguntas4 = jsonActividad.getJSONArray("preguntas");
-                            	List<PreguntaVerdaderoFalso> listaPreguntas4 = new ArrayList<>();
-                                for (int j = 0; j < jsonPreguntas4.length(); j++) {
-                                    String enunciadoPregunta = jsonPreguntas4.getString(j);
-                                    // Buscar la pregunta en el HashMap de preguntas usando el enunciado como clave
-                                    Pregunta pregunta = preguntasMap.get(enunciadoPregunta );
-                                    if (pregunta != null) {
-                                        listaPreguntas4.add((PreguntaVerdaderoFalso) pregunta);
-                                    }
-                                }
-                            	float calificacionMinima2 = jsonActividad.getFloat("calificacionMinima");
-                                actividad = new QuizVerdaderoFalso(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
-                            			tiempoCompletarSugerido, tipoActividad, calificacionMinima2, tipoPrueba,  listaPreguntas4);
-                                break;
-                            case "Examen":
-                            	JSONArray jsonPreguntas2 = jsonActividad.getJSONArray("preguntas");
-                            	List<PreguntaAbierta> listaPreguntas2 = new ArrayList<>();
-                                for (int j = 0; j < jsonPreguntas2.length(); j++) {
-                                    String enunciadoPregunta = jsonPreguntas2.getString(j);
-                                    Pregunta pregunta = preguntasMap.get(enunciadoPregunta );
-                                    if (pregunta != null) {
-                                        listaPreguntas2.add((PreguntaAbierta) pregunta);
-                                    }
-                                }
-                                actividad = new Examen(titulo, descripcion, nivelDificultad, duracionMin,
-                            			obligatorio, tiempoCompletarSugerido, tipoActividad, listaPreguntas2, tipoPrueba);
-                                Boolean calificado = jsonActividad.getBoolean("calificado");
-                                ((Examen) actividad).setCalificado(calificado);
-                                break;
-                            default:
-                                throw new IllegalArgumentException("Tipo de actividad desconocido: " + tipoActividad);
-                        }
-                        break;
-                    case "Tarea":
-                    	String contenido = jsonActividad.getString("contenido");
-                        actividad = new Tarea(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, contenido);
-                        break;
-                    case "Recurso Educativo":
-                    	String contenido2 = jsonActividad.getString("contenido");
-                    	String tipoRecurso =  jsonActividad.getString("tipoRecurso");
-                        actividad = new RecursoEducativo(titulo, descripcion, nivelDificultad, duracionMin,
-                    			obligatorio, tiempoCompletarSugerido, tipoActividad, tipoRecurso, contenido2);
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Tipo de actividad desconocido: " + tipoActividad);
-                }
+            		String id = actividad.getId();
 
-                String id = actividad.getId();
+            		// Leer las reviews de la actividad
+            		JSONArray jsonReviews = jsonActividad.getJSONArray("reviews");
+            		List<Review> listaReviews = new ArrayList<>();
+            		for (int j = 0; j < jsonReviews.length(); j++) {
+            			String contenidoReview = jsonReviews.getString(j);
+            			// Buscar la review en el HashMap de reviews usando el contenido como clave
+            			Review review = reviewsMap.get(contenidoReview);
+            			if (review != null) {
+            				listaReviews.add(review);
+            			}
+            		}
+            		actividad.setReviews(listaReviews);
 
-                // Leer las reviews de la actividad
-                JSONArray jsonReviews = jsonActividad.getJSONArray("reviews");
-                List<Review> listaReviews = new ArrayList<>();
-                for (int j = 0; j < jsonReviews.length(); j++) {
-                    String contenidoReview = jsonReviews.getString(j);
-                    // Buscar la review en el HashMap de reviews usando el contenido como clave
-                    Review review = reviewsMap.get(contenidoReview);
-                    if (review != null) {
-                        listaReviews.add(review);
-                    }
-                }
-                actividad.setReviews(listaReviews);
-
-                // Agregar la actividad al HashMap usando el id como llave
-                actividades.put(id, actividad);
+            		// Agregar la actividad al HashMap usando el id como llave
+            		actividades.put(id, actividad);
+            	}
             }
 
         } catch (IOException e) {

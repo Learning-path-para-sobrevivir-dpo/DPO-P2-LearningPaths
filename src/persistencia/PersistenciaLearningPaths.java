@@ -27,61 +27,64 @@ public class PersistenciaLearningPaths {
             // Leer el archivo JSON
             String content = new String(Files.readAllBytes(Paths.get(ARCHIVO_LEARNINGPATHS)));
 
-            // Convertir el contenido en un JSONArray
-            JSONArray jsonLearningPaths = new JSONArray(content);
+            if (!content.isBlank())
+            {
+            	// Convertir el contenido en un JSONArray
+            	JSONArray jsonLearningPaths = new JSONArray(content);
 
-            // Iterar sobre cada objeto en el JSONArray
-            for (int i = 0; i < jsonLearningPaths.length(); i++) {
-                JSONObject jsonLearningPath = jsonLearningPaths.getJSONObject(i);
+            	// Iterar sobre cada objeto en el JSONArray
+            	for (int i = 0; i < jsonLearningPaths.length(); i++) {
+            		JSONObject jsonLearningPath = jsonLearningPaths.getJSONObject(i);
 
-                // Obtener datos de LearningPath
-                String titulo = jsonLearningPath.getString("titulo");
-                String descripcion = jsonLearningPath.getString("descripcion");
-                String objetivo = jsonLearningPath.getString("objetivo");
-                int nivelDificultad = jsonLearningPath.getInt("nivelDificultad");
-                int rating = jsonLearningPath.getInt("rating");
-                String fechaCreacion = jsonLearningPath.getString("fechaCreacion");
-                String fechaModificacion = jsonLearningPath.getString("fechaModificacion");
-                int version = jsonLearningPath.getInt("version");
-                String autor = jsonLearningPath.getString("autor");
+            		// Obtener datos de LearningPath
+            		String titulo = jsonLearningPath.getString("titulo");
+            		String descripcion = jsonLearningPath.getString("descripcion");
+            		String objetivo = jsonLearningPath.getString("objetivo");
+            		int nivelDificultad = jsonLearningPath.getInt("nivelDificultad");
+            		int rating = jsonLearningPath.getInt("rating");
+            		String fechaCreacion = jsonLearningPath.getString("fechaCreacion");
+            		String fechaModificacion = jsonLearningPath.getString("fechaModificacion");
+            		int version = jsonLearningPath.getInt("version");
+            		String autor = jsonLearningPath.getString("autor");
 
-                // Crear instancia de LearningPath
-                LearningPath learningPath = new LearningPath(titulo, descripcion, objetivo, nivelDificultad, rating, fechaCreacion, fechaModificacion, version, autor);
+            		// Crear instancia de LearningPath
+            		LearningPath learningPath = new LearningPath(titulo, descripcion, objetivo, nivelDificultad, rating, fechaCreacion, fechaModificacion, version, autor);
 
-                // Cargar progresos
-                JSONObject jsonProgresos = jsonLearningPath.getJSONObject("progresosEstudiantiles");
-                for (String estudiante : jsonProgresos.keySet()) {
-                	JSONArray jsonArrayProgreso = jsonProgresos.getJSONArray(estudiante);
-                	List<String> idProgreso = new ArrayList<String>();
-                    for (int j = 0; j < jsonArrayProgreso.length(); j++) {
-                        idProgreso.add(jsonArrayProgreso.getString(j));
-                    }
-                    Progreso progreso = progresosMap.get(idProgreso);
-                    if (progreso != null) {
-                        learningPath.getProgresosEstudiantiles().put(estudiante, progreso);
-                    }
-                }
+            		// Cargar progresos
+            		JSONObject jsonProgresos = jsonLearningPath.getJSONObject("progresosEstudiantiles");
+            		for (String estudiante : jsonProgresos.keySet()) {
+            			JSONArray jsonArrayProgreso = jsonProgresos.getJSONArray(estudiante);
+            			List<String> idProgreso = new ArrayList<String>();
+            			for (int j = 0; j < jsonArrayProgreso.length(); j++) {
+            				idProgreso.add(jsonArrayProgreso.getString(j));
+            			}
+            			Progreso progreso = progresosMap.get(idProgreso);
+            			if (progreso != null) {
+            				learningPath.getProgresosEstudiantiles().put(estudiante, progreso);
+            			}
+            		}
 
-                // Cargar estudiantes
-                JSONArray jsonEstudiantes = jsonLearningPath.getJSONArray("estudiantes");
-                for (int j = 0; j < jsonEstudiantes.length(); j++) {
-                    String estudiante = jsonEstudiantes.getString(j);
-                    learningPath.getEstudiantes().add(estudiante);
-                }
+            		// Cargar estudiantes
+            		JSONArray jsonEstudiantes = jsonLearningPath.getJSONArray("estudiantes");
+            		for (int j = 0; j < jsonEstudiantes.length(); j++) {
+            			String estudiante = jsonEstudiantes.getString(j);
+            			learningPath.getEstudiantes().add(estudiante);
+            		}
 
-                // Cargar actividades
-                JSONObject jsonActividades = jsonLearningPath.getJSONObject("actividades");
-                for (String key : jsonActividades.keySet()) {
-                    int orden = Integer.parseInt(key);
-                    String idActividad = jsonActividades.getString(key);
-                    Actividad actividad = actividadesMap.get(idActividad);
-                    if (actividad != null) {
-                        learningPath.getActividades().put(orden, actividad);
-                    }
-                }
+            		// Cargar actividades
+            		JSONObject jsonActividades = jsonLearningPath.getJSONObject("actividades");
+            		for (String key : jsonActividades.keySet()) {
+            			int orden = Integer.parseInt(key);
+            			String idActividad = jsonActividades.getString(key);
+            			Actividad actividad = actividadesMap.get(idActividad);
+            			if (actividad != null) {
+            				learningPath.getActividades().put(orden, actividad);
+            			}
+            		}
 
-                // Agregar el LearningPath al HashMap
-                learningPaths.put(titulo, learningPath);
+            		// Agregar el LearningPath al HashMap
+            		learningPaths.put(titulo, learningPath);
+            	}
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -24,55 +24,58 @@ public class PersistenciaProgresos {
         try {
             /// Leer todo el contenido del archivo JSON
             String content = new String(Files.readAllBytes(Paths.get(ARCHIVO_PROGRESO)));
+            
+            if (!content.isBlank())
+            {
+            	// Convertir el contenido en un JSONArray
+            	JSONArray jsonProgresos = new JSONArray(content);
 
-            // Convertir el contenido en un JSONArray
-            JSONArray jsonProgresos = new JSONArray(content);
+            	// Iterar sobre el JSONArray y convertir cada objeto JSON a Progreso
+            	for (int i = 0; i < jsonProgresos.length(); i++) {
+            		JSONObject jsonProgreso = jsonProgresos.getJSONObject(i);
 
-            // Iterar sobre el JSONArray y convertir cada objeto JSON a Progreso
-            for (int i = 0; i < jsonProgresos.length(); i++) {
-                JSONObject jsonProgreso = jsonProgresos.getJSONObject(i);
+            		String learningPath = jsonProgreso.getString("learningPath");
+            		String estudiante = jsonProgreso.getString("estudiante");
 
-                String learningPath = jsonProgreso.getString("learningPath");
-                String estudiante = jsonProgreso.getString("estudiante");
+            		// Crear un nuevo objeto Progreso
+            		Progreso progreso = new Progreso(learningPath, estudiante);
 
-                // Crear un nuevo objeto Progreso
-                Progreso progreso = new Progreso(learningPath, estudiante);
+            		// Cargar actividadesPath desde el JSON
+            		JSONArray jsonActividadesPath = jsonProgreso.getJSONArray("actividadesPath");
+            		for (int j = 0; j < jsonActividadesPath.length(); j++) {
+            			int key = jsonActividadesPath.getInt(j); // Suponiendo que la clave es un entero (ID de actividad)
+            			Actividad actividad = mapaActividades.get(String.valueOf(key)); // Obtener actividad por ID desde el mapa
+            			if (actividad != null) {
+            				progreso.getActividadesPath().put(key, actividad);
+            			}
+            		}
 
-                // Cargar actividadesPath desde el JSON
-                JSONArray jsonActividadesPath = jsonProgreso.getJSONArray("actividadesPath");
-                for (int j = 0; j < jsonActividadesPath.length(); j++) {
-                    int key = jsonActividadesPath.getInt(j); // Suponiendo que la clave es un entero (ID de actividad)
-                    Actividad actividad = mapaActividades.get(String.valueOf(key)); // Obtener actividad por ID desde el mapa
-                    if (actividad != null) {
-                        progreso.getActividadesPath().put(key, actividad);
-                    }
-                }
+            		// Cargar otras listas de actividades
+            		progreso.setActObligatoriasPendientes(cargarListaActividades(jsonProgreso.getJSONArray("actObligatoriasPendientes"), mapaActividades));
+            		progreso.setActObligatoriasCompletadas(cargarListaActividades(jsonProgreso.getJSONArray("actObligatoriasCompletadas"), mapaActividades));
+            		progreso.setActPendientes(cargarListaActividades(jsonProgreso.getJSONArray("actPendientes"), mapaActividades));
+            		progreso.setActCompletadas(cargarListaActividades(jsonProgreso.getJSONArray("actCompletadas"), mapaActividades));
 
-                // Cargar otras listas de actividades
-                progreso.setActObligatoriasPendientes(cargarListaActividades(jsonProgreso.getJSONArray("actObligatoriasPendientes"), mapaActividades));
-                progreso.setActObligatoriasCompletadas(cargarListaActividades(jsonProgreso.getJSONArray("actObligatoriasCompletadas"), mapaActividades));
-                progreso.setActPendientes(cargarListaActividades(jsonProgreso.getJSONArray("actPendientes"), mapaActividades));
-                progreso.setActCompletadas(cargarListaActividades(jsonProgreso.getJSONArray("actCompletadas"), mapaActividades));
+            		// Cargar actividadEnProgreso (si existe)
+            		if (!jsonProgreso.isNull("actividadEnProgreso")) {
+            			String idActividad = jsonProgreso.getString("actividadEnProgreso");
+            			Actividad actividadEnProgreso = mapaActividades.get(idActividad); 
+            			progreso.setActividadEnProgreso(actividadEnProgreso);
+            		}
 
-                // Cargar actividadEnProgreso (si existe)
-                if (!jsonProgreso.isNull("actividadEnProgreso")) {
-                    String idActividad = jsonProgreso.getString("actividadEnProgreso");
-                    Actividad actividadEnProgreso = mapaActividades.get(idActividad); 
-                    progreso.setActividadEnProgreso(actividadEnProgreso);
-                }
+            		// Cargar idActividades
+            		JSONObject jsonIdActividades = jsonProgreso.getJSONObject("idActividades");
+            		for (String key : jsonIdActividades.keySet()) {
+            			int idActividad = jsonIdActividades.getInt(key);
+            			Actividad actividad = mapaActividades.get(String.valueOf(idActividad)); // Obtener actividad por ID desde el mapa
+            			if (actividad != null) {
+            				progreso.getIdActividades().put(key, actividad);
+            			}
+            		}
 
-                // Cargar idActividades
-                JSONObject jsonIdActividades = jsonProgreso.getJSONObject("idActividades");
-                for (String key : jsonIdActividades.keySet()) {
-                    int idActividad = jsonIdActividades.getInt(key);
-                    Actividad actividad = mapaActividades.get(String.valueOf(idActividad)); // Obtener actividad por ID desde el mapa
-                    if (actividad != null) {
-                        progreso.getIdActividades().put(key, actividad);
-                    }
-                }
-
-                // Agregar progreso al mapa
-                progresos.put(List.of(learningPath, estudiante), progreso);
+            		// Agregar progreso al mapa
+            		progresos.put(List.of(learningPath, estudiante), progreso);
+            	}
             }
         } catch (IOException e) {
             e.printStackTrace();
