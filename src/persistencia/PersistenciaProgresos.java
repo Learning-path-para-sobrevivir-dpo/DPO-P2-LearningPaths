@@ -16,7 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 public class PersistenciaProgresos {
 
-    private static final String ARCHIVO_PROGRESO = "datos/progreso.json";
+    private static final String ARCHIVO_PROGRESO = "datos/progresos.json";
 
     public static HashMap<List<String>, Progreso> cargarProgresos(Map<String, Actividad> mapaActividades) {
         HashMap<List<String>, Progreso> progresos = new HashMap<>();
