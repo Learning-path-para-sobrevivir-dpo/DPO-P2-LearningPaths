@@ -54,6 +54,29 @@ public abstract class Actividad implements Cloneable {
         this.idEstudiante = "";
 	}
 	
+	public Actividad(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+			int tiempoCompletarSugerido, String tipo, String id) {
+		super();
+		this.titulo = titulo;
+		this.descripcion = descripcion;
+		this.nivelDificultad = nivelDificultad;
+		this.duracionMin = duracionMin;
+		this.obligatorio = obligatorio;
+		this.tiempoCompletarSugerido = tiempoCompletarSugerido;
+		this.actPreviasSugeridas = new ArrayList<Actividad>();
+		this.reviews = new ArrayList<Review>();
+		this.ratingAcumulado = 0;
+		this.ratingPromedio = 0;
+		this.numRatings = 0;
+		this.setTipoActividad(tipo);
+		this.estado = "Sin completar";
+		this.completada = false;
+		this.completada = false;       
+		this.id = id;
+		Actividad.registrarIDActividad(this);
+        this.idEstudiante = "";
+	}
+	
 	
 	private String generarID(boolean isIDEstudiante)
 	{
@@ -208,7 +231,7 @@ public abstract class Actividad implements Cloneable {
 	{
 		String unID = actividad.getId();
 		ids.add(unID);
-		if (!actividad.getIdEstudiante().equals(""))
+		if (actividad.getIdEstudiante() != null)
 		{
 			idsEstudiantes.add(actividad.getIdEstudiante());
 		}

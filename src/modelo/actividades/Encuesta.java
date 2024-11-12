@@ -21,6 +21,14 @@ public class Encuesta extends Prueba {
 	}
 	
 	public Encuesta(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+			int tiempoCompletarSugerido, String tipoActividad, List<PreguntaAbierta> preguntas, String tipoPrueba, String id) {
+		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, tipoPrueba, id);
+		this.setPreguntas(preguntas);
+		this.setTipoActividad("Prueba");
+		this.setTipoPrueba("Encuesta");
+	}
+	
+	public Encuesta(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
 			int tiempoCompletarSugerido, String tipoActividad, String tipoPrueba) {
 		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, tipoPrueba);
 		this.preguntas = new ArrayList<PreguntaAbierta>();

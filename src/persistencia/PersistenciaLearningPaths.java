@@ -76,10 +76,15 @@ public class PersistenciaLearningPaths {
             		for (String key : jsonActividades.keySet()) {
             			int orden = Integer.parseInt(key);
             			String idActividad = jsonActividades.getString(key);
+            			System.out.println(idActividad);
             			Actividad actividad = actividadesMap.get(idActividad);
             			if (actividad != null) {
             				learningPath.getActividades().put(orden, actividad);
             			}
+            			
+            			
+            			System.out.println(actividadesMap.keySet());
+            			
             		}
 
             		// Agregar el LearningPath al HashMap

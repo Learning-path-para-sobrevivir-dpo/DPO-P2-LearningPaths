@@ -21,14 +21,11 @@
         "rating": 0,
         "titulo": "Arte y Sociedad",
         "estudiantes": ["Juliana Hernandez"],
-        "actividades": {"1": "77416742"},
+        "actividades": {"1": "95752950"},
         "version": 1,
-        "autor": "profesor",
+        "autor": "Marta Martínez",
         "objetivo": "Aprender sobre arte y sociedad",
-        "progresosEstudiantiles": {"Juliana Hernandez": [
-            "Arte y Sociedad",
-            "Juliana Hernandez"
-        ]},
+        "progresosEstudiantiles": {},
         "duracion": 0,
         "fechaCreacion": "2024-10-23"
     }

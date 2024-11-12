@@ -19,6 +19,13 @@ public abstract class Quiz extends Prueba{
 		this.setTipoActividad("Prueba");
 	}
 	
+	public Quiz(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+			int tiempoCompletarSugerido, String tipoActividad, float calificacionMinima, String tipoPrueba, String id) {
+		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, tipoPrueba, id);
+		this.calificacionMinima = calificacionMinima;
+		this.setTipoActividad("Prueba");
+	}
+	
 	public float getCalificacionMinima() {
 		return calificacionMinima;
 	}
