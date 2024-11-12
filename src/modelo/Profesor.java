@@ -36,6 +36,7 @@ public class Profesor extends Usuario{
 		
 		Actividad newAct = new RecursoEducativo(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, 
                 tiempoCompletarSugerido, tipo, tipoRecurso, contenido, enlace);
+		this.actCreadas.add(newAct);
 		return newAct;
 	}
 	
@@ -44,7 +45,7 @@ public class Profesor extends Usuario{
 		
 		Actividad newAct = new Examen(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
     			tiempoCompletarSugerido, tipo, tipoPrueba);
-		
+		this.actCreadas.add(newAct);
 		return newAct;
 	}
 	
@@ -60,6 +61,7 @@ public class Profesor extends Usuario{
 		{
 			newAct = new QuizVerdaderoFalso(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipo, calificacionMinima, tipoPrueba);
 		}
+		this.actCreadas.add(newAct);
 		return newAct;
 	}
 				
@@ -76,6 +78,7 @@ public class Profesor extends Usuario{
 	
 		Actividad newAct = new Tarea(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
     			tiempoCompletarSugerido, tipo, contenido);
+		this.actCreadas.add(newAct);
 		return newAct;
 	}
 	
