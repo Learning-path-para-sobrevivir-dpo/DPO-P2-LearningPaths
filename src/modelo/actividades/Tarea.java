@@ -10,9 +10,9 @@ public class Tarea extends Actividad{
 	private String contenido;
 	private boolean enviado;
 
-	public Tarea(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+	public Tarea(String titulo, String objetivo, int nivelDificultad, int duracionMin, boolean obligatorio,
 			int tiempoCompletarSugerido, String tipo, String contenido) {
-		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipo);
+		super(titulo, objetivo, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipo);
 		this.contenido = contenido;
 		this.enviado = false;
 		this.setTipoActividad("Tarea");

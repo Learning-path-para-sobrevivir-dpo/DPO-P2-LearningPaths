@@ -10,10 +10,10 @@ public class QuizVerdaderoFalso extends Quiz {
 	
 	private List<PreguntaVerdaderoFalso> preguntas;
 
-	public QuizVerdaderoFalso(String titulo, String descripcion, int nivelDificultad, int duracionMin,
+	public QuizVerdaderoFalso(String titulo, String objetivo, int nivelDificultad, int duracionMin,
 			boolean obligatorio, int tiempoCompletarSugerido, String tipoActividad, float calificacionMinima,
 			String tipoPrueba) {
-		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad,
+		super(titulo, objetivo, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad,
 				calificacionMinima, tipoPrueba);
 		this.setTipoPrueba("Quiz Verdadero Falso");
 		this.preguntas = new ArrayList<PreguntaVerdaderoFalso>();

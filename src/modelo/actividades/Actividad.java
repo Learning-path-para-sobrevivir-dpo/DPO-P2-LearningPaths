@@ -8,7 +8,7 @@ import modelo.*;
 
 public abstract class Actividad implements Cloneable {
 	public String titulo;
-	public String descripcion;
+	public String objetivo;
 	public int nivelDificultad;
 	public int duracionMin;
 	public boolean obligatorio;
@@ -36,7 +36,7 @@ public abstract class Actividad implements Cloneable {
 			int tiempoCompletarSugerido, String tipo) {
 		super();
 		this.titulo = titulo;
-		this.descripcion = descripcion;
+		this.objetivo = descripcion;
 		this.nivelDificultad = nivelDificultad;
 		this.duracionMin = duracionMin;
 		this.obligatorio = obligatorio;
@@ -58,7 +58,7 @@ public abstract class Actividad implements Cloneable {
 			int tiempoCompletarSugerido, String tipo, String id) {
 		super();
 		this.titulo = titulo;
-		this.descripcion = descripcion;
+		this.objetivo = descripcion;
 		this.nivelDificultad = nivelDificultad;
 		this.duracionMin = duracionMin;
 		this.obligatorio = obligatorio;
@@ -122,12 +122,12 @@ public abstract class Actividad implements Cloneable {
 		return this.titulo;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
+	public String getObjetivo() {
+		return objetivo;
 	}
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public void setObjetivo(String objetivo) {
+		this.objetivo = objetivo;
 	}
 
 	public int getNivelDificultad() {

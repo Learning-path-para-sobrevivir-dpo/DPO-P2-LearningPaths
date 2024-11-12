@@ -10,10 +10,10 @@ public class QuizOpcionMultiple extends Quiz {
 	
 	public List<PreguntaMultiple> preguntas;
 
-	public QuizOpcionMultiple(String titulo, String descripcion, int nivelDificultad, int duracionMin,
+	public QuizOpcionMultiple(String titulo, String objetivo, int nivelDificultad, int duracionMin,
 			boolean obligatorio, int tiempoCompletarSugerido, String tipoActividad, float calificacionMinima,
 			List<PreguntaMultiple> preguntas, String tipoPrueba) {
-		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad,
+		super(titulo, objetivo, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad,
 				calificacionMinima, tipoPrueba);
 		// TODO Auto-generated constructor stub
 		this.setPreguntas(preguntas);

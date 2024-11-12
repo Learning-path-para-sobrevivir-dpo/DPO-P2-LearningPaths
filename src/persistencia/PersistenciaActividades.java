@@ -48,7 +48,7 @@ public class PersistenciaActividades {
 
             		// Obtener los datos de la actividad
             		String titulo = jsonActividad.getString("titulo");
-            		String descripcion = jsonActividad.getString("descripcion");
+            		String objetivo = jsonActividad.getString("objetivo");
             		int nivelDificultad = jsonActividad.getInt("nivelDificultad");
             		int duracionMin = jsonActividad.getInt("duracionMin");
             		boolean obligatorio = jsonActividad.getBoolean("obligatorio");
@@ -73,7 +73,7 @@ public class PersistenciaActividades {
             						listaPreguntas.add((PreguntaAbierta) pregunta);
             					}
             				}
-            				actividad = new Encuesta(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, listaPreguntas, tipoPrueba, id);
+            				actividad = new Encuesta(titulo, objetivo, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, listaPreguntas, tipoPrueba, id);
             				break;
             			case "Quiz Opcion Multiple":
             				JSONArray jsonPreguntas3 = jsonActividad.getJSONArray("preguntas");
@@ -87,7 +87,7 @@ public class PersistenciaActividades {
             					}
             				}
             				float calificacionMinima = jsonActividad.getFloat("calificacionMinima");
-            				actividad = new QuizOpcionMultiple(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
+            				actividad = new QuizOpcionMultiple(titulo, objetivo, nivelDificultad, duracionMin, obligatorio,
             						tiempoCompletarSugerido, tipoActividad, calificacionMinima, listaPreguntas3, tipoPrueba, id);
             				break;
             			case "Quiz Verdadero Falso":
@@ -102,7 +102,7 @@ public class PersistenciaActividades {
             					}
             				}
             				float calificacionMinima2 = jsonActividad.getFloat("calificacionMinima");
-            				actividad = new QuizVerdaderoFalso(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
+            				actividad = new QuizVerdaderoFalso(titulo, objetivo, nivelDificultad, duracionMin, obligatorio,
             						tiempoCompletarSugerido, tipoActividad, calificacionMinima2, tipoPrueba,  listaPreguntas4, id);
             				break;
             			case "Examen":
@@ -115,7 +115,7 @@ public class PersistenciaActividades {
             						listaPreguntas2.add((PreguntaAbierta) pregunta);
             					}
             				}
-            				actividad = new Examen(titulo, descripcion, nivelDificultad, duracionMin,
+            				actividad = new Examen(titulo, objetivo, nivelDificultad, duracionMin,
             						obligatorio, tiempoCompletarSugerido, tipoActividad, listaPreguntas2, tipoPrueba, id);
             				Boolean calificado = jsonActividad.getBoolean("calificado");
             				((Examen) actividad).setCalificado(calificado);
@@ -126,13 +126,13 @@ public class PersistenciaActividades {
             			break;
             		case "Tarea":
             			String contenido = jsonActividad.getString("contenido");
-            			actividad = new Tarea(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, contenido, id);
+            			actividad = new Tarea(titulo, objetivo, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, contenido, id);
             			break;
             		case "Recurso Educativo":
             			String contenido2 = jsonActividad.getString("contenido");
             			String tipoRecurso =  jsonActividad.getString("tipoRecurso");
             			String enlace = jsonActividad.getString("enlace");
-            			actividad = new RecursoEducativo(titulo, descripcion, nivelDificultad, duracionMin,
+            			actividad = new RecursoEducativo(titulo, objetivo, nivelDificultad, duracionMin,
             					obligatorio, tiempoCompletarSugerido, tipoActividad, tipoRecurso, contenido2, enlace, id);
             			break;
             		default:
@@ -176,7 +176,7 @@ public class PersistenciaActividades {
             for (Actividad actividad : actividades.values()) {
                 JSONObject jsonActividad = new JSONObject();
                 jsonActividad.put("titulo", actividad.getTitulo());
-                jsonActividad.put("descripcion", actividad.getDescripcion());
+                jsonActividad.put("objetivo", actividad.getObjetivo());
                 jsonActividad.put("nivelDificultad", actividad.getNivelDificultad());
                 jsonActividad.put("duracionMin", actividad.getDuracionMin());
                 jsonActividad.put("obligatorio", actividad.isObligatorio());

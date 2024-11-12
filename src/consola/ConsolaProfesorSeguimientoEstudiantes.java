@@ -13,12 +13,12 @@ import modelo.Usuario;
 import modelo.actividades.Actividad;
 import persistencia.ManejoDatos;
 
-public class ConsolaProferorSeguimientoEstudiantes {
+public class ConsolaProfesorSeguimientoEstudiantes {
 	
 	public static void main(String[] args) {
 		ManejoDatos datos = new ManejoDatos();
 		Scanner scanner = new Scanner(System.in);
-		ConsolaProferorSeguimientoEstudiantes consola = new ConsolaProferorSeguimientoEstudiantes();
+		ConsolaProfesorSeguimientoEstudiantes consola = new ConsolaProfesorSeguimientoEstudiantes();
 		
 		datos.cargarDatos();
 		Map<List<String>, Usuario> usuarios = datos.getUsuarios();
@@ -57,7 +57,7 @@ public class ConsolaProferorSeguimientoEstudiantes {
 		scanner.close(); 
 	}
 	
-	public ConsolaProferorSeguimientoEstudiantes() {
+	public ConsolaProfesorSeguimientoEstudiantes() {
 		super();
 	}
 
@@ -113,10 +113,13 @@ public class ConsolaProferorSeguimientoEstudiantes {
 	private int mostrarOpcionesApp(Scanner scan)
 	{
 		int op;
-		System.out.println("Bienvenido a ......");
+		System.out.println("Bienvenido a Seguimiento de Estudiantes");
 	    System.out.println("Seleccione lo que quiere hacer: ");
-	    System.out.println("1. Iniciar Sesión");
-	    System.out.println("2. Crear perfil");
+	    System.out.println("1. Ver todos mis estudiantes");
+	    System.out.println("2. Ver estudiantes inscritos en un Learning Path");
+	    System.out.println("3. Ver todas las actividades pendientes por calificar");
+	    System.out.println("4. Ver las actividades pendientes por calificar de un Learning Path");
+	    System.out.println("5. Calificar una actividad de un estudiante");
 	    System.out.println("0. Salir de la aplicacion");
 	    
 	    System.out.print("Opción: ");
