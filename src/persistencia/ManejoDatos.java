@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-
+import excepciones.LearningPathIncorrectoProgresoException;
 import modelo.*;
 import modelo.actividades.Actividad;
 import modelo.actividades.Pregunta;
@@ -213,10 +213,13 @@ public class ManejoDatos {
 	}
 //Manejo de progreso, reviews, preguntas
 	
-	public void addProgreso(Progreso progreso)
+	public void addProgreso(Progreso progreso) throws LearningPathIncorrectoProgresoException
 	{
 		if (progreso != null)
 		{
+			String lp = progreso.getLearningPath();
+			LearningPath lpProgreso = this.learningPaths.get(lp);
+			progreso.obtenerActividadesPath(lpProgreso);
 			this.progresos.put(List.of(progreso.getLearningPath(),progreso.getEstudiante()), progreso);
 			PersistenciaProgresos.guardarProgreso(progresos);
 		}

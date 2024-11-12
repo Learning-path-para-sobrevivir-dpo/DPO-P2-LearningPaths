@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import excepciones.LearningPathIncorrectoProgresoException;
 import excepciones.YaExisteActividadEnProgresoException;
 import modelo.actividades.Actividad;
 
@@ -37,8 +38,7 @@ public class Progreso {
 		this.progresoObligatorio = 0;
 		this.progresoTotal = 0;
 		this.idsActividadesCopiadas = new ArrayList<String>();
-		//this.obtenerActividadesPath(); Galarza: lo quite porque cambie obternerActividades, pero de por si o entinedo que hace
-	
+		//this.obtenerActividadesPath(); //Galarza: lo quite porque cambie obternerActividades, pero de por si o entinedo que hace
 	}
 
 	public Progreso(String learningPath,String estudiante, Map<Integer, Actividad> actividadesPath,
@@ -147,10 +147,12 @@ public class Progreso {
 	/**
 	 * Clona todas las actividades de un Learning Path para poder ser completadas por el estudiante //Galarza: modifique para que reciba el mapa de learning paths.
 	 */
-	public void obtenerActividadesPath(HashMap<String, LearningPath> learningPaths)
+	public void obtenerActividadesPath(LearningPath learningPath) throws LearningPathIncorrectoProgresoException
 	{
-		String titulo = this.getLearningPath();
-		LearningPath learningPath = learningPaths.get(titulo);
+		if (!this.learningPath.equals(learningPath.getTitulo()))
+		{
+			throw new LearningPathIncorrectoProgresoException(learningPath.getTitulo(), this.learningPath);
+		}
 		int tamanio = learningPath.getActividades().size();
 		Actividad actNueva;
 		Actividad actVieja;
@@ -177,9 +179,9 @@ public class Progreso {
 		}
 		this.actividadesPath = nuevasActividades;
 		this.obtenerIDsActividades();
-		this.obtenerActPendientes(learningPaths);
+		this.obtenerActPendientes(learningPath);
 		this.obtenerActObligatoriasPendientes();
-		this.obtenerActCompletadas(learningPaths);
+		this.obtenerActCompletadas(learningPath);
 		this.obtenerActObligatoriasCompletadas();
 		this.calcularProgreso();
 	}
@@ -194,9 +196,8 @@ public class Progreso {
 		}
 	}
 	
-	public void obtenerActPendientes(HashMap<String, LearningPath> learningPaths) { //Galarza: agregue atributo de hash map
-		String titulo = this.getLearningPath();
-		LearningPath learningPath = learningPaths.get(titulo);
+	public void obtenerActPendientes(LearningPath learningPath) { //Galarza: agregue atributo de hash map
+		
 		List<Actividad> actividades = new ArrayList<Actividad>();
 		int tamanio = learningPath.getActividades().size();
 		Actividad act;
@@ -223,10 +224,8 @@ public class Progreso {
 		this.actObligatoriasPendientes = actividades;
 	}
 	
-	public void obtenerActCompletadas(HashMap<String, LearningPath> learningPaths) {
+	public void obtenerActCompletadas(LearningPath learningPath) {
 		List<Actividad> actividades = new ArrayList<Actividad>();
-		String titulo = this.getLearningPath();
-		LearningPath learningPath = learningPaths.get(titulo);
 		int tamanio = learningPath.getActividades().size();
 		Actividad act;
 		for (int i = 1; i <= tamanio; i++)
