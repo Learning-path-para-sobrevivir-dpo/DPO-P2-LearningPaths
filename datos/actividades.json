@@ -9,6 +9,7 @@
         "titulo": "Arte en la cotidianidad",
         "duracionMin": 30,
         "id": "95752950",
+		"idEstudiante": "",
         "obligatorio": true,
         "tipoActividad": "Recurso Educativo",
 		"enlace": "nada"
@@ -22,6 +23,7 @@
         "titulo": "Ejercicios Mapas Java",
         "duracionMin": 40,
         "id": "32733940",
+		"idEstudiante": "",
         "obligatorio": true,
         "tipoActividad": "Tarea"
     },
@@ -35,6 +37,7 @@
         "titulo": "Listas y Arreglos",
         "duracionMin": 40,
         "id": "63062845",
+		"idEstudiante": "",
         "obligatorio": false,
         "tipoActividad": "Recurso Educativo",
 		"enlace": "nada"
@@ -50,6 +53,7 @@
         "duracionMin": 60,
         "preguntas": [],
         "id": "51977106",
+		"idEstudiante": "",
         "obligatorio": true,
         "tipoActividad": "Prueba"
     }

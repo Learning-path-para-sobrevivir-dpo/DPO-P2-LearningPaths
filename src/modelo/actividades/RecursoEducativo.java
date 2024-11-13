@@ -20,8 +20,8 @@ public class RecursoEducativo extends Actividad {
 	}
 	
 	public RecursoEducativo(String titulo, String descripcion, int nivelDificultad, int duracionMin,
-			boolean obligatorio, int tiempoCompletarSugerido, String tipoActividad, String tipoRecurso, String contenido, String enlace, String id) {
-		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, id);
+			boolean obligatorio, int tiempoCompletarSugerido, String tipoActividad, String tipoRecurso, String contenido, String enlace, String id, String idEstudiante) {
+		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, id, idEstudiante);
 		this.tipoRecurso = tipoRecurso;
 		this.contenido = contenido;
 		this.enlace = enlace;

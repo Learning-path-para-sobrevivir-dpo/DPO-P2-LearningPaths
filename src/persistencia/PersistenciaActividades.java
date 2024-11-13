@@ -58,6 +58,7 @@ public class PersistenciaActividades {
             		// Crear una instancia de Actividad
             		Actividad actividad;
             		String id = jsonActividad.getString("id");
+            		String idEstudiante = jsonActividad.getString("idEstudiante");
             		switch (tipoActividad) {
             		case "Prueba":
             			String tipoPrueba = jsonActividad.getString("tipoPrueba");
@@ -73,7 +74,7 @@ public class PersistenciaActividades {
             						listaPreguntas.add((PreguntaAbierta) pregunta);
             					}
             				}
-            				actividad = new Encuesta(titulo, objetivo, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, listaPreguntas, tipoPrueba, id);
+            				actividad = new Encuesta(titulo, objetivo, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, listaPreguntas, tipoPrueba, id, idEstudiante);
             				break;
             			case "Quiz Opcion Multiple":
             				JSONArray jsonPreguntas3 = jsonActividad.getJSONArray("preguntas");
@@ -88,7 +89,7 @@ public class PersistenciaActividades {
             				}
             				float calificacionMinima = jsonActividad.getFloat("calificacionMinima");
             				actividad = new QuizOpcionMultiple(titulo, objetivo, nivelDificultad, duracionMin, obligatorio,
-            						tiempoCompletarSugerido, tipoActividad, calificacionMinima, listaPreguntas3, tipoPrueba, id);
+            						tiempoCompletarSugerido, tipoActividad, calificacionMinima, listaPreguntas3, tipoPrueba, id, idEstudiante);
             				break;
             			case "Quiz Verdadero Falso":
             				JSONArray jsonPreguntas4 = jsonActividad.getJSONArray("preguntas");
@@ -103,7 +104,7 @@ public class PersistenciaActividades {
             				}
             				float calificacionMinima2 = jsonActividad.getFloat("calificacionMinima");
             				actividad = new QuizVerdaderoFalso(titulo, objetivo, nivelDificultad, duracionMin, obligatorio,
-            						tiempoCompletarSugerido, tipoActividad, calificacionMinima2, tipoPrueba,  listaPreguntas4, id);
+            						tiempoCompletarSugerido, tipoActividad, calificacionMinima2, tipoPrueba,  listaPreguntas4, id, idEstudiante);
             				break;
             			case "Examen":
             				JSONArray jsonPreguntas2 = jsonActividad.getJSONArray("preguntas");
@@ -116,7 +117,7 @@ public class PersistenciaActividades {
             					}
             				}
             				actividad = new Examen(titulo, objetivo, nivelDificultad, duracionMin,
-            						obligatorio, tiempoCompletarSugerido, tipoActividad, listaPreguntas2, tipoPrueba, id);
+            						obligatorio, tiempoCompletarSugerido, tipoActividad, listaPreguntas2, tipoPrueba, id, idEstudiante);
             				Boolean calificado = jsonActividad.getBoolean("calificado");
             				((Examen) actividad).setCalificado(calificado);
             				break;
@@ -126,14 +127,14 @@ public class PersistenciaActividades {
             			break;
             		case "Tarea":
             			String contenido = jsonActividad.getString("contenido");
-            			actividad = new Tarea(titulo, objetivo, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, contenido, id);
+            			actividad = new Tarea(titulo, objetivo, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, contenido, id, idEstudiante);
             			break;
             		case "Recurso Educativo":
             			String contenido2 = jsonActividad.getString("contenido");
             			String tipoRecurso =  jsonActividad.getString("tipoRecurso");
             			String enlace = jsonActividad.getString("enlace");
             			actividad = new RecursoEducativo(titulo, objetivo, nivelDificultad, duracionMin,
-            					obligatorio, tiempoCompletarSugerido, tipoActividad, tipoRecurso, contenido2, enlace, id);
+            					obligatorio, tiempoCompletarSugerido, tipoActividad, tipoRecurso, contenido2, enlace, id, idEstudiante);
             			break;
             		default:
             			throw new IllegalArgumentException("Tipo de actividad desconocido: " + tipoActividad);
@@ -183,6 +184,7 @@ public class PersistenciaActividades {
                 jsonActividad.put("tiempoCompletarSugerido", actividad.getTiempoCompletarSugerido());
                 jsonActividad.put("tipoActividad", actividad.getTipoActividad());
                 jsonActividad.put("id", actividad.getId());
+                jsonActividad.put("idEstudiante", actividad.getIdEstudiante());
 
                 // Procesar las actividades según su tipo
                 if (actividad instanceof Encuesta) {

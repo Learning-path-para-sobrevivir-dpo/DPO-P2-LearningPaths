@@ -22,9 +22,9 @@ public class QuizOpcionMultiple extends Quiz {
 	
 	public QuizOpcionMultiple(String titulo, String descripcion, int nivelDificultad, int duracionMin,
 			boolean obligatorio, int tiempoCompletarSugerido, String tipoActividad, float calificacionMinima,
-			List<PreguntaMultiple> preguntas, String tipoPrueba, String id) {
+			List<PreguntaMultiple> preguntas, String tipoPrueba, String id, String idEstudiante) {
 		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad,
-				calificacionMinima, tipoPrueba, id);
+				calificacionMinima, tipoPrueba, id, idEstudiante);
 		// TODO Auto-generated constructor stub
 		this.setPreguntas(preguntas);
 		this.setTipoPrueba("Quiz Opcion Multiple");

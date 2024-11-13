@@ -20,8 +20,8 @@ public abstract class Prueba extends Actividad{
 	}
 	
 	public Prueba(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
-			int tiempoCompletarSugerido, String tipoActividad, String tipoPrueba, String id) {
-		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, id);
+			int tiempoCompletarSugerido, String tipoActividad, String tipoPrueba, String id, String idEstudiante) {
+		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, id, idEstudiante);
 		// TODO Auto-generated constructor stub
 		this.calificacion = 0;
 		this.respondida = false;

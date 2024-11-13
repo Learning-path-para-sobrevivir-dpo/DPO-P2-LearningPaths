@@ -26,7 +26,6 @@ public abstract class Actividad implements Cloneable {
 	
 	//Un HashSet con todos los IDs que ya se han utilizado para actividades
 	private static Set<String> ids = new HashSet<String>( );
-	private static Set<String> idsEstudiantes = new HashSet<String>( );
 	
 	public static final int FACIL = 1;
 	public static final int INTERMEDIO = 2;
@@ -50,12 +49,12 @@ public abstract class Actividad implements Cloneable {
 		this.estado = "Sin completar";
 		this.completada = false;
 		this.completada = false;       
-		this.id = this.generarID(false);
+		this.id = this.generarID();
         this.idEstudiante = "";
 	}
 	
 	public Actividad(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
-			int tiempoCompletarSugerido, String tipo, String id) {
+			int tiempoCompletarSugerido, String tipo, String id, String idEstudiante) {
 		super();
 		this.titulo = titulo;
 		this.objetivo = descripcion;
@@ -78,20 +77,12 @@ public abstract class Actividad implements Cloneable {
 	}
 	
 	
-	private String generarID(boolean isIDEstudiante)
+	private String generarID()
 	{
 		//Para crear un identificador unico para la actividad
 		int numero = ( int ) ( Math.random( ) * 10e7 );
 		String codigo = "" + numero;
-		Set<String> idsbuscados;
-		if (isIDEstudiante)
-		{
-			idsbuscados = idsEstudiantes;
-		}
-		else
-		{
-			idsbuscados = ids;
-		}
+		Set<String> idsbuscados = ids;
 		while( idsbuscados.contains( codigo ) )
 		{
 			numero = ( int ) ( Math.random( ) * 10e7 );
@@ -106,12 +97,12 @@ public abstract class Actividad implements Cloneable {
 	
 	public void actividadClonadaProfesor()
 	{
-		this.id = this.generarID(false);
+		this.id = this.generarID();
 	}
 	
 	public void actividadClonadaProgreso()
 	{
-		this.idEstudiante = this.generarID(true);
+		this.idEstudiante = this.generarID();
 	}
 
 	public void setTitulo(String titulo) {
@@ -233,7 +224,7 @@ public abstract class Actividad implements Cloneable {
 		ids.add(unID);
 		if (actividad.getIdEstudiante() != null)
 		{
-			idsEstudiantes.add(actividad.getIdEstudiante());
+			ids.add(actividad.getIdEstudiante());
 		}
 	}
 	
