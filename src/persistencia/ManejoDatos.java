@@ -154,7 +154,20 @@ public class ManejoDatos {
 		{
 			actividades.put(actividad.getId(), actividad);
 	        PersistenciaActividades.guardarActividades(actividades);
-        }}
+        }
+	}
+	
+	public void addActividadClonadaProgreso(Actividad actividad)
+	{
+		if (actividad != null)
+		{
+			if (!actividad.getIdEstudiante().equals(""))
+			{
+				actividades.put(actividad.getIdEstudiante(), actividad);
+				PersistenciaActividades.guardarActividades(actividades);
+			}
+        }
+	}
 	
 	/**
 	 * Encuentra una actividad por su nombre

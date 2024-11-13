@@ -43,8 +43,8 @@ public class PersistenciaProgresos {
             		// Cargar actividadesPath desde el JSON
             		JSONArray jsonActividadesPath = jsonProgreso.getJSONArray("actividadesPath");
             		for (int j = 0; j < jsonActividadesPath.length(); j++) {
-            			int key = jsonActividadesPath.getInt(j); // Suponiendo que la clave es un entero (ID de actividad)
-            			Actividad actividad = mapaActividades.get(String.valueOf(key)); // Obtener actividad por ID desde el mapa
+            			String key = jsonActividadesPath.getString(j); // Suponiendo que la clave es un entero (ID de actividad)
+            			Actividad actividad = mapaActividades.get(key); // Obtener actividad por ID desde el mapa
             			if (actividad != null) {
             				progreso.getActividadesPath().put(key, actividad);
             			}
@@ -64,7 +64,7 @@ public class PersistenciaProgresos {
             		}
 
             		// Cargar idActividades
-            		JSONObject jsonIdActividades = jsonProgreso.getJSONObject("idActividades");
+            		JSONObject jsonIdActividades = jsonProgreso.getJSONObject("idActividadesOriginales");
             		for (String key : jsonIdActividades.keySet()) {
             			int idActividad = jsonIdActividades.getInt(key);
             			Actividad actividad = mapaActividades.get(String.valueOf(idActividad)); // Obtener actividad por ID desde el mapa
@@ -113,7 +113,7 @@ public class PersistenciaProgresos {
 
                 // Convertir actividadesPath a JSONArray de IDs de actividades
                 JSONArray jsonActividadesPath = new JSONArray();
-                for (Map.Entry<Integer, Actividad> actEntry : progreso.getActividadesPath().entrySet()) {
+                for (Map.Entry<String, Actividad> actEntry : progreso.getActividadesPath().entrySet()) {
                     jsonActividadesPath.put(actEntry.getKey());
                 }
                 jsonProgreso.put("actividadesPath", jsonActividadesPath);
@@ -123,7 +123,7 @@ public class PersistenciaProgresos {
                 
                 if (progreso.getActObligatoriasPendientes() != null) {
                 for (Actividad actividad : progreso.getActObligatoriasPendientes()) {
-                    jsonActObligatoriasPendientes.put(actividad.getId());
+                    jsonActObligatoriasPendientes.put(actividad.getIdEstudiante());
                 }}
                 jsonProgreso.put("actObligatoriasPendientes", jsonActObligatoriasPendientes);
 
@@ -131,7 +131,7 @@ public class PersistenciaProgresos {
                 JSONArray jsonActObligatoriasCompletadas = new JSONArray();
                 if (progreso.getActObligatoriasCompletadas() != null) {
                 for (Actividad actividad : progreso.getActObligatoriasCompletadas()) {
-                    jsonActObligatoriasCompletadas.put(actividad.getId());
+                    jsonActObligatoriasCompletadas.put(actividad.getIdEstudiante());
                 }}
                 jsonProgreso.put("actObligatoriasCompletadas", jsonActObligatoriasCompletadas);
 
@@ -139,7 +139,7 @@ public class PersistenciaProgresos {
                 JSONArray jsonActPendientes = new JSONArray();
                 if (progreso.getActPendientes() != null) {
                 for (Actividad actividad : progreso.getActPendientes()) {
-                    jsonActPendientes.put(actividad.getId());
+                    jsonActPendientes.put(actividad.getIdEstudiante());
                 }}
                 jsonProgreso.put("actPendientes", jsonActPendientes);
 
@@ -147,7 +147,7 @@ public class PersistenciaProgresos {
                 JSONArray jsonActCompletadas = new JSONArray();
                 if (progreso.getActCompletadas() != null) {
                 for (Actividad actividad : progreso.getActCompletadas()) {
-                    jsonActCompletadas.put(actividad.getId());
+                    jsonActCompletadas.put(actividad.getIdEstudiante());
                 }}
                 jsonProgreso.put("actCompletadas", jsonActCompletadas);
 

@@ -20,12 +20,15 @@
         "nivelDificultad": 2,
         "rating": 0,
         "titulo": "Arte y Sociedad",
-        "estudiantes": [],
+        "estudiantes": ["Juliana Hernandez"],
         "actividades": {"1": "95752950"},
         "version": 1,
         "autor": "Marta Martínez",
         "objetivo": "Aprender sobre arte y sociedad",
-        "progresosEstudiantiles": {},
+        "progresosEstudiantiles": {"Juliana Hernandez": [
+            "Arte y Sociedad",
+            "Juliana Hernandez"
+        ]},
         "duracion": 0,
         "fechaCreacion": "2024-10-23"
     }

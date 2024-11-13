@@ -100,6 +100,9 @@ public abstract class Actividad implements Cloneable {
 		this.id = this.generarID();
 	}
 	
+	/**
+	 * Genera un ID único para una actividad clonada
+	 */
 	public void actividadClonadaProgreso()
 	{
 		this.idEstudiante = this.generarID();

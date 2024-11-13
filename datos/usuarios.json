@@ -3,7 +3,10 @@
         "tipo": "estudiante",
         "learningPaths": ["Arte y Sociedad"],
         "tipoEspecifico": "Estudiante",
-        "progresosLearningPaths": [],
+        "progresosLearningPaths": [[
+            "Arte y Sociedad",
+            "Juliana Hernandez"
+        ]],
         "correo": "j.hernandez@gmail.com",
         "login": "Juliana Hernandez",
         "contraseña": "Juli091103"

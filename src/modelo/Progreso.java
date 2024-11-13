@@ -15,33 +15,32 @@ public class Progreso {
 	
 	private String learningPath; //cambie esto por string, el titulo del learningPath
 	private String estudiante; //Galarza: cambie estudiante a string de su usuario
-	private Map<Integer, Actividad> actividadesPath;
+	private List<String> ordenActividades;
+	private Map<String, Actividad> actividadesPath;
 	private List<Actividad> actObligatoriasPendientes;
 	private List<Actividad> actObligatoriasCompletadas;
 	private List<Actividad> actPendientes;
 	private List<Actividad> actCompletadas;
 	private Actividad actividadEnProgreso;
-	private Map<String, Actividad> idActividades;
+	private Map<String, Actividad> idActividadesOriginales;
 	private int progresoObligatorio;
 	private int progresoTotal;
-	private List<String> idsActividadesCopiadas;
 	
 	public Progreso(String learningPath, String estudiante) {
 		this.learningPath = learningPath;
 		this.estudiante = estudiante;
-		this.actividadesPath = new HashMap<Integer, Actividad>();
+		this.actividadesPath = new HashMap<String, Actividad>();
 		this.actCompletadas = new ArrayList<Actividad>();
 		this.actPendientes = new ArrayList<Actividad>();
 		this.actObligatoriasCompletadas = new ArrayList<Actividad>();
 		this.actividadEnProgreso = null;
-		this.idActividades = new HashMap<String, Actividad>();
+		this.idActividadesOriginales = new HashMap<String, Actividad>();
 		this.progresoObligatorio = 0;
 		this.progresoTotal = 0;
-		this.idsActividadesCopiadas = new ArrayList<String>();
 		//this.obtenerActividadesPath(); //Galarza: lo quite porque cambie obternerActividades, pero de por si o entinedo que hace
 	}
 
-	public Progreso(String learningPath,String estudiante, Map<Integer, Actividad> actividadesPath,
+	public Progreso(String learningPath,String estudiante, Map<String, Actividad> actividadesPath,
 			List<Actividad> actObligatoriasPendientes, List<Actividad> actObligatoriasCompletadas,
 			List<Actividad> actPendientes, List<Actividad> actCompletadas, Actividad actividadEnProgreso) {
 		super();
@@ -57,11 +56,11 @@ public class Progreso {
 
 
 
-	public Map<Integer, Actividad> getActividadesPath() {
+	public Map<String, Actividad> getActividadesPath() {
 		return actividadesPath;
 	}
 
-	public void setActividadesPath(Map<Integer, Actividad> actividadesPath) {
+	public void setActividadesPath(Map<String, Actividad> actividadesPath) {
 		this.actividadesPath = actividadesPath;
 	}
 
@@ -122,11 +121,11 @@ public class Progreso {
 	}
 	
 	public Map<String, Actividad> getIdActividades() {
-		return idActividades;
+		return idActividadesOriginales;
 	}
 
 	public void setIdActividades(Map<String, Actividad> idActividades) {
-		this.idActividades = idActividades;
+		this.idActividadesOriginales = idActividades;
 	}
 
 	public int getProgresoObligatorio() {
@@ -136,18 +135,11 @@ public class Progreso {
 	public int getProgresoTotal() {
 		return progresoTotal;
 	}
-	
-	public List<String> getIdsActividadesCopiadas() {
-		return idsActividadesCopiadas;
-	}
-	public void setIdsActividadesCopiadas(List<String> idsActividadesCopiadas) {
-		this.idsActividadesCopiadas = idsActividadesCopiadas;
-	}
 
 	/**
 	 * Clona todas las actividades de un Learning Path para poder ser completadas por el estudiante //Galarza: modifique para que reciba el mapa de learning paths.
 	 */
-	public void obtenerActividadesPath(LearningPath learningPath) throws LearningPathIncorrectoProgresoException
+	public Map<String, Actividad> obtenerActividadesPath(LearningPath learningPath) throws LearningPathIncorrectoProgresoException
 	{
 		if (!this.learningPath.equals(learningPath.getTitulo()))
 		{
@@ -156,21 +148,28 @@ public class Progreso {
 		int tamanio = learningPath.getActividades().size();
 		Actividad actNueva;
 		Actividad actVieja;
-		HashMap<Integer, Actividad> nuevasActividades = new HashMap<Integer, Actividad>();
+		HashMap<String, Actividad> nuevasActividades = new HashMap<String, Actividad>();
+		HashMap<String, Actividad> actsOriginalesPath = new HashMap<String, Actividad>();
+		List<String> orden = new ArrayList<String>();
 		for (int i = 1; i <= tamanio; i++)
 		{
 			try {
 				actNueva = (Actividad) learningPath.getActividades().get(i).clone();
 				actNueva.actividadClonadaProgreso();
-				Set<String> ids = this.idActividades.keySet();
+				Set<String> ids = this.idActividadesOriginales.keySet();
 				if (ids.contains(actNueva.getId()))
 				{
-					actVieja = this.idActividades.get(actNueva.getId());
-					nuevasActividades.put(i, actVieja);
+					String idVieja = this.idActividadesOriginales.get(actNueva.getId()).getIdEstudiante();
+					actVieja = this.actividadesPath.get(idVieja);
+					nuevasActividades.put(idVieja, actVieja);
+					orden.add(actNueva.getId());
+					actsOriginalesPath.put(actVieja.getId(), actVieja);
 				}
 				else
 				{
-					nuevasActividades.put(i, actNueva);
+					nuevasActividades.put(actNueva.getIdEstudiante(), actNueva);
+					orden.add(actNueva.getId());
+					actsOriginalesPath.put(actNueva.getId(), actNueva);
 				}
 				
 			} catch (CloneNotSupportedException e) {
@@ -178,32 +177,23 @@ public class Progreso {
 			}
 		}
 		this.actividadesPath = nuevasActividades;
-		this.obtenerIDsActividades();
-		this.obtenerActPendientes(learningPath);
+		this.ordenActividades = orden;
+		this.idActividadesOriginales = actsOriginalesPath;
+		this.obtenerActPendientes();
 		this.obtenerActObligatoriasPendientes();
-		this.obtenerActCompletadas(learningPath);
+		this.obtenerActCompletadas();
 		this.obtenerActObligatoriasCompletadas();
 		this.calcularProgreso();
+		return this.getActividadesPath();
 	}
 	
-	public void obtenerIDsActividades() {
-		int tamanio = this.actividadesPath.size();
-		Actividad act;
-		for (int i = 1; i <= tamanio; i++)
-		{
-			act = this.actividadesPath.get(i);
-			this.idActividades.put(act.getId(), act);
-		}
-	}
-	
-	public void obtenerActPendientes(LearningPath learningPath) { //Galarza: agregue atributo de hash map
+	public void obtenerActPendientes() { //Galarza: agregue atributo de hash map
 		
 		List<Actividad> actividades = new ArrayList<Actividad>();
-		int tamanio = learningPath.getActividades().size();
 		Actividad act;
-		for (int i = 1; i <= tamanio; i++)
+		for (String idEstudiante: this.actividadesPath.keySet())
 		{
-			act = this.actividadesPath.get(i);
+			act = this.actividadesPath.get(idEstudiante);
 			if (!act.isCompletada())
 			{
 				actividades.add(act);
@@ -224,13 +214,12 @@ public class Progreso {
 		this.actObligatoriasPendientes = actividades;
 	}
 	
-	public void obtenerActCompletadas(LearningPath learningPath) {
+	public void obtenerActCompletadas() {
 		List<Actividad> actividades = new ArrayList<Actividad>();
-		int tamanio = learningPath.getActividades().size();
 		Actividad act;
-		for (int i = 1; i <= tamanio; i++)
+		for (String idEstudiante: this.actividadesPath.keySet())
 		{
-			act = this.actividadesPath.get(i);
+			act = this.actividadesPath.get(idEstudiante);
 			if (act.isCompletada())
 			{
 				actividades.add(act);
@@ -341,11 +330,12 @@ public class Progreso {
 	}
 	
 	public Actividad obtenerActividadPorNum(int numActividad) {
-		if (numActividad > this.actividadesPath.size() || numActividad < 1)
+		if (numActividad > this.ordenActividades.size() || numActividad < 1)
 		{
 			return null;
 		}
-		Actividad actividad = this.actividadesPath.get(numActividad);
+		String idActividad = this.ordenActividades.get(numActividad-1);
+		Actividad actividad = this.actividadesPath.get(idActividad);
 		return actividad;
 	}
 

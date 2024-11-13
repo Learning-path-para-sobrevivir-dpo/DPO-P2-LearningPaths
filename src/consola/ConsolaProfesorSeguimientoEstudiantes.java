@@ -44,15 +44,26 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 		System.out.println(m);
 		LearningPath lp = m.get("Arte y Sociedad");
 		System.out.println(lp.getActividades());
-		Progreso pr = ue.inscribirLearningPath(lp);
-		try {
-			datos.addProgreso(pr);
-		} catch (LearningPathIncorrectoProgresoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		Progreso pr = ue.inscribirLearningPath(lp);
+//		Map<String,Actividad> actProgreso;
+//		try {
+//			actProgreso = pr.obtenerActividadesPath(lp);
+//			Actividad act;
+//			for (String id: actProgreso.keySet())
+//			{
+//				act = actProgreso.get(id);
+//				datos.addActividadClonadaProgreso(act);
+//			}
+//			datos.addProgreso(pr);
+//			datos.actualizarUsuario(ue);
+//			datos.actualizarLearningPath(lp);
+//		} catch (LearningPathIncorrectoProgresoException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
-		System.out.println(ue.getLearningPaths());
+		System.out.println(ue.getProgresosLearningPaths());
+		
 		
 		
 //		consola.iniciarAplicacion(datos, scanner, imprimir);
@@ -257,7 +268,7 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 		return lpSeleccionado;
 	}
 	
-	private Actividad seleccionarMostrarActividadesPendientes(Profesor prof, ImprimirConsola imprimir, Scanner scan, LearningPath lpSeleccionado)
+	private Actividad seleccionarMostrarActividadesPendientes(Profesor prof, ImprimirConsola imprimir, Scanner scan, LearningPath lpSeleccionado, boolean seleccionar)
 	{
 		Actividad act = null;
 		String nombreLpSeleccionado = lpSeleccionado.getTitulo();
