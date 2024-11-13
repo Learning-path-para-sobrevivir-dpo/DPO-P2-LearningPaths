@@ -1,5 +1,6 @@
 package consola;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -19,6 +20,7 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 		ManejoDatos datos = new ManejoDatos();
 		Scanner scanner = new Scanner(System.in);
 		ConsolaProfesorSeguimientoEstudiantes consola = new ConsolaProfesorSeguimientoEstudiantes();
+		ImprimirConsola imprimir = new ImprimirConsola();
 		
 		datos.cargarDatos();
 		Map<List<String>, Usuario> usuarios = datos.getUsuarios();
@@ -53,7 +55,7 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 		System.out.println(ue.getLearningPaths());
 		
 		
-//		consola.iniciarAplicacion(datos, scanner);
+//		consola.iniciarAplicacion(datos, scanner, imprimir);
 		scanner.close(); 
 	}
 	
@@ -61,7 +63,7 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 		super();
 	}
 
-	public void iniciarAplicacion(ManejoDatos datos, Scanner scan)
+	public void iniciarAplicacion(ManejoDatos datos, Scanner scan, ImprimirConsola imprimir)
 	{
 		int op = 1;
 		Profesor usuario = null;
@@ -76,6 +78,7 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 					while (op != 0)
 					{
 						op = mostrarOpcionesApp(scan);
+						routerOpciones(usuario, op, imprimir, datos, scan);
 					}
 					op = 1;
 				}
@@ -127,6 +130,156 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 		return op;
 	}
 	
+	private void routerOpciones(Profesor prof, int op, ImprimirConsola imprimir, ManejoDatos datos, Scanner scan)
+	{
+		switch (op)
+		{
+		case 0:
+			System.out.println("Gracias por usar la aplicación!!!");
+			
+		case 1:
+			verEstudiantesProfesor(prof, imprimir);
+			
+		case 2:
+			verEstudiantesLearningPath(prof, imprimir, scan);
+			
+		case 4:
+			verActividadesPendientesCalificarLearningPath(prof, imprimir, scan);
+		}
+	}
+	
+	/**
+	 * Funcion para ver todos los estudiantes de un profesor
+	 * @param prof instancia de la sesion iniciada del profesor
+	 * @param imprimir clase para imprimir formateados los progresos de estudiantes del profesor
+	 */
+	private void verEstudiantesProfesor(Profesor prof, ImprimirConsola imprimir)
+	{
+		Map<String, LearningPath> lps = prof.getLearningPathsCreados();
+		LearningPath lp;
+		Progreso progEstudiante;
+		boolean hayEstudiantes = false;
+		for (String nombreLp: lps.keySet())
+		{
+			lp = lps.get(nombreLp);
+			List<String> estudiantesLp = lp.getEstudiantes();
+			Map<String, Progreso> progEstudiantes = lp.getProgresosEstudiantiles();
+			if (!hayEstudiantes && !progEstudiantes.isEmpty())
+			{
+				hayEstudiantes = true;
+			}
+			for (String loginEst: estudiantesLp)
+			{
+				progEstudiante = progEstudiantes.get(loginEst);
+				if (progEstudiante != null)
+					imprimir.imprimirProgreso(progEstudiante);
+			}
+		}
+		if (!hayEstudiantes)
+			System.out.println("No tiene estudiantes inscritos");
+		System.out.println();
+	}
+	
+	/**
+	 * Funcion para ver los estudiantes de un Learning Path específico
+	 * @param prof instancia de la sesion iniciada del profesor
+	 * @param imprimir
+	 * @param scan
+	 */
+	private void verEstudiantesLearningPath(Profesor prof, ImprimirConsola imprimir, Scanner scan)
+	{
+		
+		LearningPath lpSeleccionado = seleccionarLearningPaths(prof, imprimir, scan);
+		if (lpSeleccionado != null)
+		{
+			String nombreLpSeleccionado = lpSeleccionado.getTitulo();
+			Map<String, Progreso> progEstudiantes = lpSeleccionado.getProgresosEstudiantiles();
+			if (!progEstudiantes.isEmpty())
+			{
+				System.out.println("\nEstos son los estudiantes para el Learning Path '"+nombreLpSeleccionado+"'\n");
+				Progreso progEstudiante;
+				for (String loginEst: progEstudiantes.keySet())
+				{
+					progEstudiante = progEstudiantes.get(loginEst);
+					if (progEstudiante != null)
+						imprimir.imprimirProgreso(progEstudiante);
+				}
+			}
+			else
+			{
+				System.out.println("No hay estudiantes inscritos al Learning Path '"+nombreLpSeleccionado+"'\n");
+			}
+		}
+	}
+	
+	private void verActividadesPendientesCalificarLearningPath(Profesor prof, ImprimirConsola imprimir, Scanner scan)
+	{
+		LearningPath lpSeleccionado = seleccionarLearningPaths(prof, imprimir, scan);
+		if (lpSeleccionado != null)
+		{
+			
+		}
+	}
+	
+	private LearningPath seleccionarLearningPaths(Profesor prof, ImprimirConsola imprimir, Scanner scan)
+	{
+		LearningPath lpSeleccionado = null;
+		Map<String, LearningPath>lps = prof.getLearningPathsCreados();
+		if (!lps.isEmpty())
+		{
+			int i = 1;
+			Map<Integer, String> indexLPs = new HashMap<Integer, String>();
+
+			System.out.println("Tus Learning Paths:");
+			System.out.println("-----------------------------------------------------");
+			for (String nombreLp: lps.keySet())
+			{
+				System.out.println(Integer.toString(i) + ". "+ nombreLp);
+				indexLPs.put(i, nombreLp);
+				i++;
+			}
+			System.out.println("-----------------------------------------------------");
+			System.out.println("\n Seleccione el número del Learning Path que quiere: ");
+			int op = scan.nextInt();
+			while(!indexLPs.containsKey(op))
+			{
+				System.out.println("Opción invalida");
+				System.out.println("Ingrese el número del Learning Path que desea: ");
+				op = scan.nextInt();
+			}
+			String nombreLpSeleccionado = indexLPs.get(op);
+			lpSeleccionado = lps.get(nombreLpSeleccionado);
+		}
+		else
+		{
+			System.out.println("No tiene ningun Learning Path creado");
+		}
+		return lpSeleccionado;
+	}
+	
+	private Actividad seleccionarMostrarActividadesPendientes(Profesor prof, ImprimirConsola imprimir, Scanner scan, LearningPath lpSeleccionado)
+	{
+		Actividad act = null;
+		String nombreLpSeleccionado = lpSeleccionado.getTitulo();
+		Map<String, Progreso> progEstudiantes = lpSeleccionado.getProgresosEstudiantiles();
+		if (!progEstudiantes.isEmpty())
+		{
+			System.out.println("\nEstos son las actividades pendientes para el Learning Path '"+nombreLpSeleccionado+"'\n");
+			Progreso progEstudiante;
+			for (String loginEst: progEstudiantes.keySet())
+			{
+				progEstudiante = progEstudiantes.get(loginEst);
+				if (progEstudiante != null)
+					imprimir.imprimirProgreso(progEstudiante);
+			}
+		}
+		else
+		{
+			System.out.println("No hay actividades pendientes por calificar en el Learning Path '"+nombreLpSeleccionado+"'\n");
+		}
+		return act;
+	}
+	
 	/**
 	 * Funcion para iniciar sesion en la aplicacion
 	 * @param datos datos de la aplicacion
@@ -162,6 +315,11 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 		return prof;
 	}
 	
+	/**
+	 * Funcion para crear un usuario en la app
+	 * @param datos
+	 * @param scan
+	 */
 	private void crearUsuario(ManejoDatos datos, Scanner scan)
 	{
 		System.out.println("");

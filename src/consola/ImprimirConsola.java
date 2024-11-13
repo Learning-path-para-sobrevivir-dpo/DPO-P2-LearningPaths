@@ -2,6 +2,7 @@ package consola;
 
 import java.util.List;
 
+import modelo.Estudiante;
 import modelo.LearningPath;
 import modelo.Progreso;
 import modelo.actividades.Actividad;
@@ -39,6 +40,7 @@ public class ImprimirConsola {
 		}
 		
 		System.out.println("- " + act.getTitulo() + ":");
+		System.out.println("-----------------------------------------------------");
 		System.out.println("• Tipo: " + act.getTipoActividad());
 		System.out.println("• Objetivo: " + act.getObjetivo());
 		System.out.println("• Objetivo: " + act.getObjetivo());
@@ -65,7 +67,7 @@ public class ImprimirConsola {
 		{
 			imprimirInfoTipoActividad(act, imprimirInfoAdicional);
 		}
-		
+		System.out.println("-----------------------------------------------------");
 		System.out.println("\n");
 	}
 	
@@ -124,6 +126,7 @@ public class ImprimirConsola {
 				Quiz q = (Quiz) p;
 				System.out.println("• Calificacion Mínima: " + Float.toString(q.getCalificacionMinima()));
 			}
+			
 		}
 	}
 	
@@ -154,5 +157,19 @@ public class ImprimirConsola {
 		
 		System.out.println("Actividad en progreso: ");
 		imprimirActividad(prog.getActividadEnProgreso(), false, true, true);
+		System.out.println("-----------------------------------------------------");
+		System.out.println();
+	}
+	
+	public void imprimirEstudiante(Estudiante est)
+	{
+		System.out.println(est.getLogin());
+		System.out.println("-----------------------------------------------------");
+		System.out.println("• Correo: " + est.getCorreo());
+		System.out.println("• Learning Paths inscritos: ");
+		for (String namePath: est.getLearningPaths().keySet())
+		{
+			System.out.println("	• " + namePath);
+		}
 	}
 }
