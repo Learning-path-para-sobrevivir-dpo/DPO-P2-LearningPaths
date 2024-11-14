@@ -14,6 +14,7 @@ import modelo.Profesor;
 import modelo.Progreso;
 import modelo.Usuario;
 import modelo.actividades.Actividad;
+import modelo.actividades.Examen;
 import modelo.actividades.Tarea;
 import persistencia.ManejoDatos;
 
@@ -150,6 +151,9 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 			
 		case 4:
 			verActividadesPendientesCalificarLearningPath(prof, imprimir, scan);
+			
+		case 5:
+			calificarActividadEstudiante(prof, imprimir, scan, datos);
 		}
 	}
 	
@@ -273,7 +277,11 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 					}
 					if (op.equals("y"))
 					{
-						calificar(act, datos, lpSeleccionado);
+						calificar(scan, act, datos, lpSeleccionado, estudiante, imprimir);
+					}
+					else
+					{
+						System.out.println("Regresando al menu...\n");
 					}
 				}
 				
@@ -281,9 +289,80 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 		}
 	}
 	
-	private void calificar(Actividad act, ManejoDatos datos, LearningPath lp)
+	private void calificar(Scanner scan, Actividad act, ManejoDatos datos, LearningPath lp, String loginEstudiante, ImprimirConsola imprimir)
 	{
-		
+		int op;
+		Progreso progreso = datos.obtenerProgreso(lp.getTitulo(), loginEstudiante);
+		if (act instanceof Tarea)
+		{
+			System.out.println("Como desea marcar la Tarea: ");
+			System.out.println("1. Exitosa");
+			System.out.println("2. No Exitosa");
+			System.out.println("\n Escoja el número de la opción que desea: ");
+			op = scan.nextInt();
+			if (op < 1 || op > 2)
+			{
+				System.out.println("Opcion invalida. Intente de nuevo: ");
+				op = scan.nextInt();
+			}
+			if (op == 1)
+			{
+				act.setEstado("Exitosa");
+			}
+			else if (op == 2)
+			{
+				act.setEstado("No Exitosa");
+				progreso.descompletarActividad(act);
+			}
+			datos.actualizarActividad(act);
+			try {
+				datos.addProgreso(progreso);
+			} catch (LearningPathIncorrectoProgresoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			datos.actualizarLearningPath(lp);
+		}
+		else if (act instanceof Examen)
+		{
+			Examen ex = (Examen) act;
+			imprimir.imprimirPreguntasyRespuestasExamen(ex);
+			System.out.println("Ingrese la calificacion (ingreselo como un número decimal con punto):");
+			float calificacion = scan.nextFloat();
+			ex.setCalificacion(calificacion);
+			act = ex;
+			System.out.println("Como desea marcar el Examen: ");
+			System.out.println("1. Exitosa");
+			System.out.println("2. No Exitosa");
+			System.out.println("\n Escoja el número de la opción que desea: ");
+			op = scan.nextInt();
+			if (op < 1 || op > 2)
+			{
+				System.out.println("Opcion invalida. Intente de nuevo: ");
+				op = scan.nextInt();
+			}
+			if (op == 1)
+			{
+				act.setEstado("Exitosa");
+			}
+			else if (op == 2)
+			{
+				act.setEstado("No Exitosa");
+				progreso.descompletarActividad(act);
+			}
+			datos.actualizarActividad(act);
+			try {
+				datos.addProgreso(progreso);
+			} catch (LearningPathIncorrectoProgresoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			datos.actualizarLearningPath(lp);
+		}
+		else
+		{
+			System.out.println("La actividad no es calificable");
+		}
 	}
 	
 	private LearningPath seleccionarLearningPaths(Profesor prof, ImprimirConsola imprimir, Scanner scan)
