@@ -16,12 +16,12 @@
     },
     {
         "descripcion": "Curso creativo de arte",
-        "fechaModificacion": "2024-10-23",
+        "fechaModificacion": "2024-11-10",
         "nivelDificultad": 2,
         "rating": 0,
         "titulo": "Arte y Sociedad",
         "estudiantes": ["Juliana Hernandez"],
-        "actividades": {"1": "77416742"},
+        "actividades": {"1": "52491279"},
         "version": 1,
         "autor": "profesor",
         "objetivo": "Aprender sobre arte y sociedad",
@@ -30,6 +30,6 @@
             "Juliana Hernandez"
         ]},
         "duracion": 0,
-        "fechaCreacion": "2024-10-23"
+        "fechaCreacion": "2024-11-10"
     }
 ]
