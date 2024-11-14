@@ -56,7 +56,7 @@ public class Tarea extends Actividad{
 	public boolean completarActividad() {
 		// TODO Auto-generated method stub
 		boolean completada = false;
-		if (this.getEstado().equals("Enviada") || this.getEstado().equals("Exitosa"))
+		if (this.isEnviado() || this.getEstado().equals("Exitosa"))
 		{
 			this.setCompletada(true);
 			completada = true;

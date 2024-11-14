@@ -36,6 +36,8 @@ public class PersistenciaProgresos {
 
             		String learningPath = jsonProgreso.getString("learningPath");
             		String estudiante = jsonProgreso.getString("estudiante");
+            		int progresoTotal = jsonProgreso.getInt("progresoTotal");
+            		int progresoObligatorio = jsonProgreso.getInt("progresoObligatorio");
 
             		// Crear un nuevo objeto Progreso
             		Progreso progreso = new Progreso(learningPath, estudiante);
@@ -72,6 +74,9 @@ public class PersistenciaProgresos {
             				progreso.getIdActividades().put(key, actividad);
             			}
             		}
+            		
+            		progreso.setProgresoObligatorio(progresoObligatorio);
+            		progreso.setProgresoTotal(progresoTotal);
 
             		// Agregar progreso al mapa
             		progresos.put(List.of(learningPath, estudiante), progreso);
@@ -164,7 +169,9 @@ public class PersistenciaProgresos {
                 for (Map.Entry<String, Actividad> idActEntry : progreso.getIdActividades().entrySet()) {
                     jsonIdActividades.put(idActEntry.getKey(), idActEntry.getValue().getId());
                 }}
-                jsonProgreso.put("idActividades", jsonIdActividades);
+                jsonProgreso.put("idActividadesOriginales", jsonIdActividades);
+                jsonProgreso.put("progresoTotal", progreso.getProgresoTotal());
+                jsonProgreso.put("progresoObligatorio", progreso.getProgresoObligatorio());
 
                 // Agregar progreso JSON al array de progresos
                 jsonProgresos.put(jsonProgreso);

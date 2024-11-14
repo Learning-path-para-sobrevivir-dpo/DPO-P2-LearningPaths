@@ -131,9 +131,17 @@ public class Progreso {
 	public int getProgresoObligatorio() {
 		return progresoObligatorio;
 	}
+	
+	public void setProgresoObligatorio(int progresoObligatorio) {
+		this.progresoObligatorio = progresoObligatorio;
+	}
 
 	public int getProgresoTotal() {
 		return progresoTotal;
+	}
+	
+	public void setProgresoTotal(int progresoTotal) {
+		this.progresoTotal = progresoTotal;
 	}
 
 	/**
@@ -160,7 +168,7 @@ public class Progreso {
 				if (ids.contains(actNueva.getId()))
 				{
 					String idVieja = this.idActividadesOriginales.get(actNueva.getId()).getIdEstudiante();
-					actVieja = this.actividadesPath.get(idVieja);
+					actVieja = this.idActividadesOriginales.get(actNueva.getId());
 					nuevasActividades.put(idVieja, actVieja);
 					orden.add(actNueva.getId());
 					actsOriginalesPath.put(actVieja.getId(), actVieja);
@@ -183,7 +191,7 @@ public class Progreso {
 		this.obtenerActObligatoriasPendientes();
 		this.obtenerActCompletadas();
 		this.obtenerActObligatoriasCompletadas();
-		this.calcularProgreso();
+		//this.calcularProgreso();
 		return this.getActividadesPath();
 	}
 	

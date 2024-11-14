@@ -21,7 +21,12 @@
         "rating": 0,
         "titulo": "Arte y Sociedad",
         "estudiantes": ["Juliana Hernandez"],
-        "actividades": {"1": "95752950"},
+        "actividades": {
+            "1": "51977106",
+            "2": "95752950",
+            "3": "31997514",
+            "4": "40579652"
+        },
         "version": 1,
         "autor": "Marta Martínez",
         "objetivo": "Aprender sobre arte y sociedad",

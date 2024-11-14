@@ -54,6 +54,7 @@ public class PersistenciaActividades {
             		boolean obligatorio = jsonActividad.getBoolean("obligatorio");
             		int tiempoCompletarSugerido = jsonActividad.getInt("tiempoCompletarSugerido");
             		String tipoActividad = jsonActividad.getString("tipoActividad");
+            		boolean completada = jsonActividad.getBoolean("completada");
 
             		// Crear una instancia de Actividad
             		Actividad actividad;
@@ -127,7 +128,13 @@ public class PersistenciaActividades {
             			break;
             		case "Tarea":
             			String contenido = jsonActividad.getString("contenido");
+            			String medio = jsonActividad.getString("medioEntrega");
+            			boolean enviada = jsonActividad.getBoolean("enviada");
             			actividad = new Tarea(titulo, objetivo, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, contenido, id, idEstudiante);
+            			Tarea t = (Tarea) actividad;
+            			t.setEnviado(enviada);
+            			t.setMedioEntrega(medio);
+            			actividad = t;
             			break;
             		case "Recurso Educativo":
             			String contenido2 = jsonActividad.getString("contenido");
@@ -139,7 +146,7 @@ public class PersistenciaActividades {
             		default:
             			throw new IllegalArgumentException("Tipo de actividad desconocido: " + tipoActividad);
             		}
-
+            		actividad.setCompletada(completada);
             		id = actividad.getId();
 
             		// Leer las reviews de la actividad
@@ -158,7 +165,7 @@ public class PersistenciaActividades {
             		// Agregar la actividad al HashMap usando el id como llave
             		if (!actividades.containsKey(id))
             			actividades.put(id, actividad);
-            		else
+            		else if (!idEstudiante.equals(""))
             			actividades.put(idEstudiante, actividad);
             	}
             }
@@ -188,6 +195,7 @@ public class PersistenciaActividades {
                 jsonActividad.put("tipoActividad", actividad.getTipoActividad());
                 jsonActividad.put("id", actividad.getId());
                 jsonActividad.put("idEstudiante", actividad.getIdEstudiante());
+                jsonActividad.put("completada", actividad.isCompletada());
 
                 // Procesar las actividades según su tipo
                 if (actividad instanceof Encuesta) {
@@ -240,6 +248,8 @@ public class PersistenciaActividades {
                 } else if (actividad instanceof Tarea) {
                     Tarea tarea = (Tarea) actividad;
                     jsonActividad.put("contenido", tarea.getContenido());
+                    jsonActividad.put("medioEntrega", tarea.getMedioEntrega());
+                    jsonActividad.put("enviada", tarea.isEnviado());
 
                 } else if (actividad instanceof RecursoEducativo) {
                     RecursoEducativo recurso = (RecursoEducativo) actividad;

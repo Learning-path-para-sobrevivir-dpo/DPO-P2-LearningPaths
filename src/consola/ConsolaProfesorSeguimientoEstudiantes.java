@@ -6,12 +6,14 @@ import java.util.Map;
 import java.util.Scanner;
 
 import excepciones.LearningPathIncorrectoProgresoException;
+import excepciones.YaExisteActividadEnProgresoException;
 import modelo.Estudiante;
 import modelo.LearningPath;
 import modelo.Profesor;
 import modelo.Progreso;
 import modelo.Usuario;
 import modelo.actividades.Actividad;
+import modelo.actividades.Tarea;
 import persistencia.ManejoDatos;
 
 public class ConsolaProfesorSeguimientoEstudiantes {
@@ -44,26 +46,14 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 		System.out.println(m);
 		LearningPath lp = m.get("Arte y Sociedad");
 		System.out.println(lp.getActividades());
-//		Progreso pr = ue.inscribirLearningPath(lp);
-//		Map<String,Actividad> actProgreso;
-//		try {
-//			actProgreso = pr.obtenerActividadesPath(lp);
-//			Actividad act;
-//			for (String id: actProgreso.keySet())
-//			{
-//				act = actProgreso.get(id);
-//				datos.addActividadClonadaProgreso(act);
-//			}
-//			datos.addProgreso(pr);
-//			datos.actualizarUsuario(ue);
-//			datos.actualizarLearningPath(lp);
-//		} catch (LearningPathIncorrectoProgresoException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		Progreso pr = lp.getProgresosEstudiantiles().get("Juliana Hernandez");
+		
 		
 		System.out.println(ue.getProgresosLearningPaths());
-		
+		for (String p : ue.getProgresosLearningPaths().keySet())
+		{
+			imprimir.imprimirProgreso(ue.getProgresosLearningPaths().get(p));
+		}
 		
 		
 //		consola.iniciarAplicacion(datos, scanner, imprimir);

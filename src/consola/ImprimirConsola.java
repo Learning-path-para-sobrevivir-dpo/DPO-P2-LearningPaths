@@ -39,10 +39,8 @@ public class ImprimirConsola {
 			nivelDif = "Dificil";
 		}
 		
-		System.out.println("- " + act.getTitulo() + ":");
-		System.out.println("-----------------------------------------------------");
+		System.out.println("\n- " + act.getTitulo() + ":");
 		System.out.println("• Tipo: " + act.getTipoActividad());
-		System.out.println("• Objetivo: " + act.getObjetivo());
 		System.out.println("• Objetivo: " + act.getObjetivo());
 		System.out.println("• Nivel de dificultad: " + nivelDif);
 		System.out.println("• Tiempo Estimado: "+ Integer.toString(act.getDuracionMin()));
@@ -67,8 +65,6 @@ public class ImprimirConsola {
 		{
 			imprimirInfoTipoActividad(act, imprimirInfoAdicional);
 		}
-		System.out.println("-----------------------------------------------------");
-		System.out.println("\n");
 	}
 	
 	public void imprimirInfoTipoActividad(Actividad act, boolean imprimirInfoAdicional)
@@ -94,7 +90,13 @@ public class ImprimirConsola {
 					enviada = "Si";
 				}
 				System.out.println("• Enviada: " + enviada);
-				System.out.println("• Medio de entrega: " + t.getMedioEntrega());
+				String medio = "No entregado";
+				if (t.getMedioEntrega() != null)
+				{
+					medio = t.getMedioEntrega();
+				}
+				System.out.println("• Medio de entrega: " + medio);
+				
 			}
 			break;
 			
@@ -128,6 +130,11 @@ public class ImprimirConsola {
 			}
 			
 		}
+		if (imprimirInfoAdicional)
+		{
+			System.out.println("• Completada: " + Boolean.toString(act.isCompletada()));
+			System.out.println("• Estado: " + act.getEstado());
+		}
 	}
 	
 	public void imprimirLearningPath(LearningPath lp)
@@ -137,28 +144,86 @@ public class ImprimirConsola {
 	
 	public void imprimirProgreso(Progreso prog)
 	{
-		System.out.println(prog.getEstudiante());
+		System.out.println("\n"+ prog.getEstudiante());
 		System.out.println("- Progreso en el  Learning Path " + prog.getLearningPath());
+		System.out.println("    • Progreso Total: " + Integer.toString(prog.getProgresoTotal())+ "% de actividades completadas");
+		System.out.println("    • Progreso Actividades Obligatorias: " + Integer.toString(prog.getProgresoObligatorio())+ "% de actividades completadas");
 		System.out.println("-----------------------------------------------------");
 		
 		System.out.println("Actividades Completadas:");
 		List<Actividad> acts = prog.getActCompletadas();
-		for (Actividad act: acts)
+		if (!acts.isEmpty())
 		{
-			imprimirActividad(act, false, true, true);
+			for (Actividad act: acts)
+			{
+				imprimirActividad(act, false, true, true);
+			}
+			System.out.println("-----------------------------------------------------");
+			System.out.println("Actividades Obligatorias Completadas:");
+			acts = prog.getActObligatoriasCompletadas();
+			if (!acts.isEmpty())
+			{
+				for (Actividad act: acts)
+				{
+					imprimirActividad(act, false, true, true);
+				}
+				System.out.println("-----------------------------------------------------");
+			}
+			else
+			{
+				System.out.println("\nNo hay actividades completadas");
+				System.out.println("-----------------------------------------------------");
+			}
+		}
+		else
+		{
+			System.out.println("\nNo hay actividades completadas");
+			System.out.println("-----------------------------------------------------");
 		}
 		
-		System.out.println("Actividades Pendientes:");
-		acts = prog.getActObligatoriasPendientes();
-		for (Actividad act: acts)
-		{
-			imprimirActividad(act, false, true, true);
-		}
 		
-		System.out.println("Actividad en progreso: ");
-		imprimirActividad(prog.getActividadEnProgreso(), false, true, true);
-		System.out.println("-----------------------------------------------------");
-		System.out.println();
+		acts = prog.getActPendientes();
+		System.out.println("ActividadesPendientes:");
+		if (acts.isEmpty())
+		{
+			System.out.println("No tiene actividades pendientes");
+			System.out.println("-----------------------------------------------------");
+		}
+		else
+		{		
+			for (Actividad act: acts)
+			{
+				imprimirActividad(act, false, true, true);
+			}
+			System.out.println("-----------------------------------------------------");
+			System.out.println("Actividades Obligatorias Pendientes:");
+			acts = prog.getActObligatoriasPendientes();
+			if (acts.isEmpty())
+			{
+				System.out.println("No tiene actividades pendientes");
+				System.out.println("-----------------------------------------------------");
+			}
+			else
+			{
+				for (Actividad act: acts)
+				{
+					imprimirActividad(act, false, true, true);
+				}
+				System.out.println("-----------------------------------------------------");
+			}
+			System.out.println("Actividad en progreso: ");
+			if (prog.getActividadEnProgreso() != null) 
+			{
+				imprimirActividad(prog.getActividadEnProgreso(), false, true, true);
+				System.out.println("-----------------------------------------------------");
+			}
+			else
+			{
+				System.out.println("No tiene ninguna actividad en progreso");
+				System.out.println("-----------------------------------------------------");
+			}
+			System.out.println();
+		}
 	}
 	
 	public void imprimirEstudiante(Estudiante est)
