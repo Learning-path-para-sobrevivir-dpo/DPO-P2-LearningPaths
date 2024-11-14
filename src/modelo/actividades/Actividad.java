@@ -1,13 +1,14 @@
-package modelo;
+package modelo.actividades;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import modelo.*;
 
 public abstract class Actividad implements Cloneable {
 	public String titulo;
-	public String descripcion;
+	public String objetivo;
 	public int nivelDificultad;
 	public int duracionMin;
 	public boolean obligatorio;
@@ -18,6 +19,7 @@ public abstract class Actividad implements Cloneable {
 	private float ratingAcumulado;
 	private int numRatings;
 	private String id;
+	private String idEstudiante;
 	public String tipoActividad;
 	private String estado;
 	private boolean completada;
@@ -33,7 +35,7 @@ public abstract class Actividad implements Cloneable {
 			int tiempoCompletarSugerido, String tipo) {
 		super();
 		this.titulo = titulo;
-		this.descripcion = descripcion;
+		this.objetivo = descripcion;
 		this.nivelDificultad = nivelDificultad;
 		this.duracionMin = duracionMin;
 		this.obligatorio = obligatorio;
@@ -46,36 +48,80 @@ public abstract class Actividad implements Cloneable {
 		this.setTipoActividad(tipo);
 		this.estado = "Sin completar";
 		this.completada = false;
-		
-		//Para crear un identificador unico para la actividad
-		int numero = ( int ) ( Math.random( ) * 10e7 );
-        String codigo = "" + numero;
-        while( ids.contains( codigo ) )
-        {
-            numero = ( int ) ( Math.random( ) * 10e7 );
-            codigo = "" + numero;
-        }
-
-        while( codigo.length( ) < 7 )
-            codigo = "0" + codigo;
-        
-        this.id = codigo;
+		this.completada = false;       
+		this.id = this.generarID();
+        this.idEstudiante = "";
 	}
 	
-	public String getTitulo() {
-		return titulo;
+	public Actividad(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+			int tiempoCompletarSugerido, String tipo, String id, String idEstudiante) {
+		super();
+		this.titulo = titulo;
+		this.objetivo = descripcion;
+		this.nivelDificultad = nivelDificultad;
+		this.duracionMin = duracionMin;
+		this.obligatorio = obligatorio;
+		this.tiempoCompletarSugerido = tiempoCompletarSugerido;
+		this.actPreviasSugeridas = new ArrayList<Actividad>();
+		this.reviews = new ArrayList<Review>();
+		this.ratingAcumulado = 0;
+		this.ratingPromedio = 0;
+		this.numRatings = 0;
+		this.setTipoActividad(tipo);
+		this.estado = "Sin completar";
+		this.completada = false;
+		this.completada = false;       
+		this.id = id;
+		Actividad.registrarIDActividad(this);
+        this.idEstudiante = "";
+	}
+	
+	
+	private String generarID()
+	{
+		//Para crear un identificador unico para la actividad
+		int numero = ( int ) ( Math.random( ) * 10e7 );
+		String codigo = "" + numero;
+		Set<String> idsbuscados = ids;
+		while( idsbuscados.contains( codigo ) )
+		{
+			numero = ( int ) ( Math.random( ) * 10e7 );
+			codigo = "" + numero;
+		}
+
+		while( codigo.length( ) < 7 )
+			codigo = "0" + codigo;
+
+		return codigo;
+	}
+	
+	public void actividadClonadaProfesor()
+	{
+		this.id = this.generarID();
+	}
+	
+	/**
+	 * Genera un ID único para una actividad clonada
+	 */
+	public void actividadClonadaProgreso()
+	{
+		this.idEstudiante = this.generarID();
 	}
 
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
 	}
-
-	public String getDescripcion() {
-		return descripcion;
+	
+	public String getTitulo() {
+		return this.titulo;
 	}
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public String getObjetivo() {
+		return objetivo;
+	}
+
+	public void setObjetivo(String objetivo) {
+		this.objetivo = objetivo;
 	}
 
 	public int getNivelDificultad() {
@@ -154,7 +200,15 @@ public abstract class Actividad implements Cloneable {
 	public void setCompletada(boolean completada) {
 		this.completada = completada;
 	}
+	
+	public String getIdEstudiante() {
+		return idEstudiante;
+	}
 
+	/**
+	 * Añade una actividad previa sugerida para la actividad
+	 * @param actividadPrevia: actividad previa sugerida
+	 */
 	public void addActividadPrevia(Actividad actividadPrevia)
 	{
 		if (actividadPrevia != null)
@@ -171,6 +225,10 @@ public abstract class Actividad implements Cloneable {
 	{
 		String unID = actividad.getId();
 		ids.add(unID);
+		if (actividad.getIdEstudiante() != null)
+		{
+			ids.add(actividad.getIdEstudiante());
+		}
 	}
 	
 	/**
@@ -192,9 +250,9 @@ public abstract class Actividad implements Cloneable {
 	 * Actualiza el rating promedio cuando un usuario le da un rating a una actividad
 	 * @param rating: rating dado
 	 */
-	public void addRating(float rating)
+	public void addRating(double d)
 	{
-		this.ratingAcumulado += rating;
+		this.ratingAcumulado += d;
 		this.numRatings +=1;
 		this.calcularRatingPromedio();
 	}
@@ -240,7 +298,7 @@ public abstract class Actividad implements Cloneable {
 	}
 	
 	@Override
-	protected Object clone() throws CloneNotSupportedException
+	public Object clone() throws CloneNotSupportedException
 	{
 		return super.clone();
 	}
@@ -257,4 +315,5 @@ public abstract class Actividad implements Cloneable {
 	 */
 	public abstract void descompletarActividad();
 
+	public abstract void setReviews(List<Review> listaReviews);
 }

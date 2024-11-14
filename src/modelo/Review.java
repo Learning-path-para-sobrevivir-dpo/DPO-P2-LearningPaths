@@ -4,15 +4,15 @@ public class Review {
 	
 	public String fecha;
 	public String contenido; 
-	public float rating;
-	public Usuario autor;
+	public double rating;
+	public String tipo;
 	
-	public Review(String fecha, String contenido, Usuario autor) {
+	public Review(String fecha, String contenido, String tipo) {
 		super();
 		this.fecha = fecha;
 		this.contenido = contenido;
 		this.rating = 0;
-		this.autor = autor;
+		this.tipo = tipo;
 	}
 
 	public String getFecha() {
@@ -32,20 +32,20 @@ public class Review {
 	}
 
 
-	public float getRating() {
+	public double getRating() {
 		return rating;
 	}
 
-	public void setRating(float rating) {
+	public void setRating(double rating) {
 		this.rating = rating;
 	}
 
-	public Usuario getAutor() {
-		return autor;
+	public String getTipo() {
+		return tipo;
 	}
 
-	public void setAutor(Usuario autor) {
-		this.autor = autor;
-	} 
-	
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
 }

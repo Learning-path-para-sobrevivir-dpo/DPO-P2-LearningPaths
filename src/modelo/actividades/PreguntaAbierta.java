@@ -1,4 +1,4 @@
-package modelo;
+package modelo.actividades;
 
 public class PreguntaAbierta extends Pregunta {
 
@@ -8,8 +8,17 @@ public class PreguntaAbierta extends Pregunta {
 	public PreguntaAbierta(String enunciado) {
 		super(enunciado);
 		// TODO Auto-generated constructor stub
-		respuesta = null;
+		respuesta = "No hay respuesta";
 		correcta = false;
+		this.setTipo("Pregunta Abierta");
+	}
+	
+	public PreguntaAbierta(String enunciado, int numero) {
+		super(enunciado, numero);
+		// TODO Auto-generated constructor stub
+		respuesta = "No hay respuesta";
+		correcta = false;
+		this.setTipo("Pregunta Abierta");
 	}
 
 	public String getRespuesta() {

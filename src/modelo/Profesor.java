@@ -7,6 +7,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import modelo.actividades.Actividad;
+import modelo.actividades.Encuesta;
+import modelo.actividades.Examen;
+import modelo.actividades.Quiz;
+import modelo.actividades.QuizOpcionMultiple;
+import modelo.actividades.QuizVerdaderoFalso;
+import modelo.actividades.RecursoEducativo;
+import modelo.actividades.Tarea;
+
 public class Profesor extends Usuario{
 	
 	public Map<String, LearningPath> learningPathsCreados;
@@ -18,12 +27,67 @@ public class Profesor extends Usuario{
 		actCreadas = new ArrayList<Actividad>();
 	}
 	
-
+	
 	/**
+	 * Métodos para crear todas las actividades diferentes
+	 */
+	public Actividad crearRecursoEducativo(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+	        int tiempoCompletarSugerido, String tipo, String tipoRecurso, String contenido, String enlace) {
+		
+		Actividad newAct = new RecursoEducativo(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, 
+                tiempoCompletarSugerido, tipo, tipoRecurso, contenido, enlace);
+		this.actCreadas.add(newAct);
+		return newAct;
+	}
+	
+	public Actividad crearExamen(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+	        int tiempoCompletarSugerido, String tipo, String tipoPrueba) {
+		
+		Actividad newAct = new Examen(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
+    			tiempoCompletarSugerido, tipo, tipoPrueba);
+		this.actCreadas.add(newAct);
+		return newAct;
+	}
+	
+	public Actividad crearQuiz(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+	        int tiempoCompletarSugerido, String tipo, String tipoPrueba, float calificacionMinima) {
+		Actividad newAct = null;
+		
+		if (tipoPrueba == "Quiz Opcion Multiple")
+		{
+			newAct = new QuizOpcionMultiple(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,tiempoCompletarSugerido, tipo, calificacionMinima, tipoPrueba);
+		}
+		else if (tipoPrueba == "Quiz Verdadero Falso")
+		{
+			newAct = new QuizVerdaderoFalso(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipo, calificacionMinima, tipoPrueba);
+		}
+		this.actCreadas.add(newAct);
+		return newAct;
+	}
+				
+	public Actividad crearEncuesta(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+	        int tiempoCompletarSugerido, String tipo, String tipoPrueba) {
+	
+		Actividad newAct = new Encuesta(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
+				tiempoCompletarSugerido, tipo, tipoPrueba);
+		return newAct;
+	}
+	
+	public Actividad crearTarea(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+	        int tiempoCompletarSugerido, String tipo, String contenido) {
+	
+		Actividad newAct = new Tarea(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
+    			tiempoCompletarSugerido, tipo, contenido);
+		this.actCreadas.add(newAct);
+		return newAct;
+	}
+	
+	
+	/***
 	 * Método crea una nueva actividad. Se debe buscar y actuar diferente segun el tipo de 
 	 * actividad a crear dado que Actividad es una clase abstracta.
-	 */
-	public void crearActividad(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+	 
+	public Actividad crearActividad(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
 	        int tiempoCompletarSugerido, String tipo) {
 
 		Actividad newAct = null;
@@ -83,7 +147,10 @@ public class Profesor extends Usuario{
 	    scanner.close();  
 
 	    actCreadas.add(newAct);
+	    
+	    return newAct;
 	}
+	***/
 	
 
 	/**
@@ -93,13 +160,15 @@ public class Profesor extends Usuario{
 	 * @param obj: objetivo del LearningPath
 	 * @param dificultad: nivel de dificultad
 	 */
-	public void crearLearningPath(String titulo, String descripcion, String obj, int dificultad) {
+	public LearningPath crearLearningPath(String titulo, String descripcion, String obj, int dificultad) {
 		
         LocalDate fechaActual = LocalDate.now();
         String fecha = fechaActual.toString();
 		
-        LearningPath path = new LearningPath(titulo, descripcion, obj, dificultad, 0, fecha, fecha, 1, this);
+        LearningPath path = new LearningPath(titulo, descripcion, obj, dificultad, 0, fecha, fecha, 1, this.getTipo());
         learningPathsCreados.put(titulo, path);
+        
+        return path;
         
 	}
 	
@@ -128,8 +197,32 @@ public class Profesor extends Usuario{
 	    }
 	}
 
+
+	public Map<String, LearningPath> getLearningPathsCreados() {
+		return this.learningPathsCreados;
+	}
+
+
+	public List<Actividad> getActCreadas() {
+		return this.actCreadas;
+	}
+
 	
-	
+	public Actividad clonarActividad(Actividad actividad) {
+		Actividad nuevaActividad = null;
+		try {
+			nuevaActividad = (Actividad) actividad.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (nuevaActividad != null)
+		{
+			nuevaActividad.actividadClonadaProfesor();
+			this.actCreadas.add(nuevaActividad);
+		}
+		return nuevaActividad;
+	}
 	
 	
 }

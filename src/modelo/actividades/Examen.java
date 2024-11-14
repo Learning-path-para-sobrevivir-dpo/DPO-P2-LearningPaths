@@ -1,20 +1,31 @@
-package modelo;
+package modelo.actividades;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import excepciones.RespuestasInconsistentesPruebaException;
+import excepciones.TipoDePreguntaInvalidaException;
+import modelo.Review;
 
 public class Examen extends Prueba{
 
 	private List<PreguntaAbierta> preguntas;
 	private boolean calificado;
 
-	public Examen(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+	public Examen(String titulo, String objetivo, int nivelDificultad, int duracionMin, boolean obligatorio,
 			int tiempoCompletarSugerido, String tipoActividad, List<PreguntaAbierta> preguntas, String tipoPrueba) {
-		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, tipoPrueba);
-		this.preguntas = preguntas;
+		super(titulo, objetivo, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, tipoPrueba);
+		setPreguntas(preguntas);
+		this.calificado = false;
+		this.setTipoActividad("Prueba");
+		this.setTipoPrueba("Examen");
+	}
+	
+	public Examen(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+			int tiempoCompletarSugerido, String tipoActividad, List<PreguntaAbierta> preguntas, String tipoPrueba, String id, String idEstudiante) {
+		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, tipoPrueba, id, idEstudiante);
+		setPreguntas(preguntas);
 		this.calificado = false;
 		this.setTipoActividad("Prueba");
 		this.setTipoPrueba("Examen");
@@ -28,22 +39,45 @@ public class Examen extends Prueba{
 		this.setTipoActividad("Prueba");
 		this.setTipoPrueba("Examen");
 	}
+	
+	public void setPreguntas(List<PreguntaAbierta> preguntas)
+	{
+		int i = 1;
+		for(PreguntaAbierta pregunta: preguntas)
+		{
+			pregunta.setNumero(i);
+			i++;
+		}
+		this.preguntas = preguntas;
+	}
 
 	public List<PreguntaAbierta> getPreguntas() {
 		return preguntas;
 	}
-
-	public void addPregunta(PreguntaAbierta pregunta) {
-		this.preguntas.add(pregunta);
+	
+	@Override
+	public void addPregunta(Pregunta pregunta) throws TipoDePreguntaInvalidaException {
+		int numPregunta = pregunta.getNumero();
+		
+		if (!(pregunta instanceof PreguntaAbierta))
+		{
+			throw new TipoDePreguntaInvalidaException(pregunta.getTipo(), this.getTipoActividad());
+		}
+		
+		if (numPregunta <= 0 || numPregunta > this.preguntas.size())
+		{
+			pregunta.setNumero(this.preguntas.size());
+			this.preguntas.add((PreguntaAbierta) pregunta);
+		} 
+		else
+		{
+			this.preguntas.add(numPregunta - 1, (PreguntaAbierta) pregunta);
+		}
 	}
 	
-	public void addPreguntaPorPosicion(PreguntaAbierta pregunta, int pos) {
-		this.preguntas.add(pos, pregunta);
-	}
-	
-	public void eliminarPregunta(int numPregunta)
-	{
-		if (numPregunta > 0)
+	@Override
+	public void eliminarPregunta(int numPregunta) {
+		if (numPregunta > 0 && numPregunta <= this.preguntas.size())
 		{
 			this.preguntas.remove(numPregunta - 1);
 		}
@@ -102,37 +136,6 @@ public class Examen extends Prueba{
 		this.setRespondida(true);
 	}
 	
-	@Override
-	public void responderPrueba() {
-		// TODO Auto-generated method stub
-		List<String> respuestas = new ArrayList<String>();
-		Scanner scanner = new Scanner(System.in);
-		for (PreguntaAbierta pregunta: preguntas)
-		{
-			System.out.println(pregunta.getEnunciado());
-			boolean entradaValida = false;
-			String respuesta = null;
-			while (!entradaValida)
-			{
-				System.out.println("Escriba su respuesta: ");
-				respuesta = scanner.nextLine();
-	            if (!respuesta.trim().isEmpty()) {
-	                entradaValida = true;
-	            } else {
-	                System.out.println("La entrada no puede estar vacía. Inténtalo de nuevo.");
-	            }
-			}
-			respuestas.add(respuesta);
-		}
-		scanner.close();
-		try {
-			this.responderExamen(respuestas);
-		} catch (RespuestasInconsistentesPruebaException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
 	public void calificar(List<String> respuestasCalificadas) throws RespuestasInconsistentesPruebaException{
 		int numRespuestasEsperadas = this.preguntas.size();
 		if (numRespuestasEsperadas != respuestasCalificadas.size())
@@ -157,6 +160,12 @@ public class Examen extends Prueba{
 			}
 			this.setCalificado(true);
 		}
+	}
+
+	@Override
+	public void setReviews(List<Review> listaReviews) {
+		this.reviews= listaReviews;
+		
 	}
 	
 }

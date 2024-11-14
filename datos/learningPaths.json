@@ -1,0 +1,44 @@
+[
+    {
+        "descripcion": "Curso que te enseña todo sobre Estructuras de Datos en Java",
+        "fechaModificacion": "22/10/2024",
+        "nivelDificultad": 1,
+        "rating": 0,
+        "titulo": "Estructuras de Datos en Java",
+        "estudiantes": [],
+        "actividades": {},
+        "version": 1,
+        "autor": "Marta Martínez",
+        "objetivo": "Conocer todo sobre Estructuras de Datos en Java",
+        "progresosEstudiantiles": {},
+        "duracion": 0,
+        "fechaCreacion": "22/10/2024"
+    },
+    {
+        "descripcion": "Curso creativo de arte",
+        "fechaModificacion": "2024-11-10",
+        "nivelDificultad": 2,
+        "rating": 0,
+        "titulo": "Arte y Sociedad",
+        "estudiantes": ["Juliana Hernandez"],
+<<<<<<< HEAD
+        "actividades": {"1": "52491279"},
+=======
+        "actividades": {
+            "1": "51977106",
+            "2": "95752950",
+            "3": "31997514",
+            "4": "40579652"
+        },
+>>>>>>> branch 'master' of https://github.com/Learning-path-para-sobrevivir-dpo/DPO-P2-LearningPaths.git
+        "version": 1,
+        "autor": "Marta Martínez",
+        "objetivo": "Aprender sobre arte y sociedad",
+        "progresosEstudiantiles": {"Juliana Hernandez": [
+            "Arte y Sociedad",
+            "Juliana Hernandez"
+        ]},
+        "duracion": 0,
+        "fechaCreacion": "2024-11-10"
+    }
+]

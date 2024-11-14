@@ -1,23 +1,66 @@
 package persistencia;
 
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import modelo.Actividad;
-import modelo.LearningPath;
-import modelo.Usuario;
+import excepciones.LearningPathIncorrectoProgresoException;
+import modelo.*;
+import modelo.actividades.Actividad;
+import modelo.actividades.Pregunta;
 
 public class ManejoDatos {
-	private HashMap<List<String>, Usuario> usuarios;
-	private HashMap<String, Actividad> actividades;
-	private HashMap<String, LearningPath> learningPaths;
+	private HashMap<List<String>, Usuario> usuarios; 
+    private HashMap<String, LearningPath> learningPaths;
+    private HashMap<String, Actividad> actividades;
+    private HashMap<String, Pregunta> preguntas;
+    private HashMap<List<String>, Progreso> progresos;
+    private HashMap<String, Review> reviews;
+    
+    public ManejoDatos() {
+    	this.usuarios = new HashMap<List<String>, Usuario>();
+        this.learningPaths = new HashMap<String, LearningPath>();
+        this.actividades = new HashMap<String, Actividad>();
+        this.preguntas = new HashMap<String, Pregunta>();
+        this.progresos = new HashMap<List<String>, Progreso>();
+        this.reviews = new HashMap<String, Review>();
+    }
+    
+    public void cargarDatos() {
+    	this.reviews = PersistenciaReviews.cargarReviews();
+    	this.preguntas = PersistenciaPreguntas.cargarPreguntas();
+    	this.actividades = PersistenciaActividades.cargarActividades(reviews, preguntas);
+    	this.progresos = PersistenciaProgresos.cargarProgresos(actividades);
+    	this.learningPaths = PersistenciaLearningPaths.cargarLearningPaths(progresos,actividades);
+    	this.usuarios = PersistenciaUsuarios.cargarUsuarios(progresos, learningPaths, reviews, actividades);
+    }
+    
+	public HashMap<List<String>, Usuario> getUsuarios() {
+		return usuarios;
+	}
 
-	//TODO: Cargar datos desde el JSON
-	
-	//TODO: Guardar datos en el JSON
+	public void setUsuarios(HashMap<List<String>, Usuario> usuarios) {
+		this.usuarios = usuarios;
+	}
+
+	public HashMap<String, Actividad> getActividades() {
+		return actividades;
+	}
+
+	public void setActividades(HashMap<String, Actividad> actividades) {
+		this.actividades = actividades;
+	}
+
+	public HashMap<String, LearningPath> getLearningPaths() {
+		return learningPaths;
+	}
+
+	public void setLearningPaths(HashMap<String, LearningPath> learningPaths) {
+		this.learningPaths = learningPaths;
+	}
 	
 	//Manejo de Usuarios////////////////////////////////////////
 	
@@ -39,6 +82,7 @@ public class ManejoDatos {
 		{
 			List<String> infoUsuario = crearLlaveUsuario(usuario.getLogin(), usuario.getContraseña());		
 			this.usuarios.put(infoUsuario, usuario);
+			PersistenciaUsuarios.guardarUsuarios(usuarios);
 		}
 	}
 	
@@ -69,6 +113,7 @@ public class ManejoDatos {
 		{
 			List<String> infoUsuario = crearLlaveUsuario(usuario.getLogin(), usuario.getContraseña());
 			this.usuarios.replace(infoUsuario, usuario);
+			PersistenciaUsuarios.guardarUsuarios(usuarios);
 		}
 	}
 	
@@ -107,8 +152,21 @@ public class ManejoDatos {
 	{
 		if (actividad != null)
 		{
-			
-		}
+			actividades.put(actividad.getId(), actividad);
+	        PersistenciaActividades.guardarActividades(actividades);
+        }
+	}
+	
+	public void addActividadClonadaProgreso(Actividad actividad)
+	{
+		if (actividad != null)
+		{
+			if (!actividad.getIdEstudiante().equals(""))
+			{
+				actividades.put(actividad.getIdEstudiante(), actividad);
+				PersistenciaActividades.guardarActividades(actividades);
+			}
+        }
 	}
 	
 	/**
@@ -136,6 +194,7 @@ public class ManejoDatos {
 		if (path != null)
 		{
 			this.learningPaths.put(path.getTitulo(), path);
+			PersistenciaLearningPaths.guardarLearningPaths(learningPaths);
 		}
 	}
 	
@@ -162,6 +221,38 @@ public class ManejoDatos {
 		if (path != null)
 		{
 			this.learningPaths.replace(path.getTitulo(), path);
+			PersistenciaLearningPaths.guardarLearningPaths(learningPaths);
+		}
+	}
+//Manejo de progreso, reviews, preguntas
+	
+	public void addProgreso(Progreso progreso) throws LearningPathIncorrectoProgresoException
+	{
+		if (progreso != null)
+		{
+			String lp = progreso.getLearningPath();
+			LearningPath lpProgreso = this.learningPaths.get(lp);
+			progreso.obtenerActividadesPath(lpProgreso);
+			this.progresos.put(List.of(progreso.getLearningPath(),progreso.getEstudiante()), progreso);
+			PersistenciaProgresos.guardarProgreso(progresos);
+		}
+	}
+	
+	public void addReview(Review review)
+	{
+		if (review != null)
+		{
+			this.reviews.put(review.getContenido(), review);
+			PersistenciaReviews.guardarReviews(reviews);
+		}
+	}
+	
+	public void addPregunta(Pregunta pregunta)
+	{
+		if (pregunta != null)
+		{
+			this.preguntas.put(pregunta.getEnunciado(), pregunta);
+			PersistenciaPreguntas.guardarPreguntas(preguntas);;
 		}
 	}
 }

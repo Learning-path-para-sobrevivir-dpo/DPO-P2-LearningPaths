@@ -1,0 +1,31 @@
+[{
+  "estudiante": "Juliana Hernandez",
+  "progresoObligatorio": 0,
+  "actPendientes": [
+    "83259024",
+    "83353938",
+    "89436968"
+  ],
+  "actObligatoriasCompletadas": [],
+  "progresoTotal": 25,
+  "actCompletadas": ["26440388"],
+  "actividadEnProgreso": null,
+  "idActividadesOriginales": {
+    "31997514": "31997514",
+    "40579652": "40579652",
+    "95752950": "95752950",
+    "51977106": "51977106"
+  },
+  "learningPath": "Arte y Sociedad",
+  "actObligatoriasPendientes": [
+    "83259024",
+    "83353938",
+    "89436968"
+  ],
+  "actividadesPath": [
+    "83259024",
+    "83353938",
+    "89436968",
+    "26440388"
+  ]
+}]
