@@ -3,16 +3,16 @@ package consola;
 import java.util.Scanner;
 
 import excepciones.YaExisteActividadEnProgresoException;
-import modelo.Actividad;
 import modelo.Estudiante;
-import modelo.Examen;
 import modelo.LearningPath;
 import modelo.Profesor;
 import modelo.Progreso;
-import modelo.Quiz;
-import modelo.RecursoEducativo;
 import modelo.Review;
-import modelo.Tarea;
+import modelo.actividades.Actividad;
+import modelo.actividades.Examen;
+import modelo.actividades.Quiz;
+import modelo.actividades.RecursoEducativo;
+import modelo.actividades.Tarea;
 import persistencia.ManejoDatos;
 
 public class Consola {
@@ -32,10 +32,15 @@ public class Consola {
     }
 
     public void iniciarAplicacion(ManejoDatos datos, Scanner scanner) {
-        this.mostrarMenuInicio(datos, scanner);  
+   
+        int op = 1;
+        while (op!=0) {
+        	this.mostrarMenuInicio(datos, scanner); 
+        	op = this.mostrarMenuInicio(datos, scanner);
+        }
     }
 
-    public void mostrarMenuInicio(ManejoDatos datos, Scanner scanner) {
+    public int mostrarMenuInicio(ManejoDatos datos, Scanner scanner) {
         System.out.println("Bienvenido a ......");
         System.out.println("Seleccione lo que quiere hacer: ");
         System.out.println("1. Iniciar Sesión");
@@ -54,15 +59,14 @@ public class Consola {
 
         
         //Elementos a utilizar para probar el programa
-        Estudiante estudiante1 = new Estudiante("Juliana Hernandez", "j.hernandez@gmail.com", "Juli091103", "Estudiante", null);
+        Estudiante estudiante1 = new Estudiante("Juliana Hernandez", "j.hernandez@gmail.com", "Juli091103", "Estudiante");
         Profesor profesor1 = new Profesor("Marta Martínez", "m.martinez@gmail.com", 
         		"Mart123", "Profesor");
         
         //Se crea un LP al que la estudiante ya está inscrita
-        LearningPath path0 = new LearningPath ("Arte y Sociedad", "Curso creativo de arte", "Aprender sobre arte y sociedad", 
-        		1, 0, "10/03/2024", "13/05/2024", 2, profesor1);
+        LearningPath path0 = profesor1.crearLearningPath("Arte y Sociedad",  "Curso creativo de arte", "Aprender sobre arte y sociedad", 2);
         estudiante1.inscribirLearningPath(path0);
-        Progreso pEst1LP0 = new Progreso(path0, estudiante1);
+        Progreso pEst1LP0 = new Progreso(path0.getTitulo(), estudiante1.getLogin());
         
         //Add actividad a Path0
         Examen examenArtSoc = new Examen("Final Arte y Sociedad", "Examen final de art y soc.", 3,
@@ -83,7 +87,7 @@ public class Consola {
         
         LearningPath path1 = new LearningPath("Estructuras de Datos en Java", "Curso que te enseña todo sobre Estructuras de Datos en Java",
         		"Conocer todo sobre Estructuras de Datos en Java", 1, 0,
-    			"22/10/2024", "22/10/2024", 1, profesor1);
+    			"22/10/2024", "22/10/2024", 1, profesor1.getLogin());
         RecursoEducativo recurso1 = new RecursoEducativo("Listas y Arreglos", "Video sobre listas y arreglos en Java", 1, 40,
         		false, 60, "Recurso Educativo", "Video", "Enlace a video sobre listas y arreglos en Java", "www.youtube.com/listasyarreglosjava");
         Tarea tarea1 = new Tarea("Ejercicios Mapas Java", "Completar estos ejercicios de mapas", 1, 40, true,
@@ -125,15 +129,64 @@ public class Consola {
                 
             case 4:
                 System.out.println("Has seleccionado 'Profesor: Crear Actividad'");
-                Actividad quiz1 = profesor1.crearActividad("Quiz Datos Java", "Quiz sobre datos en Java", 2, 20, true,
-            	        30, "Quiz");
-                datos.addActividad(quiz1);   
+                System.out.println("Cuál actividad: ");
+                System.out.println("1. Recurso Educativo");
+                System.out.println("2. Examen");
+                System.out.println("3. Quiz");
+                System.out.println("4. Encuesta");
+                System.out.println("5. Tarea");
+                
+                System.out.print("Opción: ");
+                int actop = scanner.nextInt();
+                
+                switch (actop) {
+                
+                case 1:
+                    
+                	Actividad rec = profesor1.crearRecursoEducativo("Recurso 1", "", 1, 1, false, 1, "", "", "", "");
+                	datos.addActividad(rec);
+                	System.out.println("Se creó el recurso educativo"+ rec.getTitulo());
+                    break;
+                    
+                case 2: 
+                	
+                	Actividad exam = profesor1.crearExamen("Ex Prueba", "", 1, 20, true,
+                	        20, "Prueba", "Examen");
+                	datos.addActividad(exam);
+                	System.out.println("Se creó el examen"+ exam.getTitulo());
+                    break;
+                    
+                case 3: 
+                	
+                	Actividad quiz = profesor1.crearQuiz("Quiz Prueba", "", 1, 30,true,
+                	        50, "Prueba","Quiz", 1);
+                	datos.addActividad(quiz);
+                	System.out.println("Se creó el quiz"+ quiz.getTitulo());
+                    break;
+                    
+                case 4: 
+                	
+                	Actividad encuesta = profesor1.crearEncuesta("Encuesta Prueba", "", 2, 20, false,
+                	        10, "Prueba", "Encuesta");
+                	datos.addActividad(encuesta);
+                	System.out.println("Se creó la encuesta"+ encuesta.getTitulo());
+                    break;
+                   
+                case 5: 
+                	
+                	Actividad tarea = profesor1.crearTarea("Quiz Datos Java", "Quiz sobre datos en Java", 2, 20, true,
+                	        30, "Quiz", "");
+                	datos.addActividad(tarea);
+                	System.out.println("Se creó la tarea"+ tarea.getTitulo());
+                    break;
+                }
+                      
                 break;
                 
             case 5:
                 System.out.println("Has seleccionado 'Profesor: Clonar Actividad'");
                 
-                Actividad actAClonar = datos.getActividadPorID(tarea1.getId());
+                Actividad actAClonar = datos.getActividad(tarea1.getId());
                 System.out.println("Actividad a Clonar: "+ actAClonar);
                 
                 Actividad actClonada = profesor1.clonarActividad(actAClonar);
@@ -145,10 +198,10 @@ public class Consola {
             case 6:
                 System.out.println("Has seleccionado 'Profesor: Añadir Actividad a Learning Path'");
                 
-                String nomLP = path1.getTitulo();
+                String nomLP = path0.getTitulo();
                 LearningPath pathAñadir = datos.getLearningPath(nomLP);
                 
-                Actividad actAñadir = datos.getActividadPorID(tarea1.getId());
+                Actividad actAñadir = datos.getActividad(tarea1.getId());
 
                 profesor1.addActividadToLearningPath(pathAñadir, actAñadir, 1);
                 
@@ -159,8 +212,10 @@ public class Consola {
             case 7:
                 System.out.println("Has seleccionado 'Estudiante: Inscribirse a Learning Path'");
                 
-                estudiante1.inscribirLearningPath(path1);
-                
+                LearningPath pathInscribir = datos.getLearningPath(path1.getTitulo());
+                estudiante1.inscribirLearningPath(pathInscribir);
+
+                System.out.println("Quedó inscrito al Path" + pathInscribir.getTitulo());
                
                 break;
                 
@@ -169,7 +224,7 @@ public class Consola {
                 
                 //Asumimos que el estudiante 1 va a completar una actividad de Path 0
 
-                Actividad actCompletar = datos.getActividadPorID(examenArtSoc.getIdEstudiante());
+                Actividad actCompletar = datos.getActividad(examenArtSoc.getId());
                 estudiante1.completarActividad(1, "Arte y Sociedad");
 			try {
 				pEst1LP0.completarActividad(actCompletar);
@@ -183,10 +238,12 @@ public class Consola {
             case 9:
                 System.out.println("Has seleccionado 'Dejar Review'");
                 
-                Review revArtSoc = estudiante1.addReviewWithRating("El examen fue muy difícil y no evaluaba lo que vimos en clase.", examenArtSoc, 1);
-                Actividad actReviewed = datos.getActividadPorID(examenArtSoc.getId());
+                Review revArtSoc = estudiante1.addReviewRating("El examen fue muy difícil y no evaluaba lo que vimos en clase.", examenArtSoc.getTipoActividad(), 1.0);
+                Actividad actReviewed = datos.getActividad(examenArtSoc.getId());
                 actReviewed.addReview(revArtSoc);
                 actReviewed.addRating(revArtSoc.getRating());
+                datos.addActividad(actReviewed);
+                datos.addReview(revArtSoc);
                 System.out.println("Reseña "+ revArtSoc.getContenido()+ " añadida a: "+ actReviewed.getTitulo());
                 
                 break;
@@ -200,8 +257,8 @@ public class Consola {
                 System.out.println("Opción no válida");
                 break;
         }
+        return opcion;
     }
 
 
 }
-

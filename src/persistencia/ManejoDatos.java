@@ -7,8 +7,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-
+import excepciones.LearningPathIncorrectoProgresoException;
 import modelo.*;
+import modelo.actividades.Actividad;
+import modelo.actividades.Pregunta;
 
 public class ManejoDatos {
 	private HashMap<List<String>, Usuario> usuarios; 
@@ -35,7 +37,6 @@ public class ManejoDatos {
     	this.learningPaths = PersistenciaLearningPaths.cargarLearningPaths(progresos,actividades);
     	this.usuarios = PersistenciaUsuarios.cargarUsuarios(progresos, learningPaths, reviews, actividades);
     }
-
     
 	public HashMap<List<String>, Usuario> getUsuarios() {
 		return usuarios;
@@ -61,17 +62,8 @@ public class ManejoDatos {
 		this.learningPaths = learningPaths;
 	}
 	
-	public HashMap<String, Actividad> getActividadesEstudiantes() {
-		return actividadesEstudiantes;
-	}
-
-	public void setActividadesEstudiantes(HashMap<String, Actividad> actividadesEstudiantes) {
-		this.actividadesEstudiantes = actividadesEstudiantes;
-	}
-	
 	//Manejo de Usuarios////////////////////////////////////////
 	
-
 	private List<String> crearLlaveUsuario(String login, String password)
 	{
 		List<String> infoUsuario = new ArrayList<String>();
@@ -121,6 +113,7 @@ public class ManejoDatos {
 		{
 			List<String> infoUsuario = crearLlaveUsuario(usuario.getLogin(), usuario.getContraseña());
 			this.usuarios.replace(infoUsuario, usuario);
+			PersistenciaUsuarios.guardarUsuarios(usuarios);
 		}
 	}
 	
@@ -161,41 +154,31 @@ public class ManejoDatos {
 		{
 			actividades.put(actividad.getId(), actividad);
 	        PersistenciaActividades.guardarActividades(actividades);
-        }}
+        }
+	}
 	
-	/**
-	 * Encuentra todas las actividades con un nombre
-	 * @param nombreActividad: nombre de la actividad
-	 * @return Una lista de actividades que tengan el nombre buscado
-	 */
-	public List<Actividad> getActividadPorNombre(String nombreActividad) {
-		List<Actividad> actividades = new ArrayList<Actividad>();
-		Actividad actividad = null;
-		Set<String> ids = this.actividades.keySet();
-		Iterator<String> iterador = ids.iterator();
-		while (iterador.hasNext())
+	public void addActividadClonadaProgreso(Actividad actividad)
+	{
+		if (actividad != null)
 		{
-			String id = iterador.next();
-			actividad = this.actividades.get(id);
-			if (actividad != null && actividad.getTitulo().equals(nombreActividad))
+			if (!actividad.getIdEstudiante().equals(""))
 			{
-				actividades.add(actividad);
+				actividades.put(actividad.getIdEstudiante(), actividad);
+				PersistenciaActividades.guardarActividades(actividades);
 			}
-		}
-		return actividades;
+        }
 	}
 	
 	/**
-	 * Encuentra una actividad dado su ID
-	 * @param id: id de la actividad
-	 * @return La actividad que tiene el id dado. Si no se encuentra, retorna null
+	 * Encuentra una actividad por su nombre
+	 * @param nombreActividad: nombre de la actividad
+	 * @return La actividad buscada. Si no se encuentra retorna null.
 	 */
-	public Actividad getActividadPorID(String id)
-	{
+	public Actividad getActividad(String nombreActividad) {
 		Actividad actividad = null;
-		if (this.actividades.containsKey(id))
+		if (this.actividades.containsKey(nombreActividad))
 		{
-			actividad = this.actividades.get(id);
+			actividad = this.actividades.get(nombreActividad);
 		}
 		return actividad;
 	}
@@ -238,15 +221,18 @@ public class ManejoDatos {
 		if (path != null)
 		{
 			this.learningPaths.replace(path.getTitulo(), path);
+			PersistenciaLearningPaths.guardarLearningPaths(learningPaths);
 		}
 	}
-
 //Manejo de progreso, reviews, preguntas
 	
-	public void addProgreso(Progreso progreso)
+	public void addProgreso(Progreso progreso) throws LearningPathIncorrectoProgresoException
 	{
 		if (progreso != null)
 		{
+			String lp = progreso.getLearningPath();
+			LearningPath lpProgreso = this.learningPaths.get(lp);
+			progreso.obtenerActividadesPath(lpProgreso);
 			this.progresos.put(List.of(progreso.getLearningPath(),progreso.getEstudiante()), progreso);
 			PersistenciaProgresos.guardarProgreso(progresos);
 		}

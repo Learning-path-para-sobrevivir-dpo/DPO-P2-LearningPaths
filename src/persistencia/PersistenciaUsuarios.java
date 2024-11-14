@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import modelo.*;
+import modelo.actividades.Actividad;
 
 public class PersistenciaUsuarios {
 
@@ -27,25 +28,28 @@ public class PersistenciaUsuarios {
 
         try {
             // Leer el archivo JSON
-        	String content = new String(Files.readAllBytes(Paths.get(ARCHIVO_USUARIOS))); 
-            JSONArray jsonUsuarios = new JSONArray(content);
+        	String content = new String(Files.readAllBytes(Paths.get(ARCHIVO_USUARIOS)));
+        	if (!content.isBlank())
+        	{
+        		JSONArray jsonUsuarios = new JSONArray(content);
 
-            // Iterar sobre el JSONArray y convertir cada objeto JSON a Usuario
-            for (int i = 0; i < jsonUsuarios.length(); i++) {
-                JSONObject jsonUsuario = jsonUsuarios.getJSONObject(i);
+        		// Iterar sobre el JSONArray y convertir cada objeto JSON a Usuario
+        		for (int i = 0; i < jsonUsuarios.length(); i++) {
+        			JSONObject jsonUsuario = jsonUsuarios.getJSONObject(i);
 
-                String tipo = jsonUsuario.getString("tipo");
+        			String tipo = jsonUsuario.getString("tipo");
 
-                Usuario usuario;
-                if ("estudiante".equals(tipo)) {
-                    usuario = cargarEstudiante(jsonUsuario, mapaProgresos, mapaLearningPaths);
-                } else if ("profesor".equals(tipo) ) {
-                    usuario = cargarProfesor(jsonUsuario, mapaLearningPaths, mapaActividades);
-                } else {
-                    throw new IllegalArgumentException("Tipo de usuario desconocido: " + tipo);
-                }
+        			Usuario usuario;
+        			if ("estudiante".equals(tipo)) {
+        				usuario = cargarEstudiante(jsonUsuario, mapaProgresos, mapaLearningPaths);
+        			} else if ("profesor".equals(tipo) ) {
+        				usuario = cargarProfesor(jsonUsuario, mapaLearningPaths, mapaActividades);
+        			} else {
+        				throw new IllegalArgumentException("Tipo de usuario desconocido: " + tipo);
+        			}
 
-                usuarios.put(List.of(usuario.getLogin(),usuario.getContraseña()), usuario);
+        			usuarios.put(List.of(usuario.getLogin(),usuario.getContraseña()), usuario);
+        		}
             }
         } catch (IOException | JSONException e) {
             e.printStackTrace();

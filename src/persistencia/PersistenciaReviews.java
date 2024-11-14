@@ -21,26 +21,29 @@ public class PersistenciaReviews {
         try {
             // Leer todo el contenido del archivo JSON
             String content = new String(Files.readAllBytes(Paths.get(ARCHIVO_REVIEWS)));
+            
+            if (!content.isBlank())
+            {
+            	// Convertir el contenido en un JSONArray
+            	JSONArray jsonReviews = new JSONArray(content);
 
-            // Convertir el contenido en un JSONArray
-            JSONArray jsonReviews = new JSONArray(content);
+            	// Iterar sobre cada objeto en el JSONArray
+            	for (int i = 0; i < jsonReviews.length(); i++) {
+            		JSONObject jsonReview = jsonReviews.getJSONObject(i);
 
-            // Iterar sobre cada objeto en el JSONArray
-            for (int i = 0; i < jsonReviews.length(); i++) {
-                JSONObject jsonReview = jsonReviews.getJSONObject(i);
+            		// Obtener los datos de la review
+            		String fecha = jsonReview.getString("fecha");
+            		String contenido = jsonReview.getString("contenido");
+            		float rating = (float) jsonReview.getDouble("rating");
+            		String tipo = jsonReview.getString("tipo");
 
-                // Obtener los datos de la review
-                String fecha = jsonReview.getString("fecha");
-                String contenido = jsonReview.getString("contenido");
-                float rating = (float) jsonReview.getDouble("rating");
-                String tipo = jsonReview.getString("tipo");
+            		// Crear una instancia de Review
+            		Review review = new Review(fecha, contenido, tipo);
+            		review.setRating(rating);  
 
-                // Crear una instancia de Review
-                Review review = new Review(fecha, contenido, tipo);
-                review.setRating(rating);  
-
-                // Guardar la review en el mapa usando 'contenido' como llave
-                reviews.put(contenido, review);
+            		// Guardar la review en el mapa usando 'contenido' como llave
+            		reviews.put(contenido, review);
+            	}
             }
 
         } catch (IOException e) {

@@ -1,6 +1,6 @@
 package excepciones;
 
-import modelo.Actividad;
+import modelo.actividades.Actividad;
 
 /**
  * Esta excepción se utiliza cuando el programa, por alguna razón, deja al estudiante
