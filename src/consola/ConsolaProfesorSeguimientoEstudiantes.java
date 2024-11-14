@@ -1,5 +1,6 @@
 package consola;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -144,6 +145,9 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 		case 2:
 			verEstudiantesLearningPath(prof, imprimir, scan);
 			
+		case 3:
+			verActividadesPendientesCalificar(prof, imprimir, scan);
+			
 		case 4:
 			verActividadesPendientesCalificarLearningPath(prof, imprimir, scan);
 		}
@@ -213,13 +217,73 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 		}
 	}
 	
+	private void verActividadesPendientesCalificar(Profesor prof, ImprimirConsola imprimir, Scanner scan)
+	{
+		Map<String, LearningPath>lps = prof.getLearningPathsCreados();
+		if (!lps.isEmpty())
+		{
+			LearningPath lp;
+			for (String nomLp: lps.keySet())
+			{
+				lp = lps.get(nomLp);
+				seleccionarMostrarActividadesPendientes(prof, imprimir, scan, lp, false);
+			}
+		}
+		else
+		{
+			System.out.println("No tiene Learning Paths creados");
+		}
+	}
+	
 	private void verActividadesPendientesCalificarLearningPath(Profesor prof, ImprimirConsola imprimir, Scanner scan)
 	{
 		LearningPath lpSeleccionado = seleccionarLearningPaths(prof, imprimir, scan);
 		if (lpSeleccionado != null)
 		{
-			
+			seleccionarMostrarActividadesPendientes(prof, imprimir, scan, lpSeleccionado, false);
 		}
+	}
+	
+	private void calificarActividadEstudiante(Profesor prof, ImprimirConsola imprimir, Scanner scan, ManejoDatos datos)
+	{
+		System.out.println("Seleccione el Learning Path al que pertenece el estudiante: \n");
+		LearningPath lpSeleccionado = seleccionarLearningPaths(prof, imprimir, scan);
+		if (lpSeleccionado != null)
+		{
+			Map<String, Actividad> seleccionado = seleccionarMostrarActividadesPendientes(prof, imprimir, scan, lpSeleccionado, true);
+			if (!seleccionado.isEmpty())
+			{
+				String estudiante = null;
+				Actividad act = null;
+				for (String e: seleccionado.keySet())
+				{
+					estudiante = e;
+					act = seleccionado.get(e);
+				}
+				if (estudiante != null && act != null)
+				{
+					System.out.println("La actividad del estudiante "+ estudiante + " escogida es: ");
+					imprimir.imprimirActividad(act, false, true, true);
+					System.out.println("Desea calificarla?(y/n): ");
+					String op = scan.nextLine();
+					if (!op.equals("y") || !op.equals("n"))
+					{
+						System.out.println("Opcion invalida. Intente de nuevo: ");
+						op = scan.nextLine();
+					}
+					if (op.equals("y"))
+					{
+						calificar(act, datos, lpSeleccionado);
+					}
+				}
+				
+			}
+		}
+	}
+	
+	private void calificar(Actividad act, ManejoDatos datos, LearningPath lp)
+	{
+		
 	}
 	
 	private LearningPath seleccionarLearningPaths(Profesor prof, ImprimirConsola imprimir, Scanner scan)
@@ -258,27 +322,65 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 		return lpSeleccionado;
 	}
 	
-	private Actividad seleccionarMostrarActividadesPendientes(Profesor prof, ImprimirConsola imprimir, Scanner scan, LearningPath lpSeleccionado, boolean seleccionar)
+	private Map<String, Actividad> seleccionarMostrarActividadesPendientes(Profesor prof, ImprimirConsola imprimir, Scanner scan, LearningPath lpSeleccionado, boolean seleccionar)
 	{
+		Map<String, Actividad> actEstudiante = new HashMap<String, Actividad>();
 		Actividad act = null;
+		String e = "";
 		String nombreLpSeleccionado = lpSeleccionado.getTitulo();
+		String num = "";
+		int i = 1;
 		Map<String, Progreso> progEstudiantes = lpSeleccionado.getProgresosEstudiantiles();
 		if (!progEstudiantes.isEmpty())
 		{
-			System.out.println("\nEstos son las actividades pendientes para el Learning Path '"+nombreLpSeleccionado+"'\n");
 			Progreso progEstudiante;
+			System.out.println("\nEstos son las actividades pendientes por calificar para el Learning Path '"+nombreLpSeleccionado+"' por cada estudiante inscrito:\n");
+			Map<Integer, Actividad> acts = new HashMap<Integer, Actividad>();
+			Map<Integer, String> estudiantes = new HashMap<Integer, String>();
 			for (String loginEst: progEstudiantes.keySet())
 			{
 				progEstudiante = progEstudiantes.get(loginEst);
-				if (progEstudiante != null)
-					imprimir.imprimirProgreso(progEstudiante);
+				System.out.println("Estudiante: "+ loginEst);
+				boolean tieneActividades = false;
+				for(Actividad actCompletada: progEstudiante.getActCompletadas())
+				{
+					if (actCompletada.getEstado().equals("Sin completar"))
+					{
+						num = Integer.toString(i) + ". ";					
+						i++;
+						acts.put(i, actCompletada);
+						estudiantes.put(i, loginEst);
+						System.out.print(num);
+						imprimir.imprimirActividad(actCompletada, false, true, true);
+						tieneActividades = true;	
+					}
+				}
+				if (!tieneActividades)
+				{
+					System.out.println("No tiene actividades pendientes por calificar\n");
+				}
+			}
+			if (seleccionar)
+			{
+				int op = -1;
+				System.out.println();
+				System.out.println("Seleccione el número de la actividad que quiere calificar: ");
+				op = scan.nextInt();
+				if (!acts.containsKey(op))
+				{
+					System.out.println("Opcion invalida. Intente de nuevo: ");
+					op = scan.nextInt();
+				}
+				act = acts.get(op);
+				e = estudiantes.get(op);
+				actEstudiante.put(e, act);
 			}
 		}
 		else
 		{
 			System.out.println("No hay actividades pendientes por calificar en el Learning Path '"+nombreLpSeleccionado+"'\n");
 		}
-		return act;
+		return actEstudiante;
 	}
 	
 	/**

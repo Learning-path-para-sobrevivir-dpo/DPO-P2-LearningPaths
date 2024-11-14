@@ -55,6 +55,7 @@ public class PersistenciaActividades {
             		int tiempoCompletarSugerido = jsonActividad.getInt("tiempoCompletarSugerido");
             		String tipoActividad = jsonActividad.getString("tipoActividad");
             		boolean completada = jsonActividad.getBoolean("completada");
+            		String estado = jsonActividad.getString("estado");
 
             		// Crear una instancia de Actividad
             		Actividad actividad;
@@ -147,6 +148,7 @@ public class PersistenciaActividades {
             			throw new IllegalArgumentException("Tipo de actividad desconocido: " + tipoActividad);
             		}
             		actividad.setCompletada(completada);
+            		actividad.setEstado(estado);
             		id = actividad.getId();
 
             		// Leer las reviews de la actividad
@@ -196,6 +198,7 @@ public class PersistenciaActividades {
                 jsonActividad.put("id", actividad.getId());
                 jsonActividad.put("idEstudiante", actividad.getIdEstudiante());
                 jsonActividad.put("completada", actividad.isCompletada());
+                jsonActividad.put("estado", actividad.getEstado());
 
                 // Procesar las actividades según su tipo
                 if (actividad instanceof Encuesta) {
