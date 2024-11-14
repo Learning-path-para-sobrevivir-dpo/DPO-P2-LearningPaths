@@ -21,9 +21,18 @@
         "rating": 0,
         "titulo": "Arte y Sociedad",
         "estudiantes": ["Juliana Hernandez"],
+<<<<<<< HEAD
         "actividades": {"1": "52491279"},
+=======
+        "actividades": {
+            "1": "51977106",
+            "2": "95752950",
+            "3": "31997514",
+            "4": "40579652"
+        },
+>>>>>>> branch 'master' of https://github.com/Learning-path-para-sobrevivir-dpo/DPO-P2-LearningPaths.git
         "version": 1,
-        "autor": "profesor",
+        "autor": "Marta Martínez",
         "objetivo": "Aprender sobre arte y sociedad",
         "progresosEstudiantiles": {"Juliana Hernandez": [
             "Arte y Sociedad",

@@ -80,6 +80,7 @@ public class PersistenciaLearningPaths {
             			if (actividad != null) {
             				learningPath.getActividades().put(orden, actividad);
             			}
+            			
             		}
 
             		// Agregar el LearningPath al HashMap

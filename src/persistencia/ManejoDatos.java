@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-
+import excepciones.LearningPathIncorrectoProgresoException;
 import modelo.*;
 import modelo.actividades.Actividad;
 import modelo.actividades.Pregunta;
@@ -113,6 +113,7 @@ public class ManejoDatos {
 		{
 			List<String> infoUsuario = crearLlaveUsuario(usuario.getLogin(), usuario.getContraseña());
 			this.usuarios.replace(infoUsuario, usuario);
+			PersistenciaUsuarios.guardarUsuarios(usuarios);
 		}
 	}
 	
@@ -153,7 +154,20 @@ public class ManejoDatos {
 		{
 			actividades.put(actividad.getId(), actividad);
 	        PersistenciaActividades.guardarActividades(actividades);
-        }}
+        }
+	}
+	
+	public void addActividadClonadaProgreso(Actividad actividad)
+	{
+		if (actividad != null)
+		{
+			if (!actividad.getIdEstudiante().equals(""))
+			{
+				actividades.put(actividad.getIdEstudiante(), actividad);
+				PersistenciaActividades.guardarActividades(actividades);
+			}
+        }
+	}
 	
 	/**
 	 * Encuentra una actividad por su nombre
@@ -207,14 +221,18 @@ public class ManejoDatos {
 		if (path != null)
 		{
 			this.learningPaths.replace(path.getTitulo(), path);
+			PersistenciaLearningPaths.guardarLearningPaths(learningPaths);
 		}
 	}
 //Manejo de progreso, reviews, preguntas
 	
-	public void addProgreso(Progreso progreso)
+	public void addProgreso(Progreso progreso) throws LearningPathIncorrectoProgresoException
 	{
 		if (progreso != null)
 		{
+			String lp = progreso.getLearningPath();
+			LearningPath lpProgreso = this.learningPaths.get(lp);
+			progreso.obtenerActividadesPath(lpProgreso);
 			this.progresos.put(List.of(progreso.getLearningPath(),progreso.getEstudiante()), progreso);
 			PersistenciaProgresos.guardarProgreso(progresos);
 		}

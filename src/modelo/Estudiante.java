@@ -26,7 +26,7 @@ public class Estudiante extends Usuario {
 	 * mapa de progresos por el título del Learning Path
 	 * @param nuevoLP: Learning path a inscribir en el perfil del estudiante
 	 */
-	public void inscribirLearningPath(LearningPath nuevoLP) {
+	public Progreso inscribirLearningPath(LearningPath nuevoLP) {
         String titulo = nuevoLP.getTitulo();
 
         if (learningPaths.containsKey(titulo)) {
@@ -38,6 +38,7 @@ public class Estudiante extends Usuario {
         Progreso newProgreso = new Progreso(titulo, this.getLogin());//Galarza: cambie nuevoLp por titulo, y agregue el getLogic() para que en el progreso guarde el usuario
         this.progresosLearningPaths.put(titulo, newProgreso);
         nuevoLP.addProgresoEstudiante(newProgreso);
+        return newProgreso;
     }
 	
 	/**

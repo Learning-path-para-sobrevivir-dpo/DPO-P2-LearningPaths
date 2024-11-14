@@ -8,7 +8,7 @@ import modelo.*;
 
 public abstract class Actividad implements Cloneable {
 	public String titulo;
-	public String descripcion;
+	public String objetivo;
 	public int nivelDificultad;
 	public int duracionMin;
 	public boolean obligatorio;
@@ -26,7 +26,6 @@ public abstract class Actividad implements Cloneable {
 	
 	//Un HashSet con todos los IDs que ya se han utilizado para actividades
 	private static Set<String> ids = new HashSet<String>( );
-	private static Set<String> idsEstudiantes = new HashSet<String>( );
 	
 	public static final int FACIL = 1;
 	public static final int INTERMEDIO = 2;
@@ -36,7 +35,7 @@ public abstract class Actividad implements Cloneable {
 			int tiempoCompletarSugerido, String tipo) {
 		super();
 		this.titulo = titulo;
-		this.descripcion = descripcion;
+		this.objetivo = descripcion;
 		this.nivelDificultad = nivelDificultad;
 		this.duracionMin = duracionMin;
 		this.obligatorio = obligatorio;
@@ -50,25 +49,40 @@ public abstract class Actividad implements Cloneable {
 		this.estado = "Sin completar";
 		this.completada = false;
 		this.completada = false;       
-		this.id = this.generarID(false);
+		this.id = this.generarID();
+        this.idEstudiante = "";
+	}
+	
+	public Actividad(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+			int tiempoCompletarSugerido, String tipo, String id, String idEstudiante) {
+		super();
+		this.titulo = titulo;
+		this.objetivo = descripcion;
+		this.nivelDificultad = nivelDificultad;
+		this.duracionMin = duracionMin;
+		this.obligatorio = obligatorio;
+		this.tiempoCompletarSugerido = tiempoCompletarSugerido;
+		this.actPreviasSugeridas = new ArrayList<Actividad>();
+		this.reviews = new ArrayList<Review>();
+		this.ratingAcumulado = 0;
+		this.ratingPromedio = 0;
+		this.numRatings = 0;
+		this.setTipoActividad(tipo);
+		this.estado = "Sin completar";
+		this.completada = false;
+		this.completada = false;       
+		this.id = id;
+		Actividad.registrarIDActividad(this);
         this.idEstudiante = "";
 	}
 	
 	
-	private String generarID(boolean isIDEstudiante)
+	private String generarID()
 	{
 		//Para crear un identificador unico para la actividad
 		int numero = ( int ) ( Math.random( ) * 10e7 );
 		String codigo = "" + numero;
-		Set<String> idsbuscados;
-		if (isIDEstudiante)
-		{
-			idsbuscados = idsEstudiantes;
-		}
-		else
-		{
-			idsbuscados = ids;
-		}
+		Set<String> idsbuscados = ids;
 		while( idsbuscados.contains( codigo ) )
 		{
 			numero = ( int ) ( Math.random( ) * 10e7 );
@@ -83,12 +97,15 @@ public abstract class Actividad implements Cloneable {
 	
 	public void actividadClonadaProfesor()
 	{
-		this.id = this.generarID(false);
+		this.id = this.generarID();
 	}
 	
+	/**
+	 * Genera un ID único para una actividad clonada
+	 */
 	public void actividadClonadaProgreso()
 	{
-		this.idEstudiante = this.generarID(true);
+		this.idEstudiante = this.generarID();
 	}
 
 	public void setTitulo(String titulo) {
@@ -99,12 +116,12 @@ public abstract class Actividad implements Cloneable {
 		return this.titulo;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
+	public String getObjetivo() {
+		return objetivo;
 	}
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public void setObjetivo(String objetivo) {
+		this.objetivo = objetivo;
 	}
 
 	public int getNivelDificultad() {
@@ -208,9 +225,9 @@ public abstract class Actividad implements Cloneable {
 	{
 		String unID = actividad.getId();
 		ids.add(unID);
-		if (!actividad.getIdEstudiante().equals(""))
+		if (actividad.getIdEstudiante() != null)
 		{
-			idsEstudiantes.add(actividad.getIdEstudiante());
+			ids.add(actividad.getIdEstudiante());
 		}
 	}
 	

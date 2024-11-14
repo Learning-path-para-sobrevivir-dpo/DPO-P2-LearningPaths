@@ -15,7 +15,10 @@
         "actividadesCreadas": [],
         "tipo": "profesor",
         "tipoEspecifico": "Profesor",
-        "learningPathsCreados": ["Arte y Sociedad"],
+        "learningPathsCreados": [
+            "Estructuras de Datos en Java",
+            "Arte y Sociedad"
+        ],
         "correo": "m.martinez@gmail.com",
         "login": "Marta Martínez",
         "contraseña": "Mart123"

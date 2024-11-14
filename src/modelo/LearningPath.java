@@ -24,6 +24,7 @@ public class LearningPath {
 	//Mapa donde las actividades estan identificadas por un número que indica
 	//el orden sugerido para completar las actividades
 	private Map<Integer,Actividad> actividades;
+	private List<Actividad> posActs;
 	
 	public LearningPath(String titulo, String descripcion, String objetivo, int nivelDificultad, int rating,
 			String fechaCreacion, String fechaModificacion, int version, String autor) {
@@ -40,6 +41,7 @@ public class LearningPath {
 		this.autor = autor;
 		this.estudiantes = new ArrayList<String>();
 		this.actividades = new HashMap<Integer,Actividad>();
+		this.posActs = new ArrayList<Actividad>();
 	}
 	
 
@@ -130,11 +132,22 @@ public class LearningPath {
 
 	public void setActividades(Map<Integer,Actividad> actividades) {
 		this.actividades = actividades;
+		this.getPosActividades();
 		this.calcularDuracion();
 	}
 	
 	public int getDuracion() {
 		return duracion;
+	}
+	
+	private void getPosActividades()
+	{
+		Map<Integer,Actividad> acts = this.actividades;
+		List<Actividad> posActs = new ArrayList<Actividad>();
+		for (int i = 1; i <= this.actividades.size(); i++)
+		{
+			posActs.add(acts.get(i));
+		}
 	}
 	
 	/**
@@ -160,7 +173,9 @@ public class LearningPath {
     public void addActividadDeUltimas(Actividad act)
     {
     	int numActividades = this.actividades.size();
+    	System.out.println(numActividades);
     	this.actividades.put(numActividades+1, act);
+    	this.posActs.add(act);
     }
     
     /**
@@ -177,25 +192,21 @@ public class LearningPath {
     	}
     	else if (pos > 0  && pos <= numActividades)
     	{
-    		int i = pos;
-    		Actividad tempAct1 = this.actividades.get(i);
-    		Actividad tempAct2;
-    		this.actividades.replace(i, act);
-    		i++;
-    		int tamanio = this.actividades.size();
-    		while (i<=tamanio + 1)
+    		if (this.posActs.contains(act))
     		{
-    			if (i <= tamanio)
-    			{
-    				tempAct2 = this.actividades.get(i);
-        			this.actividades.replace(i, tempAct1);
-        			tempAct1 = tempAct2;
-    			} else
-    			{
-    				this.addActividadDeUltimas(tempAct1);
-    			}
-    			i++;
-    		} 
+    			this.posActs.remove(act);
+    			this.posActs.add(pos-1, act);
+    		}
+    		else
+    		{
+    			this.posActs.add(pos-1, act);
+    		}
+    		Map<Integer,Actividad> acts = new HashMap<Integer, Actividad>();
+    		for (int i = 0; i < this.posActs.size(); i++)
+    		{
+    			acts.put(i+1, act);
+    		}
+    		this.actividades = acts;
     	}
     }
 
