@@ -423,7 +423,7 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 				boolean tieneActividades = false;
 				for(Actividad actCompletada: progEstudiante.getActCompletadas())
 				{
-					if (actCompletada.getEstado().equals("Sin completar"))
+					if (actCompletada.getEstado().equals("Sin completar") || actCompletada.getEstado().equals("No Exitosa") )
 					{
 						num = Integer.toString(i) + ". ";					
 						i++;
