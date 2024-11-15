@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import excepciones.CompletarActividadQueNoEstaEnProgresoException;
 import excepciones.LearningPathIncorrectoProgresoException;
 import excepciones.YaExisteActividadEnProgresoException;
 import modelo.actividades.Actividad;
@@ -181,11 +182,11 @@ public class Progreso {
 		this.actividadEnProgreso = act;
 	}
 	
-	public boolean completarActividad(Actividad act) throws Exception {
+	public boolean completarActividad(Actividad act) throws CompletarActividadQueNoEstaEnProgresoException {
 		boolean completada = false;
 		if (!act.equals(this.actividadEnProgreso))
 		{
-			throw new Exception("Se intento completar una actividad que no estaba en progreso");
+			throw new CompletarActividadQueNoEstaEnProgresoException(act);
 		}
 		completada = act.completarActividad();
 		eliminarActividadPendiente(act);
@@ -355,7 +356,7 @@ public class Progreso {
 		{
 			this.actPendientes.add(act);
 		}
-		if (!this.actObligatoriasPendientes.contains(act))
+		if (!this.actObligatoriasPendientes.contains(act) && act.isObligatorio())
 		{
 			this.actObligatoriasPendientes.add(act);
 		}
@@ -391,7 +392,7 @@ public class Progreso {
 		{
 			this.actCompletadas.add(act);
 		}
-		if (!this.actObligatoriasCompletadas.contains(act))
+		if (!this.actObligatoriasCompletadas.contains(act) && act.isObligatorio())
 		{
 			this.actObligatoriasCompletadas.add(act);
 		}
