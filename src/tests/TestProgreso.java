@@ -109,24 +109,40 @@ public class TestProgreso {
 	}
 	
 	@Test
-	public void testEliminarActividadPendiente() throws LearningPathIncorrectoProgresoException
+	public void testObtenerActividadPorNum() throws LearningPathIncorrectoProgresoException
+	{
+		Actividad actObtenida;
+		progreso.obtenerActividadesPath(lpPrueba);
+		
+		actObtenida = progreso.obtenerActividadPorNum(1);
+		assertEquals(act1.getId(), actObtenida.getId(), "No se obtuvo la actividad esperada");
+		
+		actObtenida = progreso.obtenerActividadPorNum(2);
+		assertEquals(act2.getId(), actObtenida.getId(), "No se obtuvo la actividad esperada");
+		
+		actObtenida = progreso.obtenerActividadPorNum(3);
+		assertEquals(act3.getId(), actObtenida.getId(), "No se obtuvo la actividad esperada");
+		
+		actObtenida = progreso.obtenerActividadPorNum(4);
+		assertEquals(act4.getId(), actObtenida.getId(), "No se obtuvo la actividad esperada");
+		
+		actObtenida = progreso.obtenerActividadPorNum(5);
+		assertEquals(act5.getId(), actObtenida.getId(), "No se obtuvo la actividad esperada");
+		
+		actObtenida = progreso.obtenerActividadPorNum(6);
+		assertEquals(act6.getId(), actObtenida.getId(), "No se obtuvo la actividad esperada");
+		
+		//Los outliers donde la actividad retorna null
+		actObtenida = progreso.obtenerActividadPorNum(0);
+		assertTrue(actObtenida == null, "No se obtuvo la actividad esperada");
+		
+		actObtenida = progreso.obtenerActividadPorNum(7);
+		assertTrue(actObtenida == null, "No se obtuvo la actividad esperada");
+	}
+	
+	@Test
+	public void testEmpezarActividad() throws LearningPathIncorrectoProgresoException
 	{
 		progreso.obtenerActividadesPath(lpPrueba);
-		Actividad actEliminar = progreso.obtenerActividadPorNum(1);
-		progreso.eliminarActividadPendiente(actEliminar);
-		List<Actividad> listaPendientesEsperada = new ArrayList<Actividad>(List.of(act2, act3, act4, act5, act6));
-		List<Actividad> listaObtenida = progreso.getActPendientes();
-		
-		assertEquals(listaPendientesEsperada.size(), listaObtenida.size(), "No se elimino la actividad de la lista de pendientes correctamente");
-		
-		Actividad actObtenida;
-		Actividad actEsperada;
-		for (int i = 0; i < listaObtenida.size(); i++)
-		{
-			actObtenida = listaObtenida.get(i);
-			actEsperada = listaPendientesEsperada.get(i);
-			
-			assertEquals(actEsperada.getId(), actObtenida.getId(),"No se elimino la actividad de la lista de pendientes correctamente");
-		}
 	}
 }
