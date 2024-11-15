@@ -1,9 +1,11 @@
 package tests;
 
+import static org.junit.Assume.assumeTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -346,5 +348,88 @@ public class TestProgreso {
 		//que las listas de actividades obligatorias pendientes y completadas cambien
 		assertFalse(progreso.getActObligatoriasPendientes().contains(actCompletar),  "No se actualizaron las listas de actividades pendientes y completadas como era de esperarse");
 		assertTrue(progreso.getActObligatoriasCompletadas().contains(actCompletar),  "No se actualizaron las listas de actividades pendientes y completadas como era de esperarse");
+	}
+	
+	@Test
+	public void testCompletarActividadQueNoEstaEnProgresoExceptionSinActividadEmpezada() throws LearningPathIncorrectoProgresoException
+	{
+		progreso.obtenerActividadesPath(lpPrueba);
+		Actividad actCompletar = progreso.obtenerActividadPorNum(1);
+		
+		assertThrows(CompletarActividadQueNoEstaEnProgresoException.class, ()->progreso.completarActividad(actCompletar));
+	}
+	
+	@Test
+	public void testCompletarActividadQueNoEstaEnProgresoExceptionConActividadEmpezada() throws LearningPathIncorrectoProgresoException, YaExisteActividadEnProgresoException
+	{
+		progreso.obtenerActividadesPath(lpPrueba);
+		Actividad actEmpezada = progreso.obtenerActividadPorNum(5);
+		Actividad actCompletar = progreso.obtenerActividadPorNum(1);
+		
+		progreso.empezarActividad(actEmpezada);
+		
+		assertThrows(CompletarActividadQueNoEstaEnProgresoException.class, ()->progreso.completarActividad(actCompletar));
+	}
+	
+	@Test
+	public void testDescompletarActividadObligatoriaCompletada() throws LearningPathIncorrectoProgresoException, YaExisteActividadEnProgresoException, CompletarActividadQueNoEstaEnProgresoException
+	{
+		progreso.obtenerActividadesPath(lpPrueba);
+		Actividad actCompletar = progreso.obtenerActividadPorNum(1);
+		progreso.empezarActividad(actCompletar);
+		progreso.completarActividad(actCompletar);
+		assumeTrue(progreso.getActCompletadas().contains(actCompletar));
+		assumeTrue(progreso.getActObligatoriasCompletadas().contains(actCompletar)); //Como la actividad 1 es obligatoria, tambien tiene que estar en la lista de Obligatorias
+		assumeTrue(actCompletar.isCompletada());
+		
+		progreso.descompletarActividad(actCompletar);
+		assertFalse(progreso.getActCompletadas().contains(actCompletar), "No se actualizaron las listas de actividades pendientes y completadas como era de esperarse");
+		assertFalse(progreso.getActObligatoriasCompletadas().contains(actCompletar), "No se actualizaron las listas de actividades pendientes y completadas como era de esperarse");
+		
+		assertTrue(progreso.getActPendientes().contains(actCompletar), "No se actualizaron las listas de actividades pendientes y completadas como era de esperarse");
+		assertTrue(progreso.getActObligatoriasPendientes().contains(actCompletar), "No se actualizaron las listas de actividades pendientes y completadas como era de esperarse");
+		
+		assertFalse(actCompletar.isCompletada(), "No se actualizó el estado de la actividad");
+	}
+	
+	public void testDescompletarActividadNoObligatoriaCompletada() throws LearningPathIncorrectoProgresoException, YaExisteActividadEnProgresoException, CompletarActividadQueNoEstaEnProgresoException
+	{
+		progreso.obtenerActividadesPath(lpPrueba);
+		Actividad actCompletar = progreso.obtenerActividadPorNum(5); //Encuesta no obligatoria
+		progreso.empezarActividad(actCompletar);
+		Encuesta p = (Encuesta) actCompletar;
+		p.setRespondida(true);
+		progreso.completarActividad(actCompletar);
+		assumeTrue(progreso.getActCompletadas().contains(actCompletar));
+		assumeFalse(progreso.getActObligatoriasCompletadas().contains(actCompletar)); //Como la actividad 1 es obligatoria, tambien tiene que estar en la lista de Obligatorias
+		assumeTrue(actCompletar.isCompletada());
+		
+		progreso.descompletarActividad(actCompletar);
+		assertFalse(progreso.getActCompletadas().contains(actCompletar), "No se actualizaron las listas de actividades pendientes y completadas como era de esperarse");
+		assertFalse(progreso.getActObligatoriasCompletadas().contains(actCompletar), "No se actualizaron las listas de actividades pendientes y completadas como era de esperarse");
+		
+		assertTrue(progreso.getActPendientes().contains(actCompletar), "No se actualizaron las listas de actividades pendientes y completadas como era de esperarse");
+		assertFalse(progreso.getActObligatoriasPendientes().contains(actCompletar), "No se actualizaron las listas de actividades pendientes y completadas como era de esperarse");
+		
+		assertFalse(actCompletar.isCompletada(), "No se actualizó el estado de la actividad");
+	}
+	
+	@Test
+	public void testDescompletarActividadNoCompletada() throws LearningPathIncorrectoProgresoException, YaExisteActividadEnProgresoException
+	{
+		progreso.obtenerActividadesPath(lpPrueba);
+		Actividad actCompletar = progreso.obtenerActividadPorNum(1); //Actividad obligatoria
+		progreso.empezarActividad(actCompletar);
+		assumeFalse(progreso.getActCompletadas().contains(actCompletar));
+		assumeFalse(progreso.getActObligatoriasCompletadas().contains(actCompletar)); 
+		assumeFalse(actCompletar.isCompletada());
+		
+		progreso.descompletarActividad(actCompletar);
+		assertFalse(progreso.getActCompletadas().contains(actCompletar), "No se actualizaron las listas de actividades pendientes y completadas como era de esperarse");
+		assertFalse(progreso.getActObligatoriasCompletadas().contains(actCompletar), "No se actualizaron las listas de actividades pendientes y completadas como era de esperarse");
+		
+		assertTrue(progreso.getActPendientes().contains(actCompletar), "No se actualizaron las listas de actividades pendientes y completadas como era de esperarse");
+		//Como la actividad 1 es obligatoria, tiene que estar en la lista de Obligatorias
+		assertTrue(progreso.getActObligatoriasPendientes().contains(actCompletar), "No se actualizaron las listas de actividades pendientes y completadas como era de esperarse");
 	}
 }

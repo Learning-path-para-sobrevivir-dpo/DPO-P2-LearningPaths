@@ -196,9 +196,13 @@ public class Progreso {
 	}
 	
 	public void descompletarActividad(Actividad act){
-		eliminarActividadCompletada(act);
-		addActividadPendiente(act);
-		this.calcularProgreso();
+		if (this.actCompletadas.contains(act))
+		{
+			eliminarActividadCompletada(act);
+			addActividadPendiente(act);
+			this.calcularProgreso();
+			act.descompletarActividad();
+		}
 	}
 	
 	/**
