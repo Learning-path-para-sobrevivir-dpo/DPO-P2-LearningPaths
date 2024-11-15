@@ -209,7 +209,7 @@ public class Progreso {
 		return this.getActividadesPath();
 	}
 	
-	public void obtenerActPendientes() { //Galarza: agregue atributo de hash map
+	private void obtenerActPendientes() { //Galarza: agregue atributo de hash map
 		
 		List<Actividad> actividades = new ArrayList<Actividad>();
 		Actividad act;
@@ -224,7 +224,7 @@ public class Progreso {
 		this.actPendientes = actividades;
 	}
 	
-	public void obtenerActObligatoriasPendientes() {
+	private void obtenerActObligatoriasPendientes() {
 		List<Actividad> actividades = new ArrayList<Actividad>();
 		for (Actividad act: this.actPendientes)
 		{
@@ -236,7 +236,7 @@ public class Progreso {
 		this.actObligatoriasPendientes = actividades;
 	}
 	
-	public void obtenerActCompletadas() {
+	private void obtenerActCompletadas() {
 		List<Actividad> actividades = new ArrayList<Actividad>();
 		Actividad act;
 		for (String idEstudiante: this.actividadesPath.keySet())
@@ -250,7 +250,7 @@ public class Progreso {
 		this.actCompletadas = actividades;
 	}
 	
-	public void obtenerActObligatoriasCompletadas() {
+	private void obtenerActObligatoriasCompletadas() {
 		List<Actividad> actividades = new ArrayList<Actividad>();
 		for (Actividad act: this.actCompletadas)
 		{
@@ -276,6 +276,7 @@ public class Progreso {
 			}
 		}
 	}
+	
 	public void addActividadPendiente(Actividad act)
 	{
 		if (!this.actPendientes.contains(act))
@@ -357,13 +358,12 @@ public class Progreso {
 			return null;
 		}
 		String idActividad = this.ordenActividades.get(numActividad-1);
-		Actividad actividad = this.actividadesPath.get(idActividad);
+		Actividad actividad = this.idActividadesOriginales.get(idActividad);
 		return actividad;
 	}
 
 	public void setActividadEnProgreso(Actividad actividadEnProgreso2) {
 		this.actividadEnProgreso= actividadEnProgreso2;
-		
 	}
 	
 }

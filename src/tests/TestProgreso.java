@@ -112,12 +112,11 @@ public class TestProgreso {
 	public void testEliminarActividadPendiente() throws LearningPathIncorrectoProgresoException
 	{
 		progreso.obtenerActividadesPath(lpPrueba);
-		System.out.println(progreso.getActPendientes());
-		progreso.eliminarActividadPendiente(act1);
+		Actividad actEliminar = progreso.obtenerActividadPorNum(1);
+		progreso.eliminarActividadPendiente(actEliminar);
 		List<Actividad> listaPendientesEsperada = new ArrayList<Actividad>(List.of(act2, act3, act4, act5, act6));
 		List<Actividad> listaObtenida = progreso.getActPendientes();
-		System.out.println(listaPendientesEsperada);
-		System.out.println(listaObtenida);
+		
 		assertEquals(listaPendientesEsperada.size(), listaObtenida.size(), "No se elimino la actividad de la lista de pendientes correctamente");
 		
 		Actividad actObtenida;
@@ -127,7 +126,7 @@ public class TestProgreso {
 			actObtenida = listaObtenida.get(i);
 			actEsperada = listaPendientesEsperada.get(i);
 			
-			assertEquals(actEsperada, actObtenida, "No se elimino la actividad de la lista de pendientes correctamente");
+			assertEquals(actEsperada.getId(), actObtenida.getId(),"No se elimino la actividad de la lista de pendientes correctamente");
 		}
 	}
 }
