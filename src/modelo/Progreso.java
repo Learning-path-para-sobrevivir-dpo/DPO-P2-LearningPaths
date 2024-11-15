@@ -54,7 +54,21 @@ public class Progreso {
 		this.actividadEnProgreso = actividadEnProgreso;
 	}
 
+	public List<String> getOrdenActividades() {
+		return ordenActividades;
+	}
 
+	public void setOrdenActividades(List<String> ordenActividades) {
+		this.ordenActividades = ordenActividades;
+	}
+
+	public Map<String, Actividad> getIdActividadesOriginales() {
+		return idActividadesOriginales;
+	}
+
+	public void setIdActividadesOriginales(Map<String, Actividad> idActividadesOriginales) {
+		this.idActividadesOriginales = idActividadesOriginales;
+	}
 
 	public Map<String, Actividad> getActividadesPath() {
 		return actividadesPath;
@@ -199,9 +213,9 @@ public class Progreso {
 		
 		List<Actividad> actividades = new ArrayList<Actividad>();
 		Actividad act;
-		for (String idEstudiante: this.actividadesPath.keySet())
+		for (String id: this.ordenActividades)
 		{
-			act = this.actividadesPath.get(idEstudiante);
+			act = this.idActividadesOriginales.get(id);
 			if (!act.isCompletada())
 			{
 				actividades.add(act);
@@ -255,12 +269,12 @@ public class Progreso {
 			this.actPendientes.remove(pos);
 		}
 		if (this.actObligatoriasPendientes != null) {
-		if (this.actObligatoriasPendientes.contains(act))
-		{
-			int pos = this.actObligatoriasPendientes.indexOf(act);
-			this.actObligatoriasPendientes.remove(pos);
+			if (this.actObligatoriasPendientes.contains(act))
+			{
+				int pos = this.actObligatoriasPendientes.indexOf(act);
+				this.actObligatoriasPendientes.remove(pos);
+			}
 		}
-	}
 	}
 	public void addActividadPendiente(Actividad act)
 	{
