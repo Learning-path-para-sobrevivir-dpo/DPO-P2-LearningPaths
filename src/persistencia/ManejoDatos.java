@@ -183,6 +183,22 @@ public class ManejoDatos {
 		return actividad;
 	}
 	
+	public void actualizarActividad(Actividad act)
+	{
+		if (act != null)
+		{
+			if (act.getIdEstudiante().equals(""))
+			{
+				this.actividades.replace(act.getId(), act);
+			}
+			else
+			{
+				this.actividades.replace(act.getIdEstudiante(), act);
+			}
+			PersistenciaActividades.guardarActividades(actividades);
+		}
+	}
+	
 	//Manejo de Learning Paths /////////////////////////////////////
 	
 	/**
@@ -236,6 +252,17 @@ public class ManejoDatos {
 			this.progresos.put(List.of(progreso.getLearningPath(),progreso.getEstudiante()), progreso);
 			PersistenciaProgresos.guardarProgreso(progresos);
 		}
+	}
+	
+	public HashMap<List<String>, Progreso> getProgresos()
+	{
+		return progresos;
+	}
+	
+	public Progreso obtenerProgreso(String nombreLearningPath, String loginEstudiante)
+	{
+		Progreso prog = this.progresos.get(List.of(nombreLearningPath, loginEstudiante));
+		return prog;
 	}
 	
 	public void addReview(Review review)
