@@ -1,15 +1,26 @@
 package consola;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 import excepciones.LearningPathNoEncontradoException;
+import excepciones.TipoDePreguntaInvalidaException;
 import modelo.LearningPath;
 import modelo.Profesor;
 import modelo.Progreso;
+import modelo.Review;
 import modelo.Usuario;
 import modelo.actividades.Actividad;
+import modelo.actividades.Encuesta;
+import modelo.actividades.Examen;
+import modelo.actividades.PreguntaAbierta;
+import modelo.actividades.PreguntaMultiple;
+import modelo.actividades.PreguntaVerdaderoFalso;
+import modelo.actividades.Quiz;
+import modelo.actividades.QuizOpcionMultiple;
+import modelo.actividades.QuizVerdaderoFalso;
 import persistencia.ManejoDatos;
 
 public class ConsolaProfesorCreadorLearningPaths {
@@ -183,23 +194,28 @@ public class ConsolaProfesorCreadorLearningPaths {
             switch (actop) {
             
             case 1:
+            	crearRecursoEducativo(prof, scan);
                 
                 break;
                 
             case 2: 
+            	crearExamen(prof, scan);
 
                 break;
                 
             case 3: 
+            	crearQuiz(prof, scan);
 
                 break;
                 
             case 4: 
-
+            	crearEncuesta(prof,scan);
+            	
                 break;
                
             case 5: 
-
+            	crearTarea(prof, scan);
+            	
                 break;
             }
                   
@@ -268,12 +284,8 @@ public class ConsolaProfesorCreadorLearningPaths {
 		while (nivelDificultad == (0))
 		{
 			System.out.println("Ingrese la dificultad de 1 (fácil) a 3 (difícil): ");
-			String niv = scan.nextLine();
-			try {
-				nivelDificultad = Integer.parseInt(niv);
-			} catch (NumberFormatException e) {
-			    System.out.println("No se ingresó un número.");
-			}
+			nivelDificultad = leerEntero(scan);
+	
 		}
 		
 		
@@ -290,7 +302,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 	    }
 
 	    System.out.println("Sus Learning Paths creados son:");
-	    for (String titulo : paths.keySet()) {
+	    for (String titulo: paths.keySet()) {
 	        System.out.println("- " + titulo);
 	    }
 
@@ -316,18 +328,24 @@ public class ConsolaProfesorCreadorLearningPaths {
 	        }
 	    }
 
-	    // Mostrar las reseñas del Learning Path seleccionado
-	    System.out.println("Reseñas del Learning Path '" + seleccionado.getTitulo() + "':");
-	    int reseñas = seleccionado.getRating(); // Asegúrate de tener este método en la clase LearningPath
-	    System.out.println(reseñas);
+	    // Mostrar el rating del Learning Path seleccionado
+	    System.out.println("Rating del Learning Path '" + seleccionado.getTitulo() + "':");
+	    int rating = seleccionado.getRating(); // Asegúrate de tener este método en la clase LearningPath
+	    System.out.println(rating);
 	    
-//	    if (reseñas.isEmpty()) {
-//	        System.out.println("No hay reseñas para este Learning Path.");
-//	    } else {
-//	        for (String reseña : reseñas) {
-//	            System.out.println("- " + reseña);
-//	        }
-//	    }
+	   Map<Integer, Actividad> actsSeleccionado = seleccionado.getActividades();
+
+	   for (Actividad act: actsSeleccionado.values()) {
+		   
+		   List<Review> revs = act.getReviews();
+		
+		   for (Review rev: revs) {
+			   
+			   System.out.println("- Rating: "+ rev.rating+ "; Contenido: " + rev.getContenido() + "; Publicado: " + rev.getFecha());
+		   }
+	   }
+	   
+	    
 	}
 
 
@@ -434,12 +452,8 @@ public class ConsolaProfesorCreadorLearningPaths {
     		while (nuevoNiv == (0))
     		{
     			System.out.println("Ingrese la nueva dificultad de 1 (fácil) a 3 (difícil): ");
-    			String niv = scan.nextLine();
-    			try {
-    				nuevoNiv = Integer.parseInt(niv);
-    			} catch (NumberFormatException e) {
-    			    System.out.println("No se ingresó un número.");
-    			}
+    			nuevoNiv = leerEntero(scan);
+  
     		}
     		seleccionado.setNivelDificultad(nuevoNiv);
 
@@ -453,8 +467,6 @@ public class ConsolaProfesorCreadorLearningPaths {
 	
 	public void añadirActividad(Profesor prof, ImprimirConsola imprimir, Scanner scan, ManejoDatos datos, LearningPath path) {
 	    String nomAct = "";
-	    
-	    int numActs = (path.getPosActs().size());
 	    int pos = -1;
 
 	    while (nomAct.trim().isEmpty()) {
@@ -463,8 +475,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 	    }
 	    
 	    System.out.println("Ingrese la posición a la que desea agregarla (-1 si desea dejarla al final):  ");
-	    String rtaPos = scan.nextLine();
-	    pos = Integer.parseInt(rtaPos);
+	    pos = leerEntero(scan);
 
 	    // Obtener la actividad del sistema
 	    Actividad actParaAñadir = datos.getActividad(nomAct);
@@ -489,8 +500,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 
 
 	    System.out.println("Ingrese la posición de la actividad que desea eliminar:  ");
-	    String rtaPos = scan.nextLine();
-	    pos = Integer.parseInt(rtaPos);
+	    pos = leerEntero(scan);
 
    
 	    path.eliminarActividadPorPos(pos);
@@ -512,6 +522,420 @@ public class ConsolaProfesorCreadorLearningPaths {
 		
 		prof.clonarActividad(actClonar);
 	}
+	
+	
+	public void crearRecursoEducativo(Profesor prof, Scanner scan) {
+		
+		System.out.println("Para crear un Recurso Educativo, proporciona la siguiente información:");
+
+		// Leer título
+		System.out.print("Título: ");
+		String titulo = scan.nextLine();
+
+		// Leer descripción
+		System.out.print("Descripción: ");
+		String descripcion = scan.nextLine();
+
+		// Leer nivel educativo
+		System.out.print("Nivel de Dificultad de 1 (fácil) a 3 (difícil): : ");
+		int niv = leerEntero(scan);
+		
+		// Leer duración
+		System.out.print("Duración estimada (en minutos): ");
+		int dur = leerEntero(scan);
+
+		// Leer si es obligatorio
+		System.out.print("¿Es obligatorio? (true/false): ");
+		boolean obligatorio = leerBooleano(scan);
+
+		// Leer tiempo recomendado
+		System.out.print("Tiempo recomendado de dedicación (en minutos): ");
+		int tiempo = leerEntero(scan);
+
+		// Leer tipo de actividad
+		System.out.print("Tipo de actividad: ");
+		String tipo = scan.nextLine();
+
+		// Leer tipo de recurso
+		System.out.print("Tipo de recurso (ej. Video, Documento, Quiz): ");
+		String tipoRecurso = scan.nextLine();
+
+		// Leer contenido
+		System.out.print("Contenido breve o resumen del recurso: ");
+		String contenido = scan.nextLine();
+
+		// Leer enlace
+		System.out.print("Enlace al recurso (URL): ");
+		String enlace = scan.nextLine();
+
+		// Llamar al método del profesor para crear el recurso educativo
+		prof.crearRecursoEducativo(titulo, descripcion, niv, dur, obligatorio, tiempo, tipo, tipoRecurso, contenido, enlace);
+
+		System.out.println("¡Recurso educativo creado con éxito!");
+	}
+
+	private void crearQuiz(Profesor prof, Scanner scan) {
+		
+		System.out.println("Para crear un quiz, proporciona la siguiente información:");
+
+		// Leer título
+		System.out.print("Título: ");
+		String titulo = scan.nextLine();
+
+		// Leer descripción
+		System.out.print("Descripción: ");
+		String descripcion = scan.nextLine();
+
+		System.out.print("Nivel de Dificultad de 1 (fácil) a 3 (difícil): : ");
+		int niv = leerEntero(scan);
+		
+		// Leer duración
+		System.out.print("Duración estimada (en minutos): ");
+		int dur = leerEntero(scan);
+
+		// Leer si es obligatorio
+		System.out.print("¿Es obligatorio? (true/false): ");
+		boolean obligatorio = leerBooleano(scan);
+
+		// Leer tiempo recomendado
+		System.out.print("Tiempo recomendado de dedicación (en minutos): ");
+		int tiempo = leerEntero(scan);
+
+		System.out.print("Tipo de actividad: ");
+		String tipo = scan.nextLine();
+
+		
+		System.out.print("Tipo de prueba (Quiz Opcion Multiple/Quiz Verdadero Falso): ");
+		String tipoPrueba = scan.nextLine();
+
+
+		Quiz quiz = prof.crearQuiz(titulo, descripcion, niv, dur, obligatorio, tiempo, tipo, tipoPrueba, niv);
+		
+		System.out.println("¡Quiz creado con éxito!");
+		System.out.println("Aún no tiene preguntas, debes crearlas: ");
+
+		boolean continuar = true;
+		
+		while(continuar) {
+			
+			System.out.println("Su quiz es de tipo " + tipoPrueba + ", por ende, las preguntas deben ser de ese tipo.");
+			System.out.println("1. Añadir pregunta");
+			System.out.println("2. Finalizar adición de preguntas");
+			
+	        System.out.print("Ingrese su opción: ");
+	        
+	        int opcion = leerEntero(scan);
+	        switch (opcion) {
+	            case 1:
+	    			if (tipoPrueba == "Quiz Opcion Multiple")
+	    			{
+	    				añadirPreguntaMultiple( prof,  scan,  quiz);
+	    			}
+	    			else if (tipoPrueba == "Quiz Verdadero Falso")
+	    			{
+	    				añadirPreguntaVoF( prof,  scan,  quiz);
+	    			}	                break;
+	            case 2:
+	                continuar = false;
+	                break;
+	            default:
+	                System.out.println("Opción inválida. Intente de nuevo.");
+	        }
+			
+		}
+	}
+	
+	private void añadirPreguntaMultiple(Profesor prof, Scanner scan, Quiz quiz) {
+	    System.out.println("Creando pregunta de opción múltiple: ");
+
+	    // Leer contenido de la pregunta
+	    System.out.print("Ingrese el contenido de la pregunta: ");
+	    String contenido = scan.nextLine();
+
+	    // Leer las opciones
+	    List<String> opciones = new ArrayList<>();
+	    System.out.println("Ingrese las opciones (mínimo 4): ");
+	    for (int i = 1; i <= 4; i++) {
+	        System.out.print("Opción " + i + ": ");
+	        opciones.add(scan.nextLine());
+	    }
+
+	    // Leer la opción correcta
+	    System.out.print("Ingrese el número de la opción correcta (1-4): ");
+	    int correcta = leerEntero(scan);
+
+	    // Crear y añadir la pregunta
+	    try {
+	        PreguntaMultiple pregunta = prof.crearPreguntaMultiple(contenido, opciones, correcta - 1);
+	        prof.addPreguntaQuizMultiple((QuizOpcionMultiple) quiz, pregunta);
+	        System.out.println("Pregunta de opción múltiple añadida con éxito.");
+	    } catch (ClassCastException e) {
+	        System.out.println("Error: El quiz no admite preguntas de opción múltiple.");
+	    } catch (TipoDePreguntaInvalidaException e) {
+	        System.out.println("Error: Tipo de pregunta inválido.");
+	    }
+	}
+
+	
+	private void añadirPreguntaVoF(Profesor prof, Scanner scan, Quiz quiz) {
+	    System.out.println("Creando pregunta de verdadero/falso: ");
+
+	    // Leer contenido de la pregunta
+	    System.out.print("Ingrese el contenido de la pregunta: ");
+	    String contenido = scan.nextLine();
+
+	    // Leer la respuesta correcta
+	    System.out.print("¿La afirmación es verdadera? (true/false): ");
+	    boolean correcta = leerBooleano(scan);
+
+	    // Crear y añadir la pregunta
+	    try {
+	        PreguntaVerdaderoFalso pregunta = prof.crearPreguntaVoF(contenido, correcta);
+	        prof.addPreguntaVoF((QuizVerdaderoFalso) quiz, pregunta);
+	        System.out.println("Pregunta de verdadero/falso añadida con éxito.");
+	    } catch (ClassCastException e) {
+	        System.out.println("Error: El quiz no admite preguntas de verdadero/falso.");
+	    } catch (TipoDePreguntaInvalidaException e) {
+	        System.out.println("Error: Tipo de pregunta inválido.");
+	    }
+	}
+
+	
+	
+	private void crearExamen(Profesor prof, Scanner scan) {
+		
+		System.out.println("Para crear un Examen, proporciona la siguiente información: ");
+
+		// Leer título
+		System.out.print("Título: ");
+		String titulo = scan.nextLine();
+
+		// Leer descripción
+		System.out.print("Descripción: ");
+		String descripcion = scan.nextLine();
+
+		System.out.print("Nivel de Dificultad de 1 (fácil) a 3 (difícil): : ");
+		int niv = leerEntero(scan);
+		
+		// Leer duración
+		System.out.print("Duración estimada (en minutos): ");
+		int dur = leerEntero(scan);
+
+		// Leer si es obligatorio
+		System.out.print("¿Es obligatorio? (true/false): ");
+		boolean obligatorio = leerBooleano(scan);
+
+		// Leer tiempo recomendado
+		System.out.print("Tiempo recomendado de dedicación (en minutos): ");
+		int tiempo = leerEntero(scan);
+
+		// Leer tipo de actividad
+		System.out.print("Tipo de actividad: ");
+		String tipo = scan.nextLine();
+		// Leer tipo de recurso
+		System.out.print("Tipo de prueba (Examen): ");
+		String tipoPrueba = scan.nextLine();
+
+
+		// Llamar al método del profesor para crear el examen
+		Examen exam = prof.crearExamen(titulo, descripcion, niv, dur, obligatorio, tiempo, tipo, tipoPrueba);
+		
+		System.out.println("¡Examen creado con éxito!");
+		
+		System.out.println("Aún no tiene preguntas, debes crearlas: ");
+
+		boolean continuar = true;
+		
+		while(continuar) {
+			
+			System.out.println("Su prueba es examen, por ende, las preguntas deben ser abiertas.");
+			System.out.println("1. Añadir pregunta");
+			System.out.println("2. Finalizar adición de preguntas");
+			
+	        System.out.print("Ingrese su opción: ");
+	        
+	        int opcion = leerEntero(scan);
+	        switch (opcion) {
+	            case 1:
+	            	añadirPreguntaAbierta(prof, scan, exam);
+	            	break;
+	            case 2:
+	                continuar = false;
+	                break;
+	            default:
+	                System.out.println("Opción inválida. Intente de nuevo.");
+	        }
+			
+		}
+
+	}
+	
+	private void crearEncuesta(Profesor prof, Scanner scan) {
+		
+		System.out.println("Para crear una Encuesta, proporciona la siguiente información: ");
+
+		// Leer título
+		System.out.print("Título: ");
+		String titulo = scan.nextLine();
+
+		// Leer descripción
+		System.out.print("Descripción: ");
+		String descripcion = scan.nextLine();
+
+		// Leer nivel dificultad
+		System.out.print("Nivel de Dificultad de 1 (fácil) a 3 (difícil): : ");
+		int niv = leerEntero(scan);
+		
+		// Leer duración
+		System.out.print("Duración estimada (en minutos): ");
+		int dur = leerEntero(scan);
+
+		// Leer si es obligatorio
+		System.out.print("¿Es obligatorio? (true/false): ");
+		boolean obligatorio = leerBooleano(scan);
+
+		// Leer tiempo recomendado
+		System.out.print("Tiempo recomendado de dedicación (en minutos): ");
+		int tiempo = leerEntero(scan);
+
+		// Leer tipo de actividad
+		System.out.print("Tipo de actividad: ");
+		String tipo = scan.nextLine();
+
+		System.out.print("Tipo de prueba (Encuesta): ");
+		String tipoPrueba = scan.nextLine();
+
+
+		// Llamar al método del profesor para crear la encuesta
+		Encuesta encuesta = prof.crearEncuesta(titulo, descripcion, niv, dur, obligatorio, tiempo, tipo, tipoPrueba);
+		
+		System.out.println("¡Encuesta creada con éxito!");
+		
+		System.out.println("Aún no tiene preguntas, debes crearlas: ");
+
+		boolean continuar = true;
+		
+		while(continuar) {
+			
+			System.out.println("Su prueba es encuesta, por ende, las preguntas deben ser abiertas.");
+			System.out.println("1. Añadir pregunta");
+			System.out.println("2. Finalizar adición de preguntas");
+			
+	        System.out.print("Ingrese su opción: ");
+	        
+	        int opcion = leerEntero(scan);
+	        switch (opcion) {
+	            case 1:
+	            	añadirPreguntaAbierta(prof, scan, encuesta);
+	            	break;
+	            case 2:
+	                continuar = false;
+	                break;
+	            default:
+	                System.out.println("Opción inválida. Intente de nuevo.");
+	        }
+			
+		}
+
+	}
+	
+	
+	private void añadirPreguntaAbierta(Profesor prof, Scanner scan, Object actividad) {
+	    if (!(actividad instanceof Examen) && !(actividad instanceof Encuesta)) {
+	        System.out.println("Error: La actividad no es válida para añadir preguntas.");
+	        return;
+	    }
+
+	    System.out.println("Creando pregunta abierta:");
+
+	    // Leer contenido de la pregunta
+	    System.out.print("Ingrese el contenido de la pregunta: ");
+	    String contenido = scan.nextLine();
+
+	    // Crear y añadir la pregunta
+	    try {
+	        PreguntaAbierta pregunta = prof.crearPreguntaAbierta(contenido);
+
+	        if (actividad instanceof Examen) {
+	            prof.addPreguntaExamen((Examen) actividad, pregunta);
+	            System.out.println("Pregunta añadida con éxito al examen.");
+	        } else if (actividad instanceof Encuesta) {
+	            prof.addPreguntaEncuesta((Encuesta) actividad, pregunta);
+	            System.out.println("Pregunta añadida con éxito a la encuesta.");
+	        }
+	    } catch (TipoDePreguntaInvalidaException e) {
+	        System.out.println("Error: No se pudo añadir la pregunta. Detalles: " + e.getMessage());
+	    }
+	}
+	
+	
+	public void crearTarea(Profesor prof, Scanner scan) {
+		
+		System.out.println("Para crear una Tarea, proporciona la siguiente información:");
+
+		// Leer título
+		System.out.print("Título: ");
+		String titulo = scan.nextLine();
+
+		// Leer descripción
+		System.out.print("Descripción: ");
+		String descripcion = scan.nextLine();
+
+		System.out.print("Nivel de Dificultad de 1 (fácil) a 3 (difícil): : ");
+		int niv = leerEntero(scan);
+		
+		// Leer duración
+		System.out.print("Duración estimada (en minutos): ");
+		int dur = leerEntero(scan);
+
+		// Leer si es obligatorio
+		System.out.print("¿Es obligatorio? (true/false): ");
+		boolean obligatorio = leerBooleano(scan);
+
+		// Leer tiempo recomendado
+		System.out.print("Tiempo recomendado de dedicación (en minutos): ");
+		int tiempo = leerEntero(scan);
+
+		System.out.print("Tipo de actividad: ");
+		String tipo = scan.nextLine();
+
+
+		System.out.print("Contenido de la tarea: ");
+		String contenido = scan.nextLine();
+
+
+
+		// Llamar al método del profesor para crear la tarea
+		prof.crearTarea(titulo, descripcion, niv, dur, obligatorio, tiempo, tipo, contenido);
+
+		System.out.println("¡Tarea creada con éxito!");
+	}
+
+	
+	private static int leerEntero(Scanner scan) {
+		while (true) {
+			try {
+				return Integer.parseInt(scan.nextLine());
+			} catch (NumberFormatException e) {
+				System.out.print("Por favor, ingresa un número entero válido: ");
+			}
+		}
+	}
+
+
+	private static boolean leerBooleano(Scanner scan) {
+		while (true) {
+			String input = scan.nextLine().trim().toLowerCase();
+			if (input.equals("true") || input.equals("false")) {
+				return Boolean.parseBoolean(input);
+			}
+			System.out.print("Por favor, ingresa 'true' o 'false': ");
+		}
+
+
+		
+	}
+
 	
 	
 }

@@ -17,7 +17,7 @@ public class LearningPath {
 	public int nivelDificultad;
 	public int duracion;
 	public int rating;
-	public List<Review> listRatings;
+	public List<Integer> listRatings;
 	public String fechaCreacion;
 	public String fechaModificacion;
 	public int version;
@@ -249,12 +249,11 @@ public class LearningPath {
     public void eliminarActividadPorPos(int pos) {
         int numActividades = this.actividades.size();
 
-        // Verificar si la posición es válida
         if (pos <= 0 || pos > numActividades) {
             throw new IllegalArgumentException("Posición inválida: " + pos);
         }
 
-        // Eliminar la actividad de la lista ordenada
+        // Eliminar la actividad 
         this.posActs.remove(pos - 1);
 
         // Reconstruir el HashMap de actividades con las nuevas posiciones
@@ -269,10 +268,21 @@ public class LearningPath {
     }
 
 
-    public void addRating(Review rating) {
+    public void addRating(int rating) {
     	
     	listRatings.add(rating);
+    	calcularRating();
+    }
+    
+    public void calcularRating() {
+    	int promedio = 0;
     	
+    	for (int rating: listRatings) {
+    		
+    		promedio = promedio+rating;	
+    	}
+    	
+    	this.setRating(promedio);
     }
 
 
