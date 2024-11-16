@@ -73,7 +73,7 @@ public abstract class Usuario {
 		return review;
 	}
 	
-public Review addReviewRating(String contenido, String tipo, double rating) {
+	public Review addReviewRating(String contenido, String tipo, double rating) {
 		
         LocalDate fechaActual = LocalDate.now();
         String fecha = fechaActual.toString();
@@ -82,5 +82,18 @@ public Review addReviewRating(String contenido, String tipo, double rating) {
 		review.setRating(rating);
 		reviews.add(review);
 		return review;
-}
+	}
+	
+	public Review addRatingLP(int rating) {
+		//Rating es un review sin contenido
+		String contenido = "";
+        LocalDate fechaActual = LocalDate.now();
+        String fecha = fechaActual.toString();
+        
+		Review review = new Review(fecha, contenido, tipo);
+		review.setRating(rating);
+		reviews.add(review);
+		return review;
+		
+	}
 }

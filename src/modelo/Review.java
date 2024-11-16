@@ -47,5 +47,7 @@ public class Review {
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
+	
+	
 
 }
