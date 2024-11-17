@@ -18,6 +18,7 @@ public class QuizOpcionMultiple extends Quiz {
 		// TODO Auto-generated constructor stub
 		this.setPreguntas(preguntas);
 		this.setTipoPrueba("Quiz Opcion Multiple");
+		this.setTipoActividad("Prueba");
 	}
 	
 	public QuizOpcionMultiple(String titulo, String descripcion, int nivelDificultad, int duracionMin,
@@ -28,6 +29,7 @@ public class QuizOpcionMultiple extends Quiz {
 		// TODO Auto-generated constructor stub
 		this.setPreguntas(preguntas);
 		this.setTipoPrueba("Quiz Opcion Multiple");
+		this.setTipoActividad("Prueba");
 	}
 	
 	public QuizOpcionMultiple(String titulo, String descripcion, int nivelDificultad, int duracionMin,
@@ -38,6 +40,7 @@ public class QuizOpcionMultiple extends Quiz {
 		// TODO Auto-generated constructor stub
 		this.preguntas = new ArrayList<PreguntaMultiple>();
 		this.setTipoPrueba("Quiz Opcion Multiple");
+		this.setTipoActividad("Prueba");
 	}
 	
 	public void setPreguntas(List<PreguntaMultiple> preguntas)

@@ -16,6 +16,7 @@ public class QuizVerdaderoFalso extends Quiz {
 		super(titulo, objetivo, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad,
 				calificacionMinima, tipoPrueba);
 		this.setTipoPrueba("Quiz Verdadero Falso");
+		this.setTipoActividad("Prueba");
 		this.preguntas = new ArrayList<PreguntaVerdaderoFalso>();
 	}
 	
@@ -24,6 +25,7 @@ public class QuizVerdaderoFalso extends Quiz {
 			String tipoPrueba, List<PreguntaVerdaderoFalso> preguntas) {
 		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad,
 				calificacionMinima, tipoPrueba);
+		this.setTipoActividad("Prueba");
 		this.setTipoPrueba("Quiz Verdadero Falso");
 		this.setPreguntas(preguntas);
 	}
@@ -34,6 +36,7 @@ public class QuizVerdaderoFalso extends Quiz {
 		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad,
 				calificacionMinima, tipoPrueba, id, idEstudiante);
 		this.setTipoPrueba("Quiz Verdadero Falso");
+		this.setTipoActividad("Prueba");
 		this.setPreguntas(preguntas);
 	}
 	
