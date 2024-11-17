@@ -173,7 +173,6 @@ public class LearningPath {
     public void addActividadDeUltimas(Actividad act)
     {
     	int numActividades = this.actividades.size();
-    	System.out.println(numActividades);
     	this.actividades.put(numActividades+1, act);
     	this.posActs.add(act);
     }

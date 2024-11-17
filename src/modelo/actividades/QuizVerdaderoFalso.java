@@ -102,6 +102,7 @@ public class QuizVerdaderoFalso extends Quiz {
 			else
 			{
 				this.setEstado("No Exitosa");
+				this.setRespondida(false);
 			}
 		}
 	}

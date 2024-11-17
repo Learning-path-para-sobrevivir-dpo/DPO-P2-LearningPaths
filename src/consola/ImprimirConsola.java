@@ -7,6 +7,7 @@ import modelo.LearningPath;
 import modelo.Progreso;
 import modelo.actividades.Actividad;
 import modelo.actividades.Examen;
+import modelo.actividades.PreguntaAbierta;
 import modelo.actividades.Prueba;
 import modelo.actividades.Quiz;
 import modelo.actividades.RecursoEducativo;
@@ -134,6 +135,23 @@ public class ImprimirConsola {
 		{
 			System.out.println("• Completada: " + Boolean.toString(act.isCompletada()));
 			System.out.println("• Estado: " + act.getEstado());
+		}
+	}
+	
+	public void imprimirPreguntasyRespuestasExamen(Examen ex)
+	{
+		System.out.println("Examen: "+ex.getTitulo());
+		System.out.println("-----------------------------------------------------");
+		System.out.println("Preguntas y respuestas del estudiante:\n");
+		List<PreguntaAbierta> preguntas = ex.getPreguntas();
+		int i = 1;
+		for (PreguntaAbierta p: preguntas)
+		{
+			System.out.println("Pregunta "+ Integer.toString(i)+ ":");
+			System.out.println("Enunciado:");
+			System.out.println(p.getEnunciado());
+			System.out.println("\nRespuesta del Estudiante: ");
+			System.out.println(p.getRespuesta()+"\n");
 		}
 	}
 	

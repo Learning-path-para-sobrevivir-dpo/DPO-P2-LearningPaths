@@ -57,7 +57,16 @@ public abstract class Prueba extends Actividad{
 		boolean completada = false;
 		if (this.respondida)
 		{
-			if (this.getEstado().equals("Enviada") || this.getEstado().equals("Exitosa"))
+			if (this instanceof Quiz)
+			{
+				Quiz q = (Quiz) this;
+				if (q.getCalificacion() >= q.getCalificacionMinima() && (this.isRespondida() || this.getEstado().equals("Exitosa")))
+				{
+					this.setCompletada(true);
+					completada = true;
+				}
+			}
+			else if (this.isRespondida() || this.getEstado().equals("Exitosa"))
 			{
 				this.setCompletada(true);
 				completada = true;

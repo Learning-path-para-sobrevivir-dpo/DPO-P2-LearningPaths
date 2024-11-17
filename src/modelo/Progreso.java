@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import excepciones.CompletarActividadQueNoEstaEnProgresoException;
 import excepciones.LearningPathIncorrectoProgresoException;
 import excepciones.YaExisteActividadEnProgresoException;
 import modelo.actividades.Actividad;
@@ -54,7 +55,21 @@ public class Progreso {
 		this.actividadEnProgreso = actividadEnProgreso;
 	}
 
+	public List<String> getOrdenActividades() {
+		return ordenActividades;
+	}
 
+	public void setOrdenActividades(List<String> ordenActividades) {
+		this.ordenActividades = ordenActividades;
+	}
+
+	public Map<String, Actividad> getIdActividadesOriginales() {
+		return idActividadesOriginales;
+	}
+
+	public void setIdActividadesOriginales(Map<String, Actividad> idActividadesOriginales) {
+		this.idActividadesOriginales = idActividadesOriginales;
+	}
 
 	public Map<String, Actividad> getActividadesPath() {
 		return actividadesPath;
@@ -120,6 +135,10 @@ public class Progreso {
 		return actividadEnProgreso;
 	}
 	
+	public void setActividadEnProgreso(Actividad actividadEnProgreso2) {
+		this.actividadEnProgreso= actividadEnProgreso2;
+	}
+	
 	public Map<String, Actividad> getIdActividades() {
 		return idActividadesOriginales;
 	}
@@ -143,7 +162,49 @@ public class Progreso {
 	public void setProgresoTotal(int progresoTotal) {
 		this.progresoTotal = progresoTotal;
 	}
+	
 
+	public Actividad obtenerActividadPorNum(int numActividad) {
+		if (numActividad > this.ordenActividades.size() || numActividad < 1)
+		{
+			return null;
+		}
+		String idActividad = this.ordenActividades.get(numActividad-1);
+		Actividad actividad = this.idActividadesOriginales.get(idActividad);
+		return actividad;
+	}
+	
+	public void empezarActividad(Actividad act) throws YaExisteActividadEnProgresoException {
+		if (this.actividadEnProgreso != null)
+		{
+			throw new YaExisteActividadEnProgresoException(this.actividadEnProgreso);
+		}
+		this.actividadEnProgreso = act;
+	}
+	
+	public boolean completarActividad(Actividad act) throws CompletarActividadQueNoEstaEnProgresoException {
+		boolean completada = false;
+		if (!act.equals(this.actividadEnProgreso))
+		{
+			throw new CompletarActividadQueNoEstaEnProgresoException(act);
+		}
+		completada = act.completarActividad();
+		eliminarActividadPendiente(act);
+		addActividadCompletada(act);
+		this.calcularProgreso();
+		return completada;
+	}
+	
+	public void descompletarActividad(Actividad act){
+		if (this.actCompletadas.contains(act))
+		{
+			eliminarActividadCompletada(act);
+			addActividadPendiente(act);
+			this.calcularProgreso();
+			act.descompletarActividad();
+		}
+	}
+	
 	/**
 	 * Clona todas las actividades de un Learning Path para poder ser completadas por el estudiante //Galarza: modifique para que reciba el mapa de learning paths.
 	 */
@@ -195,13 +256,21 @@ public class Progreso {
 		return this.getActividadesPath();
 	}
 	
-	public void obtenerActPendientes() { //Galarza: agregue atributo de hash map
+	/*
+	 * Estos Métodos se usan internamente para 
+	 */
+	
+	/**
+	 * Obtiene las actividades pendientes cuando se carga
+	 * por primera vez el Progreso
+	 */
+	private void obtenerActPendientes() { //Galarza: agregue atributo de hash map
 		
 		List<Actividad> actividades = new ArrayList<Actividad>();
 		Actividad act;
-		for (String idEstudiante: this.actividadesPath.keySet())
+		for (String id: this.ordenActividades)
 		{
-			act = this.actividadesPath.get(idEstudiante);
+			act = this.idActividadesOriginales.get(id);
 			if (!act.isCompletada())
 			{
 				actividades.add(act);
@@ -210,7 +279,11 @@ public class Progreso {
 		this.actPendientes = actividades;
 	}
 	
-	public void obtenerActObligatoriasPendientes() {
+	/**
+	 * Obtiene las actividades obligatorias pendientes cuando se carga
+	 * por primera vez el Progreso
+	 */
+	private void obtenerActObligatoriasPendientes() {
 		List<Actividad> actividades = new ArrayList<Actividad>();
 		for (Actividad act: this.actPendientes)
 		{
@@ -222,7 +295,11 @@ public class Progreso {
 		this.actObligatoriasPendientes = actividades;
 	}
 	
-	public void obtenerActCompletadas() {
+	/**
+	 * Obtiene las actividades completadas cuando se carga
+	 * por primera vez el Progreso
+	 */
+	private void obtenerActCompletadas() {
 		List<Actividad> actividades = new ArrayList<Actividad>();
 		Actividad act;
 		for (String idEstudiante: this.actividadesPath.keySet())
@@ -236,7 +313,11 @@ public class Progreso {
 		this.actCompletadas = actividades;
 	}
 	
-	public void obtenerActObligatoriasCompletadas() {
+	/**
+	 * Obtiene las actividades obligatorias completadas cuando se carga
+	 * por primera vez el Progreso
+	 */
+	private void obtenerActObligatoriasCompletadas() {
 		List<Actividad> actividades = new ArrayList<Actividad>();
 		for (Actividad act: this.actCompletadas)
 		{
@@ -248,33 +329,49 @@ public class Progreso {
 		this.actObligatoriasCompletadas = actividades;
 	}
 	
-	public void eliminarActividadPendiente(Actividad act) {
+	/**
+	 * Elimina una actividad en progreso de la lista de pendientes cuando se
+	 * completa esa actividad
+	 * @param act actividad que estaba en progreso 
+	 */
+	private void eliminarActividadPendiente(Actividad act) {
 		if (this.actPendientes.contains(act))
 		{
 			int pos = this.actPendientes.indexOf(act);
 			this.actPendientes.remove(pos);
 		}
 		if (this.actObligatoriasPendientes != null) {
-		if (this.actObligatoriasPendientes.contains(act))
-		{
-			int pos = this.actObligatoriasPendientes.indexOf(act);
-			this.actObligatoriasPendientes.remove(pos);
+			if (this.actObligatoriasPendientes.contains(act))
+			{
+				int pos = this.actObligatoriasPendientes.indexOf(act);
+				this.actObligatoriasPendientes.remove(pos);
+			}
 		}
 	}
-	}
-	public void addActividadPendiente(Actividad act)
+	
+	/**
+	 * Añade de vuelta una actividad a la lista de actividades pendientes
+	 * cuando el profesor descompleta una actividad al marcarla como No Exitosa
+	 * @param act actividad a añadir de vuelta a pendientes
+	 */
+	private void addActividadPendiente(Actividad act)
 	{
 		if (!this.actPendientes.contains(act))
 		{
 			this.actPendientes.add(act);
 		}
-		if (!this.actObligatoriasPendientes.contains(act))
+		if (!this.actObligatoriasPendientes.contains(act) && act.isObligatorio())
 		{
 			this.actObligatoriasPendientes.add(act);
 		}
 	}
 	
-	public void eliminarActividadCompletada(Actividad act)
+	/**
+	 * Elimina una actividad completada cuando el profesor 
+	 * descompleta una actividad al marcarla como No Exitosa
+	 * @param act actividad a eliminar de la lista de actividades completadas
+	 */
+	private void eliminarActividadCompletada(Actividad act)
 	{
 		if (this.actCompletadas.contains(act))
 		{
@@ -288,68 +385,38 @@ public class Progreso {
 		}
 	}
 	
-	public void addActividadCompletada(Actividad act)
+	/**
+	 * Añade una actividad en progreso a la lista de actividades completadas
+	 * cuando se completa esa actividad
+	 * @param act Actividad completada 
+	 */
+	private void addActividadCompletada(Actividad act)
 	{
 		if (!this.actCompletadas.contains(act))
 		{
 			this.actCompletadas.add(act);
 		}
-		if (!this.actObligatoriasCompletadas.contains(act))
+		if (!this.actObligatoriasCompletadas.contains(act) && act.isObligatorio())
 		{
 			this.actObligatoriasCompletadas.add(act);
 		}
 	}
 	
-	public void empezarActividad(Actividad act) throws YaExisteActividadEnProgresoException {
-		if (this.actividadEnProgreso != null)
-		{
-			throw new YaExisteActividadEnProgresoException(this.actividadEnProgreso);
-		}
-		this.actividadEnProgreso = act;
-	}
-	
-	public boolean completarActividad(Actividad act) throws Exception {
-		boolean completada = false;
-		if (!act.equals(this.actividadEnProgreso))
-		{
-			throw new Exception("Se intento completar una actividad que no estaba en progreso");
-		}
-		completada = act.completarActividad();
-		eliminarActividadPendiente(act);
-		addActividadCompletada(act);
-		this.calcularProgreso();
-		return completada;
-	}
-	
-	public void descompletarActividad(Actividad act){
-		eliminarActividadCompletada(act);
-		addActividadPendiente(act);
-		this.calcularProgreso();
-	}
-	
+	/**
+	 * Calcula el progreso del estudiante basandose en el número de actividades
+	 * obligatorias completadas y el número de actividades totales completadas
+	 */
 	private void calcularProgreso() {
 		int actTotales = this.actPendientes.size() + this.actCompletadas.size();
 		int actCompletadas = this.actCompletadas.size();
-		this.progresoTotal = (actCompletadas / actTotales) * 100;
+		if (actTotales != 0)
+			this.progresoTotal = (actCompletadas / actTotales) * 100;
 		
 		actTotales = this.actObligatoriasCompletadas.size() + this.actObligatoriasPendientes.size();
 		actCompletadas = this.actObligatoriasCompletadas.size();
-		this.progresoObligatorio = (actCompletadas / actTotales) * 100;
-	}
-	
-	public Actividad obtenerActividadPorNum(int numActividad) {
-		if (numActividad > this.ordenActividades.size() || numActividad < 1)
-		{
-			return null;
-		}
-		String idActividad = this.ordenActividades.get(numActividad-1);
-		Actividad actividad = this.actividadesPath.get(idActividad);
-		return actividad;
+		if (actTotales != 0)
+			this.progresoObligatorio = (actCompletadas / actTotales) * 100;
 	}
 
-	public void setActividadEnProgreso(Actividad actividadEnProgreso2) {
-		this.actividadEnProgreso= actividadEnProgreso2;
-		
-	}
 	
 }
