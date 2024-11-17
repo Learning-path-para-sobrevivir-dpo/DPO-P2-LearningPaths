@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import org.json.JSONArray;
+
 import excepciones.*;
 import modelo.*;
-import modelo.actividades.Actividad;
+import modelo.actividades.*;
 import persistencia.*;
 
 public class ConsolaEstudiantes {
@@ -89,8 +91,7 @@ public class ConsolaEstudiantes {
 	    System.out.println("2. Ver Learning Paths inscritos");
 	    System.out.println("3. Ver actividades del Learning Path");
 	    System.out.println("4. Ver progreso de Learning Path");
-	    System.out.println("5. Iniciar actividad");
-	    System.out.println("6. Continuar una actividad iniciada");
+	    System.out.println("5. Iniciar actividad o continuar una actividad iniciada");
 	    System.out.println("0. Salir de la aplicacion");
 	    
 	    System.out.print("Opción: ");
@@ -106,7 +107,7 @@ public class ConsolaEstudiantes {
 			System.out.println("Gracias por usar la aplicación!!!");
 			
 		case 1:
-			verInscribirLearningPath(es, imprimir);
+			verInscribirLearningPath(datos, es, imprimir, scan);
 			
 		case 2:
 			verLearningPaths(es, imprimir, scan);
@@ -120,72 +121,121 @@ public class ConsolaEstudiantes {
 		case 5:
 			verIniciarActividad(es, imprimir, scan);
 			
-		case 6:
-			verContinuarActividad(es, imprimir, scan);
 		}
 	}
 	
 	/**
-	 * Funcion para ver todos los Learning Paths a inscribir
-	 * @param prof instancia de la sesion iniciada del estudiante
-	 * @param imprimir clase para imprimir formateados los Learning Paths disponibles
+	 * Funcion para inscribir un Learning Path
+	 * @param es instancia de la sesion iniciada del estudiante
+	 * @param imprimir
+	 * @param scan
 	 */
-	private void verInscribirLearningPath(Estudiante es, ImprimirConsola imprimir)
+	private void verInscribirLearningPath(ManejoDatos datos, Estudiante es, ImprimirConsola imprimir, Scanner scan)
 	{
-	
+		LearningPath lpSeleccionado = seleccionarLearningPathD(datos, imprimir, scan);
+		if (lpSeleccionado != null)
+		{
+			String nombreLpSeleccionado = lpSeleccionado.getTitulo();
+			es.inscribirLearningPath(lpSeleccionado);
+			System.out.println("\n El Learning Path '"+nombreLpSeleccionado+"' fue inscrito exitosamenete\n");
+				
+			}
+		else
+			{
+				System.out.println("Hubo un problema al tratar de inscribir el Learning Path\n");
+			}
 	}
 	
 	/**
-	 * Funcion para ver los estudiantes de un Learning Path específico
-	 * @param prof instancia de la sesion iniciada del profesor
+	 * Funcion para ver Learning Paths inscritos
+	 * @param es instancia de la sesion iniciada del estudiante
 	 * @param imprimir
 	 * @param scan
 	 */
 	private void verLearningPaths(Estudiante es, ImprimirConsola imprimir, Scanner scan)
-	{
-		
-		LearningPath lpSeleccionado = seleccionarLearningPath(es, imprimir, scan);
-		if (lpSeleccionado != null)
+	{	
+		Map<String, LearningPath> learningPaths = es.getLearningPaths();
+		if (!learningPaths.isEmpty())
 		{
-			String nombreLpSeleccionado = lpSeleccionado.getTitulo();
-			Map<String, Progreso> progEstudiantes = lpSeleccionado.getProgresosEstudiantiles();
-			if (!progEstudiantes.isEmpty())
+			for (LearningPath learningPath: learningPaths.values())
 			{
-				System.out.println("\nEstos son los estudiantes para el Learning Path '"+nombreLpSeleccionado+"'\n");
-				Progreso progEstudiante;
-				for (String loginEst: progEstudiantes.keySet())
-				{
-					progEstudiante = progEstudiantes.get(loginEst);
-					if (progEstudiante != null)
-						imprimir.imprimirProgreso(progEstudiante);
-				}
+				imprimir.imprimirLearningPath(learningPath);
+				
 			}
-			else
-			{
-				System.out.println("No hay estudiantes inscritos al Learning Path '"+nombreLpSeleccionado+"'\n");
-			}
-			
+		}
+		
+		else {
+			System.out.println("\nNo hay Learning Paths inscritos\n");
 		}
 	}
 	
 	private void verActividadesLearningPath(Estudiante es, ImprimirConsola imprimir, Scanner scan)
 	{
-		
+		LearningPath lpSeleccionado = seleccionarLearningPathE(es, imprimir, scan);
+		if (lpSeleccionado != null)
+		{
+			Map<Integer, Actividad> actividades = lpSeleccionado.getActividades();
+			if (!actividades.isEmpty())
+			{
+				for (Actividad actividad: actividades.values())
+				{
+					imprimir.imprimirActividad(actividad, true, true, true);
+				}
+			}
+			
+			else {
+				System.out.println("\nNo hay actividades en este Learning Path\n");
+			}
+			}
+		else
+			{
+				System.out.println("Este Learning Path no existe\n");
+			}
 	}
 	
 	private void verProgresoLearningPath(Estudiante es, ImprimirConsola imprimir, Scanner scan)
 	{
-		
+		LearningPath lpSeleccionado = seleccionarLearningPathE(es, imprimir, scan);
+		Map<String, Progreso> progresos = lpSeleccionado.getProgresosEstudiantiles();
+		Progreso progreso = progresos.get(es.getLogin());
+		imprimir.imprimirProgreso(progreso);
 	}
 	
 	private void verIniciarActividad(Estudiante es, ImprimirConsola imprimir, Scanner scan)
 	{
-		
-	}
-	
-	private void verContinuarActividad(Estudiante es, ImprimirConsola imprimir, Scanner scan)
-	{
-		
+		LearningPath lpSeleccionado = seleccionarLearningPathE(es, imprimir, scan);
+		Actividad actividad = seleccionarActividad(es, imprimir, scan, lpSeleccionado, true);
+		//es.iniciarActividad(actividad, lpSeleccionado.getTitulo());
+		String tipoActividad = actividad.getTipoActividad();
+		switch (tipoActividad) {
+		case "Prueba":
+			String tipoPrueba = ((Prueba) actividad).getTipoPrueba();
+			switch (tipoPrueba) {
+			case "Encuesta":
+				iniciarEncuesta((Encuesta) actividad); 
+				break;
+			case "Quiz Opcion Multiple":
+				iniciarQuizMultiple((QuizOpcionMultiple) actividad); 
+				break;
+			case "Quiz Verdadero Falso":
+				iniciarQuizVF((QuizVerdaderoFalso) actividad);
+				break;
+			case "Examen":
+				iniciarExamen((Examen) actividad); 
+				break;
+			default:
+				throw new IllegalArgumentException("Tipo de prueba desconocido: " + tipoPrueba);
+			}
+			break;
+		case "Tarea":
+			responderTarea((Tarea)actividad);
+			break;
+		case "Recurso Educativo":
+			completarRecurso((RecursoEducativo) actividad);
+			break;
+		default:
+			throw new IllegalArgumentException("Tipo de actividad desconocido: " + tipoActividad);
+		}
 	}
 	
 	
@@ -234,7 +284,44 @@ public class ConsolaEstudiantes {
 		System.out.println("");
 	}
 
-	private LearningPath seleccionarLearningPath(Estudiante es, ImprimirConsola imprimir, Scanner scan)
+	private LearningPath seleccionarLearningPathD(ManejoDatos datos, ImprimirConsola imprimir, Scanner scan)
+	{
+		LearningPath lpSeleccionado = null;
+		Map<String, LearningPath>lps = datos.getLearningPaths();
+		if (!lps.isEmpty())
+		{
+			int i = 1;
+			Map<Integer, String> indexLPs = new HashMap<Integer, String>();
+
+			System.out.println("Learning Paths disponibles:");
+			System.out.println("-----------------------------------------------------");
+			for (String nombreLp: lps.keySet())
+			{
+				System.out.println(Integer.toString(i) + ". "+ nombreLp);
+				indexLPs.put(i, nombreLp);
+				i++;
+			}
+		
+			System.out.println("-----------------------------------------------------");
+			System.out.println("\n Seleccione el número del Learning Path que quiere: ");
+			int op = scan.nextInt();
+			while(!indexLPs.containsKey(op))
+			{
+				System.out.println("Opción invalida");
+				System.out.println("Ingrese el número del Learning Path que desea: ");
+				op = scan.nextInt();
+			}
+			String nombreLpSeleccionado = indexLPs.get(op);
+			lpSeleccionado = lps.get(nombreLpSeleccionado);
+		}
+		else
+		{
+			System.out.println("No hay ningun Learning Path para inscribir");
+		}
+		return lpSeleccionado;
+	}
+	
+	private LearningPath seleccionarLearningPathE(Estudiante es, ImprimirConsola imprimir, Scanner scan)
 	{
 		LearningPath lpSeleccionado = null;
 		Map<String, LearningPath>lps = es.getLearningPaths();
@@ -251,6 +338,7 @@ public class ConsolaEstudiantes {
 				indexLPs.put(i, nombreLp);
 				i++;
 			}
+		
 			System.out.println("-----------------------------------------------------");
 			System.out.println("\n Seleccione el número del Learning Path que quiere: ");
 			int op = scan.nextInt();
@@ -308,4 +396,185 @@ public class ConsolaEstudiantes {
 		}
 		return act;
 	}
+	
+	public void iniciarQuizMultiple(QuizOpcionMultiple quiz) 
+	{
+        Scanner scanner = new Scanner(System.in);
+        List<Integer> respuestas = new ArrayList<>();
+
+        System.out.println("Quiz: " + quiz.getTitulo());
+        System.out.println("Objetivo: " + quiz.getObjetivo());
+        System.out.println("-----------------------------------");
+
+        // Mostrar todas las preguntas y opciones primero
+        for (PreguntaMultiple pregunta : quiz.getPreguntas()) {
+            System.out.println("Pregunta " + pregunta.getNumero() + ": " + pregunta.getEnunciado());
+
+            // Mostrar opciones de respuesta
+            List<String> opciones = pregunta.getOpciones();
+            for (int i = 0; i < opciones.size(); i++) {
+                System.out.println("   " + (i + 1) + ". " + opciones.get(i));
+            }
+            System.out.println("-----------------------------------");
+        }
+
+        // Solicitar respuestas para cada pregunta
+        System.out.println("Ahora ingresa tus respuestas para cada pregunta:");
+        for (int i = 0; i < quiz.getPreguntas().size(); i++) {
+            int respuesta = -1;
+            while (respuesta < 1 || respuesta > quiz.getPreguntas().get(i).getOpciones().size()) {
+                System.out.print("Respuesta para la pregunta " + (i + 1) + ": ");
+                try {
+                    respuesta = Integer.parseInt(scanner.nextLine());
+                    if (respuesta < 1 || respuesta > quiz.getPreguntas().get(i).getOpciones().size()) {
+                        System.out.println("Respuesta no válida. Intenta de nuevo.");
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Por favor, ingresa un número válido.");
+                }
+            }
+            respuestas.add(respuesta - 1); 
+        }
+
+        // Intentar calificar el quiz y mostrar el resultado
+        try {
+            quiz.responderQuiz(respuestas);
+            System.out.println("Quiz completado.");
+            System.out.println("Calificación: " + quiz.getCalificacion());
+            System.out.println("Estado: " + quiz.getEstado());
+        } catch (RespuestasInconsistentesPruebaException e) {
+            System.out.println("Número de respuestas incorrecto. Inténtalo de nuevo.");
+        }
+        
+        scanner.close();
+    }
+	
+	public void iniciarQuizVF(QuizVerdaderoFalso quiz) 
+	{
+        Scanner scanner = new Scanner(System.in);
+        List<Boolean> respuestas = new ArrayList<>();
+
+        System.out.println("Quiz: " + quiz.getTitulo());
+        System.out.println("Objetivo: " + quiz.getObjetivo());
+        System.out.println("-----------------------------------");
+
+        // Mostrar todas las preguntas 
+        for (PreguntaVerdaderoFalso pregunta : quiz.getPreguntas()) {
+            System.out.println("Pregunta " + pregunta.getNumero() + ": " + pregunta.getEnunciado());
+            System.out.println("-----------------------------------");
+        }
+
+        // Solicitar respuestas para cada pregunta
+        System.out.println("Ahora ingresa tus respuestas para cada pregunta:");
+        for (int i = 0; i < quiz.getPreguntas().size(); i++) {
+            Boolean respuesta = null;
+            while (respuesta == null) {
+                System.out.print("Respuesta para la pregunta " + (i + 1) + " (V/F): ");
+                String input = scanner.nextLine().trim().toUpperCase();
+                
+                if (input.equals("V")) {
+                    respuesta = true;
+                } else if (input.equals("F")) {
+                    respuesta = false;
+                } else {
+                    System.out.println("Respuesta no válida. Por favor ingresa 'V' para Verdadero o 'F' para Falso.");
+                }
+            }
+            respuestas.add(respuesta);
+        }
+
+        // Intentar calificar el quiz y mostrar el resultado
+        try {
+            quiz.responderQuiz(respuestas);
+            System.out.println("Quiz completado.");
+            System.out.println("Calificación: " + quiz.getCalificacion());
+            System.out.println("Estado: " + quiz.getEstado());
+        } catch (RespuestasInconsistentesPruebaException e) {
+            System.out.println("Número de respuestas incorrecto. Inténtalo de nuevo.");
+        }
+        
+        scanner.close();
+    }
+
+	public void iniciarEncuesta(Encuesta quiz) 
+	{
+        Scanner scanner = new Scanner(System.in);
+        List<String> respuestas = new ArrayList<>();
+
+        System.out.println("Quiz: " + quiz.getTitulo());
+        System.out.println("Descripción: " + quiz.getObjetivo());
+        System.out.println("-----------------------------------");
+
+        // Mostrar todas las preguntas de verdadero/falso
+        for (PreguntaAbierta pregunta : quiz.getPreguntas()) {
+            System.out.println("Pregunta " + pregunta.getNumero() + ": " + pregunta.getEnunciado());
+            System.out.println("-----------------------------------");
+        }
+
+        // Solicitar respuestas para cada pregunta
+        System.out.println("Ahora ingresa tus respuestas para cada pregunta:");
+        for (int i = 0; i < quiz.getPreguntas().size(); i++) { 
+            System.out.print("Respuesta para la pregunta " + (i + 1) + ": ");
+            String input = scanner.nextLine().trim().toUpperCase();
+            respuestas.add(input);
+        }
+
+        // Intentar calificar el quiz y mostrar el resultado
+        try {
+            quiz.responderEncuesta(respuestas);
+            System.out.println("Quiz completado.");
+            System.out.println("Calificación: " + quiz.getCalificacion());
+            System.out.println("Estado: " + quiz.getEstado());
+        } catch (RespuestasInconsistentesPruebaException e) {
+            System.out.println("Número de respuestas incorrecto. Inténtalo de nuevo.");
+        }
+        
+        scanner.close();
+    }
+
+	private void iniciarExamen(Examen examen) 
+	{	
+		Scanner scanner = new Scanner(System.in);
+        System.out.println("Respondiendo el examen...");
+        List<String> respuestas = new ArrayList<>();
+        
+        for (PreguntaAbierta pregunta : examen.getPreguntas()) {
+            System.out.print("Respuesta a la pregunta " + pregunta.getNumero() + ": ");
+            respuestas.add(scanner.nextLine());
+        }
+        
+        try {
+            examen.responderExamen(respuestas);
+            System.out.println("Examen respondido exitosamente.");
+        } catch (RespuestasInconsistentesPruebaException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        scanner.close();
+    }
+
+	private void responderTarea(Tarea tarea) {
+		Scanner scanner = new Scanner(System.in);
+        if (tarea.isEnviado()) {
+            System.out.println("La tarea ya ha sido enviada.");
+            scanner.close();
+            return;
+        }
+
+        System.out.print("Especifique el medio de entrega (por ejemplo, correo electrónico, plataforma): ");
+        String medioEntrega = scanner.nextLine();
+        tarea.setMedioEntrega(medioEntrega);
+
+        tarea.setEnviado(true);
+        System.out.println("La tarea ha sido marcada como enviada.");
+        scanner.close();
+    }
+
+	private void completarRecurso(RecursoEducativo recursoEducativo) {
+        if (recursoEducativo.isCompletada()) {
+            System.out.println("El recurso ya está completado.");
+        } else {
+            recursoEducativo.completarActividad();
+            System.out.println("El recurso ha sido marcado como completado.");
+        }
+    }
 }
