@@ -228,10 +228,10 @@ public class ConsolaEstudiantes {
 			}
 			break;
 		case "Tarea":
-			//TODO:
+			responderTarea((Tarea)actividad);
 			break;
 		case "Recurso Educativo":
-			//TODO:
+			completarRecurso((RecursoEducativo) actividad);
 			break;
 		default:
 			throw new IllegalArgumentException("Tipo de actividad desconocido: " + tipoActividad);
@@ -552,5 +552,29 @@ public class ConsolaEstudiantes {
         scanner.close();
     }
 
-	
+	private void responderTarea(Tarea tarea) {
+		Scanner scanner = new Scanner(System.in);
+        if (tarea.isEnviado()) {
+            System.out.println("La tarea ya ha sido enviada.");
+            scanner.close();
+            return;
+        }
+
+        System.out.print("Especifique el medio de entrega (por ejemplo, correo electrónico, plataforma): ");
+        String medioEntrega = scanner.nextLine();
+        tarea.setMedioEntrega(medioEntrega);
+
+        tarea.setEnviado(true);
+        System.out.println("La tarea ha sido marcada como enviada.");
+        scanner.close();
+    }
+
+	private void completarRecurso(RecursoEducativo recursoEducativo) {
+        if (recursoEducativo.isCompletada()) {
+            System.out.println("El recurso ya está completado.");
+        } else {
+            recursoEducativo.completarActividad();
+            System.out.println("El recurso ha sido marcado como completado.");
+        }
+    }
 }
