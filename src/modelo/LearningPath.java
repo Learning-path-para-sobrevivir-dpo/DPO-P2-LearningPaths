@@ -201,34 +201,29 @@ public class LearningPath {
      * @param act: actividad a añadir
      * @param pos: posición en la que se debe poner la actividad
      */
-    public void addActividadPorPos (Actividad act, int pos) {
-    	int numActividades = this.actividades.size();
-    	if (pos > numActividades)
-    	{
-    		this.addActividadDeUltimas(act);
-    	}
-    	else if (pos > 0  && pos <= numActividades)
-    	{
-    		if (this.posActs.contains(act))
-    		{
-    			this.posActs.remove(act);
-    			this.posActs.add(pos-1, act);
-    		}
-    		else
-    		{
-    			this.posActs.add(pos-1, act);
-    		}
-    		Map<Integer,Actividad> acts = new HashMap<Integer, Actividad>();
-    		for (int i = 0; i < this.posActs.size(); i++)
-    		{
-    			acts.put(i+1, act);
-    		}
-    		this.actividades = acts;
-    	}
-    	
-    	calcularDuracion();
+    public void addActividadPorPos(Actividad act, int pos) {
+        int numActividades = this.actividades.size();
 
+        if (pos > numActividades) {
+            this.addActividadDeUltimas(act);
+        } else if (pos > 0 && pos <= numActividades) {
+            if (this.posActs.contains(act)) {
+                this.posActs.remove(act);
+                this.posActs.add(pos - 1, act);
+            } else {
+                this.posActs.add(pos - 1, act);
+            }
+
+            Map<Integer, Actividad> acts = new HashMap<>();
+            for (int i = 0; i < this.posActs.size(); i++) {
+                acts.put(i + 1, this.posActs.get(i)); 
+            }
+            this.actividades = acts;
+        }
+
+        calcularDuracion();
     }
+
 
 	/**
      * Añade un Estudiante inscrito y su progreso al Learning Path

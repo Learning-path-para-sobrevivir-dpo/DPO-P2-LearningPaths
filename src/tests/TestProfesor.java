@@ -1,30 +1,25 @@
 package tests;
 
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assume.assumeTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import excepciones.TipoDePreguntaInvalidaException;
 import modelo.LearningPath;
 import modelo.Profesor;
 import modelo.actividades.Actividad;
+import modelo.actividades.Encuesta;
 import modelo.actividades.Examen;
 import modelo.actividades.PreguntaAbierta;
 import modelo.actividades.PreguntaMultiple;
@@ -41,7 +36,6 @@ public class TestProfesor {
 	private QuizOpcionMultiple act1;
 	private Actividad act2;
 	private Examen act3;
-	private Actividad act4;
 	private Actividad actParaClonar;
 	
 	
@@ -72,8 +66,11 @@ public class TestProfesor {
 	public void testCrearLearningPath() {
 		LearningPath pathTest = prof.crearLearningPath("Excel para principiantes", "Curso para aprender Excel.", "Conocimientos básicos Excel.", 2);
 		
+		LocalDate fechaActual = LocalDate.now();
+        String fecha = fechaActual.toString();
+		
 		assertEquals("Excel para principiantes", pathTest.getTitulo(), "El título no coincide.");
-		assertEquals("2024-11-17", pathTest.getFechaCreacion(), "No es la fecha de creación esperada");
+		assertEquals(fecha, pathTest.getFechaCreacion(), "No es la fecha de creación esperada");
 	}
 	
 	@Test
@@ -89,6 +86,31 @@ public class TestProfesor {
 
 		
 	}
+	
+	@Test
+	public void testAddActividadPorPos() {
+		LearningPath pathTest = prof.crearLearningPath("Excel para principiantes", "Curso para aprender Excel.", "Conocimientos básicos Excel.", 2);
+		prof.addActividadToLearningPath(pathTest, act2, 1);
+		
+		Map<Integer, Actividad> actsTest= pathTest.getActividades();
+		assertEquals("Quiz VoF 2", (actsTest.get(1)).getTitulo(), "No tiene la posicion esperada");
+		
+		prof.addActividadToLearningPath(pathTest, act1, 0);
+		assertEquals("Quiz Multiple 1", (actsTest.get(2)).getTitulo(), "No tiene la posicion esperada");
+
+		prof.addActividadToLearningPath(pathTest, act3, 2);
+		actsTest= pathTest.getActividades();
+		assertEquals("Examen final", (actsTest.get(2)).getTitulo(), "No tiene la posicion esperada");
+		assertEquals("Quiz Multiple 1", (actsTest.get(3)).getTitulo(), "No tiene la posicion esperada");
+
+		//Test de que si la actividad ya estaba en el path, la elimina y cambia su posición por la nueva posición
+		prof.addActividadToLearningPath(pathTest, act3, 3);
+		actsTest= pathTest.getActividades();
+		assertEquals("Examen final", (actsTest.get(3)).getTitulo(), "No tiene la posicion esperada");
+		assertEquals("Quiz Multiple 1", (actsTest.get(2)).getTitulo(), "No tiene la posicion esperada");
+
+	}
+	
 	
 	@Test
 	public void testClonarAct() {
@@ -163,7 +185,7 @@ public class TestProfesor {
 	    }
 
 	    RecursoEducativo recCreado = (RecursoEducativo)recursoCreado;
-	    assertNotNull(recursoCreado, "El recurso no fue encontrada en la lista de actividades creadas.");
+	    assertNotNull(recursoCreado, "El recurso no fue encontrado en la lista de actividades creadas.");
 
 	    assertEquals( "Video 1", recursoCreado.getTitulo(), "El título del recurso no coincide.");
 	    assertEquals( "video para el curso", recursoCreado.getObjetivo(), "El objetivo del recurso no coincide.");
@@ -175,6 +197,102 @@ public class TestProfesor {
 	
 		
 	}
+
+	
+	@Test
+	public void testCrearExamen() {
+		
+		Examen examParaCrear = prof.crearExamen("Examen parcial", "examen en la mitad del curso", 3, 60, true, 60, "Prueba", "Examen");
+		
+		
+	    List<Actividad> actsCreadas = prof.getActCreadas();
+	    
+	    Actividad examenCreado = null;
+
+	    for (Actividad act : actsCreadas) {
+	        if (act.getTitulo().equals(examParaCrear.getTitulo())) {
+	        	examenCreado = act;
+	            break;
+	        }
+	    }
+
+	    Examen examCreado = (Examen)examenCreado;
+	    assertNotNull(examenCreado, "El examen no fue encontrado en la lista de actividades creadas.");
+
+	    assertEquals( "Examen parcial", examCreado.getTitulo(), "El título del examen no coincide.");
+	    assertEquals( "examen en la mitad del curso", examCreado.getObjetivo(), "El objetivo del examen no coincide.");
+	    assertEquals( 60, examCreado.getDuracionMin(), "La duración del examen no coincide.");
+	    assertEquals(3, examCreado.getNivelDificultad(), "El nivel de dificultad del examen no coincide.");
+
+	    
+	    assertTrue(actsCreadas.contains(examCreado), "El examen no está en la lista de actividades creadas.");
+	
+		
+	}
+	
+	
+	@Test
+	public void testCrearEncuesta() {
+		
+		Encuesta encParaCrear = prof.crearEncuesta("Encuesta", "encuesta sobre el curso", 1, 15, false, 120, "Prueba", "Encuesta");
+		
+		
+	    List<Actividad> actsCreadas = prof.getActCreadas();
+	    
+	    Actividad encuestaCreada = null;
+
+	    for (Actividad act : actsCreadas) {
+	        if (act.getTitulo().equals(encParaCrear.getTitulo())) {
+	    	    encuestaCreada = act;
+	            break;
+	        }
+	    }
+
+	    Encuesta encCreada = (Encuesta)encuestaCreada;
+	    assertNotNull(encuestaCreada, "La encuesta no fue encontrada en la lista de actividades creadas.");
+
+	    assertEquals( "Encuesta", encCreada.getTitulo(), "El título de la encuesta no coincide.");
+	    assertEquals( "encuesta sobre el curso", encCreada.getObjetivo(), "El objetivo de la encuesta no coincide.");
+	    assertEquals( 15, encCreada.getDuracionMin(), "La duración de la encuesta no coincide.");
+	    assertEquals(1, encCreada.getNivelDificultad(), "El nivel de dificultad de la encuesta no coincide.");
+
+	    
+	    assertTrue(actsCreadas.contains(encCreada), "La encuesta no está en la lista de actividades creadas.");
+	
+		
+	}
+	
+	
+	@Test
+	public void testCrearTarea() {
+		
+		Tarea tareaParaCrear = prof.crearTarea("Tarea 2", "Tarea corta para practicar", 1, 30, false, 120, "Tarea", "Ejercicios 12-25");
+		
+		
+	    List<Actividad> actsCreadas = prof.getActCreadas();
+	    
+	    Actividad tCreada = null;
+
+	    for (Actividad act : actsCreadas) {
+	        if (act.getTitulo().equals(tareaParaCrear.getTitulo())) {
+	        	tCreada = act;
+	            break;
+	        }
+	    }
+
+	    Tarea tareaCreada = (Tarea)tCreada;
+	    assertNotNull(tCreada, "La tarea no fue encontrada en la lista de actividades creadas.");
+
+	    assertEquals( "Tarea 2", tareaCreada.getTitulo(), "El título de la encuesta no coincide.");
+	    assertEquals( "Tarea corta para practicar", tareaCreada.getObjetivo(), "El objetivo de la tarea no coincide.");
+	    assertEquals( 30, tareaCreada.getDuracionMin(), "La duración de la tarea no coincide.");
+	    assertEquals(1, tareaCreada.getNivelDificultad(), "El nivel de dificultad de la tarea no coincide.");
+	    
+	    
+	    assertTrue(actsCreadas.contains(tareaCreada), "La tarea no está en la lista de actividades creadas.");
+	
+	}
+	
 
 	
 	@Test

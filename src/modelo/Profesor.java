@@ -74,13 +74,14 @@ public class Profesor extends Usuario{
 	
 			Encuesta newAct = new Encuesta(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
 				tiempoCompletarSugerido, tipo, tipoPrueba);
+		this.actCreadas.add(newAct);
 		return newAct;
 	}
 	
-	public Actividad crearTarea(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+	public Tarea crearTarea(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
 	        int tiempoCompletarSugerido, String tipo, String contenido) {
 	
-		Actividad newAct = new Tarea(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
+		Tarea newAct = new Tarea(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
     			tiempoCompletarSugerido, tipo, contenido);
 		this.actCreadas.add(newAct);
 		return newAct;
