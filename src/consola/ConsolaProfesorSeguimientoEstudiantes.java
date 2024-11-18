@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import excepciones.CompletarActividadQueNoEstaEnProgresoException;
 import excepciones.LearningPathIncorrectoProgresoException;
 import excepciones.YaExisteActividadEnProgresoException;
 import modelo.Estudiante;
@@ -29,36 +30,36 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 		datos.cargarDatos();
 		Map<List<String>, Usuario> usuarios = datos.getUsuarios();
 		
-		Usuario u = null;
-		Profesor up;
-		Estudiante ue = null;
-		int i = 0;
-		for (List<String> llave: usuarios.keySet())
-		{
-			u = usuarios.get(llave);
-			System.out.println(u.getLogin());
-			if (i == 0)
-			{
-				ue = (Estudiante) u;
-			}
-			i++;
-		}
-		up = (Profesor) u;
-		Map<String, LearningPath> m = up.getLearningPathsCreados();
-		System.out.println(m);
-		LearningPath lp = m.get("Arte y Sociedad");
-		System.out.println(lp.getActividades());
-		Progreso pr = lp.getProgresosEstudiantiles().get("Juliana Hernandez");
+//		Usuario u = null;
+//		Profesor up;
+//		Estudiante ue = null;
+//		int i = 0;
+//		for (List<String> llave: usuarios.keySet())
+//		{
+//			u = usuarios.get(llave);
+//			System.out.println(u.getLogin());
+//			if (i == 0)
+//			{
+//				ue = (Estudiante) u;
+//			}
+//			i++;
+//		}
+//		up = (Profesor) u;
+//		Map<String, LearningPath> m = up.getLearningPathsCreados();
+//		System.out.println(m);
+//		LearningPath lp = m.get("Arte y Sociedad");
+//		System.out.println(lp.getActividades());
+//		Progreso pr = lp.getProgresosEstudiantiles().get("Juliana Hernandez");
+//		
+//		
+//		System.out.println(ue.getProgresosLearningPaths());
+//		for (String p : ue.getProgresosLearningPaths().keySet())
+//		{
+//			imprimir.imprimirProgreso(ue.getProgresosLearningPaths().get(p));
+//		}
 		
 		
-		System.out.println(ue.getProgresosLearningPaths());
-		for (String p : ue.getProgresosLearningPaths().keySet())
-		{
-			imprimir.imprimirProgreso(ue.getProgresosLearningPaths().get(p));
-		}
-		
-		
-//		consola.iniciarAplicacion(datos, scanner, imprimir);
+		consola.iniciarAplicacion(datos, scanner, imprimir);
 		scanner.close(); 
 	}
 	
@@ -139,21 +140,27 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 		{
 		case 0:
 			System.out.println("Gracias por usar la aplicación!!!");
+			break;
 			
 		case 1:
 			verEstudiantesProfesor(prof, imprimir);
+			break;
 			
 		case 2:
 			verEstudiantesLearningPath(prof, imprimir, scan);
+			break;
 			
 		case 3:
 			verActividadesPendientesCalificar(prof, imprimir, scan);
+			break;
 			
 		case 4:
 			verActividadesPendientesCalificarLearningPath(prof, imprimir, scan);
+			break;
 			
 		case 5:
 			calificarActividadEstudiante(prof, imprimir, scan, datos);
+			break;
 		}
 	}
 	
@@ -180,8 +187,9 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 			for (String loginEst: estudiantesLp)
 			{
 				progEstudiante = progEstudiantes.get(loginEst);
-				if (progEstudiante != null)
+				if (progEstudiante != null) {
 					imprimir.imprimirProgreso(progEstudiante);
+				}
 			}
 		}
 		if (!hayEstudiantes)
@@ -344,6 +352,12 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 			if (op == 1)
 			{
 				act.setEstado("Exitosa");
+				try {
+					progreso.completarActividad(act);
+				} catch (CompletarActividadQueNoEstaEnProgresoException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			else if (op == 2)
 			{
@@ -382,6 +396,7 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 				indexLPs.put(i, nombreLp);
 				i++;
 			}
+			System.out.println("indexLPs");
 			System.out.println("-----------------------------------------------------");
 			System.out.println("\n Seleccione el número del Learning Path que quiere: ");
 			int op = scan.nextInt();
@@ -426,9 +441,9 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 					if (actCompletada.getEstado().equals("Sin completar") || actCompletada.getEstado().equals("No Exitosa") )
 					{
 						num = Integer.toString(i) + ". ";					
-						i++;
 						acts.put(i, actCompletada);
 						estudiantes.put(i, loginEst);
+						i++;
 						System.out.print(num);
 						imprimir.imprimirActividad(actCompletada, false, true, true);
 						tieneActividades = true;	
