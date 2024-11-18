@@ -1,7 +1,10 @@
 package modelo;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +18,7 @@ public class LearningPath {
 	public int nivelDificultad;
 	public int duracion;
 	public int rating;
+	public List<Integer> listRatings;
 	public String fechaCreacion;
 	public String fechaModificacion;
 	public int version;
@@ -34,7 +38,9 @@ public class LearningPath {
 		this.nivelDificultad = nivelDificultad;
 		this.duracion = 0;
 		this.rating = rating;
-		this.fechaCreacion = fechaCreacion;
+        LocalDate fechaActual = LocalDate.now();
+        String fecha = fechaActual.toString();
+		this.fechaCreacion = fecha;
 		this.fechaModificacion = fechaModificacion;
 		this.version = version;
 		this.progresosEstudiantiles = new HashMap<String, Progreso>();
@@ -136,6 +142,17 @@ public class LearningPath {
 		this.calcularDuracion();
 	}
 	
+
+	public List<Actividad> getPosActs() {
+		return posActs;
+	}
+
+
+	public void setPosActs(List<Actividad> posActs) {
+		this.posActs = posActs;
+	}
+	
+	
 	public int getDuracion() {
 		return duracion;
 	}
@@ -175,6 +192,7 @@ public class LearningPath {
     	int numActividades = this.actividades.size();
     	this.actividades.put(numActividades+1, act);
     	this.posActs.add(act);
+    	calcularDuracion();
     }
     
     /**
@@ -207,6 +225,9 @@ public class LearningPath {
     		}
     		this.actividades = acts;
     	}
+    	
+    	calcularDuracion();
+
     }
 
 	/**
@@ -219,6 +240,56 @@ public class LearningPath {
     	this.estudiantes.add(estudiante);
     	this.progresosEstudiantiles.put(estudiante, progreso);
     }
+
+
+    /**
+     * Elimina una actividad de la posición indicada, manteniendo el orden
+     * enumerado de actividades en el Learning Path.
+     * @param pos: posición de la actividad a eliminar (1-indexado)
+     * @throws IllegalArgumentException si la posición es inválida
+     */
+    public void eliminarActividadPorPos(int pos) {
+        int numActividades = this.actividades.size();
+
+        if (pos <= 0 || pos > numActividades) {
+            throw new IllegalArgumentException("Posición inválida: " + pos);
+        }
+
+        // Eliminar la actividad 
+        this.posActs.remove(pos - 1);
+
+        // Reconstruir el HashMap de actividades con las nuevas posiciones
+        Map<Integer, Actividad> acts = new HashMap<>();
+        for (int i = 0; i < this.posActs.size(); i++) {
+            acts.put(i + 1, this.posActs.get(i));
+        }
+        this.actividades = acts;
+
+        // Recalcular la duración del Learning Path
+        calcularDuracion();
+    }
+
+
+    public void addRating(int rating) {
+    	
+    	listRatings.add(rating);
+    	calcularRating();
+    }
+    
+    public void calcularRating() {
+    	int promedio = 0;
+    	
+    	for (int rating: listRatings) {
+    		
+    		promedio = promedio+rating;	
+    	}
+    	
+    	this.setRating(promedio);
+    }
+
+
+
+
 
 }
 

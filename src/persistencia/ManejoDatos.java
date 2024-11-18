@@ -38,6 +38,16 @@ public class ManejoDatos {
     	this.usuarios = PersistenciaUsuarios.cargarUsuarios(progresos, learningPaths, reviews, actividades);
     }
     
+    public void guardarDatos() {
+    	PersistenciaUsuarios.guardarUsuarios(usuarios);
+    	PersistenciaReviews.guardarReviews(reviews);
+    	PersistenciaPreguntas.guardarPreguntas(preguntas);
+    	PersistenciaActividades.guardarActividades(actividades);
+    	PersistenciaProgresos.guardarProgreso(progresos);
+    	PersistenciaLearningPaths.guardarLearningPaths(learningPaths);
+    	PersistenciaUsuarios.guardarUsuarios(usuarios);
+    }
+    
 	public HashMap<List<String>, Usuario> getUsuarios() {
 		return usuarios;
 	}

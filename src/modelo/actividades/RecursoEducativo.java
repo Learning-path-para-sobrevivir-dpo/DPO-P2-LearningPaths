@@ -17,6 +17,7 @@ public class RecursoEducativo extends Actividad {
 		this.tipoRecurso = tipoRecurso;
 		this.contenido = contenido;
 		this.enlace = enlace;
+		this.setTipoActividad("Recurso Educativo");
 	}
 	
 	public RecursoEducativo(String titulo, String descripcion, int nivelDificultad, int duracionMin,
@@ -25,6 +26,7 @@ public class RecursoEducativo extends Actividad {
 		this.tipoRecurso = tipoRecurso;
 		this.contenido = contenido;
 		this.enlace = enlace;
+		this.setTipoActividad("Recurso Educativo");
 	}
 
 

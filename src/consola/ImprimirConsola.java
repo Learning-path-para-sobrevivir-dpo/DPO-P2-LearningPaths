@@ -1,6 +1,7 @@
 package consola;
 
 import java.util.List;
+import java.util.Map;
 
 import modelo.Estudiante;
 import modelo.LearningPath;
@@ -157,8 +158,36 @@ public class ImprimirConsola {
 	
 	public void imprimirLearningPath(LearningPath lp)
 	{
+		System.out.println("Learning Path: "+ lp.getTitulo());
+		System.out.println("Descripción: "+ "\n" +lp.getDescripcion());
+		System.out.println("Objetivo: "+ "\n" +lp.getObjetivo());
+		System.out.println("Fecha creación: "+ lp.getFechaCreacion());
+		System.out.println("Fecha última modificación: "+ lp.getFechaModificacion());
+		System.out.println("Duracion: "+ lp.getDuracion());
+		System.out.println("Nivel dificultad: "+lp.getNivelDificultad());
+		System.out.println("Rating: "+ lp.getRating());
+
+		System.out.println("Actividades: ");
+		Map<Integer, Actividad> actividades = lp.getActividades();
 		
+		if (!actividades.isEmpty()) {
+			
+			for (Actividad act: actividades.values()) {
+				
+				imprimirActividad(act, false, false, true);
+			}
+			System.out.println("-----------------------------------------------------");
+		}
+		else
+		{
+			System.out.println("\nNo hay actividades en el Learning Path");
+			System.out.println("-----------------------------------------------------");
+		}
+
+		
+
 	}
+	
 	
 	public void imprimirProgreso(Progreso prog)
 	{

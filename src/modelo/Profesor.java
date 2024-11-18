@@ -7,9 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import excepciones.TipoDePreguntaInvalidaException;
 import modelo.actividades.Actividad;
 import modelo.actividades.Encuesta;
 import modelo.actividades.Examen;
+import modelo.actividades.PreguntaAbierta;
+import modelo.actividades.PreguntaMultiple;
+import modelo.actividades.PreguntaVerdaderoFalso;
 import modelo.actividades.Quiz;
 import modelo.actividades.QuizOpcionMultiple;
 import modelo.actividades.QuizVerdaderoFalso;
@@ -31,27 +35,27 @@ public class Profesor extends Usuario{
 	/**
 	 * Métodos para crear todas las actividades diferentes
 	 */
-	public Actividad crearRecursoEducativo(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+	public RecursoEducativo crearRecursoEducativo(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
 	        int tiempoCompletarSugerido, String tipo, String tipoRecurso, String contenido, String enlace) {
 		
-		Actividad newAct = new RecursoEducativo(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, 
+		RecursoEducativo newAct = new RecursoEducativo(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, 
                 tiempoCompletarSugerido, tipo, tipoRecurso, contenido, enlace);
 		this.actCreadas.add(newAct);
 		return newAct;
 	}
 	
-	public Actividad crearExamen(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+	public Examen crearExamen(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
 	        int tiempoCompletarSugerido, String tipo, String tipoPrueba) {
 		
-		Actividad newAct = new Examen(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
+		Examen newAct = new Examen(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
     			tiempoCompletarSugerido, tipo, tipoPrueba);
 		this.actCreadas.add(newAct);
 		return newAct;
 	}
 	
-	public Actividad crearQuiz(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+	public Quiz crearQuiz(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
 	        int tiempoCompletarSugerido, String tipo, String tipoPrueba, float calificacionMinima) {
-		Actividad newAct = null;
+		Quiz newAct = null;
 		
 		if (tipoPrueba == "Quiz Opcion Multiple")
 		{
@@ -65,10 +69,10 @@ public class Profesor extends Usuario{
 		return newAct;
 	}
 				
-	public Actividad crearEncuesta(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+	public Encuesta crearEncuesta(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
 	        int tiempoCompletarSugerido, String tipo, String tipoPrueba) {
 	
-		Actividad newAct = new Encuesta(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
+			Encuesta newAct = new Encuesta(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
 				tiempoCompletarSugerido, tipo, tipoPrueba);
 		return newAct;
 	}
@@ -165,7 +169,7 @@ public class Profesor extends Usuario{
         LocalDate fechaActual = LocalDate.now();
         String fecha = fechaActual.toString();
 		
-        LearningPath path = new LearningPath(titulo, descripcion, obj, dificultad, 0, fecha, fecha, 1, this.getTipo());
+        LearningPath path = new LearningPath(titulo, descripcion, obj, dificultad, 0, fecha, fecha, 1, this.getLogin());
         learningPathsCreados.put(titulo, path);
         
         return path;
@@ -225,4 +229,49 @@ public class Profesor extends Usuario{
 	}
 	
 	
+	public PreguntaAbierta crearPreguntaAbierta(String contenido) {
+		
+		PreguntaAbierta pregunta = new PreguntaAbierta(contenido);
+		return pregunta;
+		
+	}
+	
+	
+	public PreguntaMultiple crearPreguntaMultiple(String contenido, List<String> opciones, int correcta ) {
+		
+		PreguntaMultiple pregunta = new PreguntaMultiple(contenido, opciones, correcta);
+		return pregunta;
+		
+	}
+	
+
+	public PreguntaVerdaderoFalso crearPreguntaVoF(String contenido, boolean correcto) {
+		
+		PreguntaVerdaderoFalso pregunta = new PreguntaVerdaderoFalso(contenido, correcto);
+		return pregunta;
+		
+	}
+	
+	public void addPreguntaQuizMultiple(QuizOpcionMultiple quiz, PreguntaMultiple pregunta) throws TipoDePreguntaInvalidaException{
+		
+		quiz.addPregunta(pregunta);
+		
+	}
+	
+	public void addPreguntaVoF(QuizVerdaderoFalso quiz, PreguntaVerdaderoFalso pregunta) throws TipoDePreguntaInvalidaException {
+		
+		quiz.addPregunta(pregunta);
+	}
+	
+	
+	public void addPreguntaExamen (Examen examen, PreguntaAbierta pregunta) throws TipoDePreguntaInvalidaException {
+		
+		examen.addPregunta(pregunta);
+	}
+
+	
+	public void addPreguntaEncuesta (Encuesta encuesta, PreguntaAbierta pregunta) throws TipoDePreguntaInvalidaException {
+		
+		encuesta.addPregunta(pregunta);
+	}
 }
