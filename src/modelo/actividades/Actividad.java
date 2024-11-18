@@ -73,7 +73,7 @@ public abstract class Actividad implements Cloneable {
 		this.completada = false;       
 		this.id = id;
 		Actividad.registrarIDActividad(this);
-        this.idEstudiante = "";
+        this.idEstudiante = idEstudiante;
 	}
 	
 	

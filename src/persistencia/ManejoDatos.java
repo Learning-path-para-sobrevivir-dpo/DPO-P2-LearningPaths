@@ -187,6 +187,7 @@ public class ManejoDatos {
 	{
 		if (act != null)
 		{
+			
 			if (act.getIdEstudiante().equals(""))
 			{
 				this.actividades.replace(act.getId(), act);
@@ -251,6 +252,19 @@ public class ManejoDatos {
 			progreso.obtenerActividadesPath(lpProgreso);
 			this.progresos.put(List.of(progreso.getLearningPath(),progreso.getEstudiante()), progreso);
 			PersistenciaProgresos.guardarProgreso(progresos);
+		}
+	}
+	
+	public void actualizarProgreso(Progreso progreso) throws LearningPathIncorrectoProgresoException
+	{
+		if (progresos.containsKey(List.of(progreso.getLearningPath(), progreso.getEstudiante())))
+		{
+			progresos.replace(List.of(progreso.getLearningPath(), progreso.getEstudiante()), progreso);
+			PersistenciaProgresos.guardarProgreso(progresos);
+		}
+		else
+		{
+			addProgreso(progreso);
 		}
 	}
 	

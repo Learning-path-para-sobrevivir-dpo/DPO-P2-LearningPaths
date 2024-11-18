@@ -163,9 +163,10 @@ public class PersistenciaActividades {
             			}
             		}
             		actividad.setReviews(listaReviews);
+            		
 
             		// Agregar la actividad al HashMap usando el id como llave
-            		if (!idEstudiante.equals("") && !actividades.containsKey(idEstudiante))
+            		if (!idEstudiante.equals(""))
             			actividades.put(idEstudiante, actividad);
             		else if (!actividades.containsKey(id))
             			actividades.put(id, actividad);

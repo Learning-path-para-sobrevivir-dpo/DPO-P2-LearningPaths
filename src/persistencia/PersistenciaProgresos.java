@@ -158,7 +158,7 @@ public class PersistenciaProgresos {
 
                 // Convertir actividadEnProgreso a ID de actividad (si no es null)
                 if (progreso.getActividadEnProgreso() != null) {
-                    jsonProgreso.put("actividadEnProgreso", progreso.getActividadEnProgreso().getId());
+                    jsonProgreso.put("actividadEnProgreso", progreso.getActividadEnProgreso().getIdEstudiante());
                 } else {
                     jsonProgreso.put("actividadEnProgreso", JSONObject.NULL);
                 }
@@ -167,7 +167,7 @@ public class PersistenciaProgresos {
                 JSONObject jsonIdActividades = new JSONObject();
                 if (progreso.getIdActividades() != null) {
                 for (Map.Entry<String, Actividad> idActEntry : progreso.getIdActividades().entrySet()) {
-                    jsonIdActividades.put(idActEntry.getKey(), idActEntry.getValue().getId());
+                    jsonIdActividades.put(idActEntry.getKey(), idActEntry.getValue().getIdEstudiante());
                 }}
                 jsonProgreso.put("idActividadesOriginales", jsonIdActividades);
                 jsonProgreso.put("progresoTotal", progreso.getProgresoTotal());

@@ -301,6 +301,7 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 	{
 		int op;
 		Progreso progreso = datos.obtenerProgreso(lp.getTitulo(), loginEstudiante);
+		
 		if (act instanceof Tarea)
 		{
 			System.out.println("Como desea marcar la Tarea: ");
@@ -324,12 +325,13 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 			}
 			datos.actualizarActividad(act);
 			try {
-				datos.addProgreso(progreso);
+				datos.actualizarProgreso(progreso);
 			} catch (LearningPathIncorrectoProgresoException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			datos.actualizarLearningPath(lp);
+			
+			
 		}
 		else if (act instanceof Examen)
 		{
@@ -396,7 +398,6 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 				indexLPs.put(i, nombreLp);
 				i++;
 			}
-			System.out.println("indexLPs");
 			System.out.println("-----------------------------------------------------");
 			System.out.println("\n Seleccione el número del Learning Path que quiere: ");
 			int op = scan.nextInt();
