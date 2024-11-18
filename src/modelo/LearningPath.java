@@ -48,6 +48,7 @@ public class LearningPath {
 		this.estudiantes = new ArrayList<String>();
 		this.actividades = new HashMap<Integer,Actividad>();
 		this.posActs = new ArrayList<Actividad>();
+		this.listRatings = new ArrayList<Integer>();
 	}
 	
 
@@ -273,12 +274,15 @@ public class LearningPath {
     
     public void calcularRating() {
     	int promedio = 0;
-    	
+		int suma = 0;
+
     	for (int rating: listRatings) {
     		
-    		promedio = promedio+rating;	
+    		suma = suma+rating;	
+    		
     	}
     	
+    	promedio = suma/listRatings.size();
     	this.setRating(promedio);
     }
 

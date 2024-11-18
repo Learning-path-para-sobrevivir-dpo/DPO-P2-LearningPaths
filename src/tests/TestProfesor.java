@@ -58,7 +58,13 @@ public class TestProfesor {
 	public void tearDown()
 	{
 		prof = null;
+		path1 = null;
+		actParaClonar= null;
+		act1 = null;
+		act2 = null;
+		act3 = null;
 
+		
 	}
 	
 	
