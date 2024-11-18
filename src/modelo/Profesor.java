@@ -35,10 +35,10 @@ public class Profesor extends Usuario{
 	/**
 	 * Métodos para crear todas las actividades diferentes
 	 */
-	public Actividad crearRecursoEducativo(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+	public RecursoEducativo crearRecursoEducativo(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
 	        int tiempoCompletarSugerido, String tipo, String tipoRecurso, String contenido, String enlace) {
 		
-		Actividad newAct = new RecursoEducativo(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, 
+		RecursoEducativo newAct = new RecursoEducativo(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, 
                 tiempoCompletarSugerido, tipo, tipoRecurso, contenido, enlace);
 		this.actCreadas.add(newAct);
 		return newAct;
@@ -74,13 +74,14 @@ public class Profesor extends Usuario{
 	
 			Encuesta newAct = new Encuesta(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
 				tiempoCompletarSugerido, tipo, tipoPrueba);
+		this.actCreadas.add(newAct);
 		return newAct;
 	}
 	
-	public Actividad crearTarea(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
+	public Tarea crearTarea(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
 	        int tiempoCompletarSugerido, String tipo, String contenido) {
 	
-		Actividad newAct = new Tarea(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
+		Tarea newAct = new Tarea(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
     			tiempoCompletarSugerido, tipo, contenido);
 		this.actCreadas.add(newAct);
 		return newAct;
@@ -169,7 +170,7 @@ public class Profesor extends Usuario{
         LocalDate fechaActual = LocalDate.now();
         String fecha = fechaActual.toString();
 		
-        LearningPath path = new LearningPath(titulo, descripcion, obj, dificultad, 0, fecha, fecha, 1, this.getTipo());
+        LearningPath path = new LearningPath(titulo, descripcion, obj, dificultad, 0, fecha, fecha, 1, this.getLogin());
         learningPathsCreados.put(titulo, path);
         
         return path;
