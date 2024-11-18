@@ -25,7 +25,7 @@ import persistencia.ManejoDatos;
 
 public class ConsolaProfesorCreadorLearningPaths {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws LearningPathNoEncontradoException {
 		ManejoDatos datos = new ManejoDatos();
 		Scanner scanner = new Scanner(System.in);
 		ConsolaProfesorCreadorLearningPaths consola = new ConsolaProfesorCreadorLearningPaths();
@@ -34,7 +34,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 		datos.cargarDatos();
 		Map<List<String>, Usuario> usuarios = datos.getUsuarios();
 		
-//		consola.iniciarAplicacion(datos, scanner, imprimir);
+		consola.iniciarAplicacion(datos, scanner, imprimir);
 		scanner.close(); 
 	}
 
