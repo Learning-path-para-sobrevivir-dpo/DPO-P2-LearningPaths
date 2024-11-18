@@ -1,5 +1,6 @@
 package modelo;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -37,7 +38,9 @@ public class LearningPath {
 		this.nivelDificultad = nivelDificultad;
 		this.duracion = 0;
 		this.rating = rating;
-		this.fechaCreacion = fechaCreacion;
+        LocalDate fechaActual = LocalDate.now();
+        String fecha = fechaActual.toString();
+		this.fechaCreacion = fecha;
 		this.fechaModificacion = fechaModificacion;
 		this.version = version;
 		this.progresosEstudiantiles = new HashMap<String, Progreso>();
