@@ -21,6 +21,8 @@ import modelo.actividades.PreguntaVerdaderoFalso;
 import modelo.actividades.Quiz;
 import modelo.actividades.QuizOpcionMultiple;
 import modelo.actividades.QuizVerdaderoFalso;
+import modelo.actividades.RecursoEducativo;
+import modelo.actividades.Tarea;
 import persistencia.ManejoDatos;
 
 public class ConsolaProfesorCreadorLearningPaths {
@@ -36,6 +38,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 		
 		consola.iniciarAplicacion(datos, scanner, imprimir);
 		scanner.close(); 
+		
 	}
 
 	public ConsolaProfesorCreadorLearningPaths() {
@@ -94,33 +97,34 @@ public class ConsolaProfesorCreadorLearningPaths {
 	 * @return El usuario del profesor. Si el usuario no existe o si es el usuario
 	 * de un estudiante registrado, retorna null.
 	 */
-	private Profesor iniciarSesion(ManejoDatos datos, Scanner scan)
-	{
-		Usuario usuario = null;
-		Profesor prof = null;
-		String login = "";
-		String password = "";
-		
-		while (login.trim().isEmpty())
-		{
-			System.out.println("Ingrese su nombre de usuario: ");
-			login = scan.nextLine();
-		}
-		
-		while (password.trim().isEmpty())
-		{
-			System.out.println("Ingrese su contraseña: ");
-			password = scan.nextLine();
-		}
-		
-		usuario = datos.getUsuario(login, password);
-		if (usuario instanceof Profesor)
-		{
-			prof = (Profesor) usuario;
-		}
-		
-		return prof;
+	private Profesor iniciarSesion(ManejoDatos datos, Scanner scan) {
+	    Usuario usuario = null;
+	    Profesor prof = null;
+	    String login = "";
+	    String password = "";
+
+	    if (scan.hasNextLine()) {
+	        scan.nextLine();
+	    }
+
+	    while (login.trim().isEmpty()) {
+	        System.out.println("Ingrese su nombre de usuario: ");
+	        login = scan.nextLine();
+	    }
+
+	    while (password.trim().isEmpty()) {
+	        System.out.println("Ingrese su contraseña: ");
+	        password = scan.nextLine();
+	    }
+
+	    usuario = datos.getUsuario(login, password);
+	    if (usuario instanceof Profesor) {
+	        prof = (Profesor) usuario;
+	    }
+
+	    return prof;
 	}
+
 	
 	/**
 	 * Funcion para crear un usuario en la app
@@ -129,7 +133,35 @@ public class ConsolaProfesorCreadorLearningPaths {
 	 */
 	private void crearUsuario(ManejoDatos datos, Scanner scan)
 	{
-		System.out.println("");
+	    Profesor prof = null;
+	    String login = "";
+	    String password = "";
+	    String correo = "";
+
+	    if (scan.hasNextLine()) {
+	        scan.nextLine();
+	    }
+
+	    while (login.trim().isEmpty()) {
+	        System.out.println("Ingrese su nombre de usuario: ");
+	        login = scan.nextLine();
+	    }
+
+	    while (password.trim().isEmpty()) {
+	        System.out.println("Ingrese su contraseña: ");
+	        password = scan.nextLine();
+	    }
+	    
+	    while (correo.trim().isEmpty()) {
+	        System.out.println("Ingrese su correo: ");
+	        correo = scan.nextLine();
+	    }
+
+	    Usuario usuario = new Profesor (login, correo, password, "Profesor");
+	    datos.addUsuario(usuario);
+
+	    System.out.println("El usuario fue creado exitosamente!!");
+	    
 	}
 
 	
@@ -164,20 +196,23 @@ public class ConsolaProfesorCreadorLearningPaths {
 			
 		case 1:
 			verLearningPathsCreados(prof, imprimir);
+			break;
 			
 		case 2:
-			crearLearningPath(prof, imprimir, scan);
+			crearLearningPath(prof, imprimir, scan, datos);
+			break;
 			
 		case 3:
 			verReseñas(prof, imprimir, scan);
+			break;
 			
 		case 4:
 			editarLearningPaths(prof, imprimir, scan, datos);
-			
+			break;
 			
 		case 5:
 			clonarActividad(prof, imprimir, scan, datos);
-			
+			break;
             
         case 6:
             System.out.println("Has seleccionado 'Crear Actividad'");
@@ -194,27 +229,27 @@ public class ConsolaProfesorCreadorLearningPaths {
             switch (actop) {
             
             case 1:
-            	crearRecursoEducativo(prof, scan);
+            	crearRecursoEducativo(prof, scan, datos);
                 
                 break;
                 
             case 2: 
-            	crearExamen(prof, scan);
+            	crearExamen(prof, scan, datos);
 
                 break;
                 
             case 3: 
-            	crearQuiz(prof, scan);
+            	crearQuiz(prof, scan, datos);
 
                 break;
                 
             case 4: 
-            	crearEncuesta(prof,scan);
+            	crearEncuesta(prof,scan, datos);
             	
                 break;
                
             case 5: 
-            	crearTarea(prof, scan);
+            	crearTarea(prof, scan, datos);
             	
                 break;
             }
@@ -223,7 +258,9 @@ public class ConsolaProfesorCreadorLearningPaths {
 						
         case 0:
             System.out.println("Gracias por usar la aplicación! Saliendo...");
+            
             System.exit(0);
+         
             break;
             
         default:
@@ -246,6 +283,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 	    if (hayLearningPaths) {
 	        for (String nombreLp : lps.keySet()) {
 	            LearningPath lp = lps.get(nombreLp);
+	            System.out.println("\n\n");
 	            imprimir.imprimirLearningPath(lp); 
 	        }
 	    } else {
@@ -255,13 +293,17 @@ public class ConsolaProfesorCreadorLearningPaths {
 	}
 
 	
-	private void crearLearningPath(Profesor prof, ImprimirConsola imprimir, Scanner scan) {
+	private void crearLearningPath(Profesor prof, ImprimirConsola imprimir, Scanner scan, ManejoDatos datos) {
 		
 		String titulo = "";
 		String descripcion = "";
 		String objetivo = "";
 		int nivelDificultad = 0;
 		
+
+	    if (scan.hasNextLine()) {
+	        scan.nextLine();
+	    }
 		
 		while (titulo.trim().isEmpty())
 		{
@@ -289,68 +331,13 @@ public class ConsolaProfesorCreadorLearningPaths {
 		}
 		
 		
-		prof.crearLearningPath(titulo, descripcion, objetivo, nivelDificultad);
+		LearningPath pathCreado = prof.crearLearningPath(titulo, descripcion, objetivo, nivelDificultad);
+		datos.addLearningPath(pathCreado);
+		datos.actualizarUsuario(prof);
 	}
-	
 	
 	public void verReseñas(Profesor prof, ImprimirConsola imprimir, Scanner scan) throws LearningPathNoEncontradoException {
 	    // Obtener los Learning Paths creados por el profesor
-	    Map<String, LearningPath> paths = prof.getLearningPathsCreados();
-
-	    if (paths.isEmpty()) {
-	        throw new LearningPathNoEncontradoException("No ha creado ningún Learning Path.");
-	    }
-
-	    System.out.println("Sus Learning Paths creados son:");
-	    for (String titulo: paths.keySet()) {
-	        System.out.println("- " + titulo);
-	    }
-
-	    String nomConsultar = "";
-	    LearningPath seleccionado = null;
-
-	    while (seleccionado == null) {
-	        System.out.println("¿De cuál Learning Path desea ver las reseñas? (Escriba 'salir' para cancelar)");
-	        nomConsultar = scan.nextLine().trim();
-
-	        // Permitir salir del bucle
-	        if (nomConsultar.equalsIgnoreCase("salir")) {
-	            System.out.println("Operación cancelada.");
-	            return;
-	        }
-
-	        // Buscar el Learning Path en el mapa
-	        seleccionado = paths.get(nomConsultar);
-
-	        // Si no existe, lanzar excepción
-	        if (seleccionado == null) {
-	            throw new LearningPathNoEncontradoException("El Learning Path '" + nomConsultar + "' no existe.");
-	        }
-	    }
-
-	    // Mostrar el rating del Learning Path seleccionado
-	    System.out.println("Rating del Learning Path '" + seleccionado.getTitulo() + "':");
-	    int rating = seleccionado.getRating(); // Asegúrate de tener este método en la clase LearningPath
-	    System.out.println(rating);
-	    
-	   Map<Integer, Actividad> actsSeleccionado = seleccionado.getActividades();
-
-	   for (Actividad act: actsSeleccionado.values()) {
-		   
-		   List<Review> revs = act.getReviews();
-		
-		   for (Review rev: revs) {
-			   
-			   System.out.println("- Rating: "+ rev.rating+ "; Contenido: " + rev.getContenido() + "; Publicado: " + rev.getFecha());
-		   }
-	   }
-	   
-	    
-	}
-
-
-	public void editarLearningPaths(Profesor prof, ImprimirConsola imprimir, Scanner scan, ManejoDatos datos) throws LearningPathNoEncontradoException {
-		
 	    Map<String, LearningPath> paths = prof.getLearningPathsCreados();
 
 	    if (paths.isEmpty()) {
@@ -365,7 +352,63 @@ public class ConsolaProfesorCreadorLearningPaths {
 	    String nomConsultar = "";
 	    LearningPath seleccionado = null;
 
-	    while (seleccionado == null) {
+	    if (scan.hasNextLine()) {
+	        scan.nextLine();
+	    }
+	    
+	    while (nomConsultar.trim().isEmpty()) {
+	        System.out.println("Ingrese el nombre del Learning Path del que desea ver las reseñas:");
+	        nomConsultar = scan.nextLine().trim();
+
+
+	        seleccionado = paths.get(nomConsultar);
+	        if (seleccionado == null) {
+	            System.out.println("El Learning Path '" + nomConsultar + "' no existe. Intente nuevamente.");
+	        }
+
+	    }
+
+	    // Mostrar el rating del Learning Path seleccionado
+	    System.out.println("Rating del Learning Path '" + seleccionado.getTitulo() + "':");
+	    int rating = seleccionado.getRating(); // Asegúrate de tener este método en la clase LearningPath
+	    System.out.println(rating);
+
+	    Map<Integer, Actividad> actsSeleccionado = seleccionado.getActividades();
+
+	    for (Actividad act : actsSeleccionado.values()) {
+	        List<Review> revs = act.getReviews();
+
+	        for (Review rev : revs) {
+	            System.out.println("- Rating: " + rev.getRating() + "; Contenido: " + rev.getContenido() + "; Publicado: " + rev.getFecha());
+	        }
+	    }
+	}
+
+
+
+	public void editarLearningPaths(Profesor prof, ImprimirConsola imprimir, Scanner scan, ManejoDatos datos) throws LearningPathNoEncontradoException {
+		
+	    Map<String, LearningPath> paths = prof.getLearningPathsCreados();
+
+	    if (paths.isEmpty()) {
+	        throw new LearningPathNoEncontradoException("No ha creado ningún Learning Path.");
+	    }
+
+	    System.out.println("Sus Learning Paths creados son:");
+	    for (String titulo : paths.keySet()) {
+	        System.out.println("- " + titulo);
+	    }
+	    
+	    
+
+	    String nomConsultar = "";
+	    LearningPath seleccionado = null;
+
+	    if (scan.hasNextLine()) {
+	        scan.nextLine();
+	    }
+	    
+	    while (nomConsultar.trim().isEmpty()) {
 	        System.out.println("¿De cuál Learning Path desea ver las reseñas? (Escriba 'salir' para cancelar)");
 	        nomConsultar = scan.nextLine().trim();
 
@@ -409,6 +452,7 @@ public class ConsolaProfesorCreadorLearningPaths {
             
         case 3: 
         	String nuevoTitulo = "";
+        	
         	
     		while (nuevoTitulo.trim().isEmpty())
     		{
@@ -469,6 +513,11 @@ public class ConsolaProfesorCreadorLearningPaths {
 	    String nomAct = "";
 	    int pos = -1;
 
+	    
+	    if (scan.hasNextLine()) {
+	        scan.nextLine();
+	    }
+	    
 	    while (nomAct.trim().isEmpty()) {
 	        System.out.println("Ingrese el nombre de la actividad que desea agregar: ");
 	        nomAct = scan.nextLine();
@@ -478,7 +527,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 	    pos = leerEntero(scan);
 
 	    // Obtener la actividad del sistema
-	    Actividad actParaAñadir = datos.getActividad(nomAct);
+	    Actividad actParaAñadir = datos.getActividadPorNombre(nomAct);
 
 	    // Verificar si la actividad existe
 	    if (actParaAñadir == null) {
@@ -491,6 +540,8 @@ public class ConsolaProfesorCreadorLearningPaths {
 	    else {
 	    	path.addActividadDeUltimas(actParaAñadir);
 	    }
+	    
+	    datos.actualizarLearningPath(path);
 
 	}
 	
@@ -505,6 +556,8 @@ public class ConsolaProfesorCreadorLearningPaths {
    
 	    path.eliminarActividadPorPos(pos);
 	    
+	    
+	    datos.actualizarLearningPath(path);
 
 	}
 
@@ -521,13 +574,19 @@ public class ConsolaProfesorCreadorLearningPaths {
 
 		
 		prof.clonarActividad(actClonar);
+		datos.actualizarUsuario(prof);
 	}
 	
 	
-	public void crearRecursoEducativo(Profesor prof, Scanner scan) {
+	public void crearRecursoEducativo(Profesor prof, Scanner scan, ManejoDatos datos) {
 		
 		System.out.println("Para crear un Recurso Educativo, proporciona la siguiente información:");
 
+
+	    if (scan.hasNextLine()) {
+	        scan.nextLine();
+	    }
+		
 		// Leer título
 		System.out.print("Título: ");
 		String titulo = scan.nextLine();
@@ -569,15 +628,21 @@ public class ConsolaProfesorCreadorLearningPaths {
 		String enlace = scan.nextLine();
 
 		// Llamar al método del profesor para crear el recurso educativo
-		prof.crearRecursoEducativo(titulo, descripcion, niv, dur, obligatorio, tiempo, tipo, tipoRecurso, contenido, enlace);
+		RecursoEducativo recCreado = prof.crearRecursoEducativo(titulo, descripcion, niv, dur, obligatorio, tiempo, tipo, tipoRecurso, contenido, enlace);
 
+		datos.addActividad(recCreado);
+		
 		System.out.println("¡Recurso educativo creado con éxito!");
+		
 	}
 
-	private void crearQuiz(Profesor prof, Scanner scan) {
+	private void crearQuiz(Profesor prof, Scanner scan, ManejoDatos datos) {
 		
 		System.out.println("Para crear un quiz, proporciona la siguiente información:");
 
+	    if (scan.hasNextLine()) {
+	        scan.nextLine();
+	    }
 		// Leer título
 		System.out.print("Título: ");
 		String titulo = scan.nextLine();
@@ -612,6 +677,8 @@ public class ConsolaProfesorCreadorLearningPaths {
 		Quiz quiz = prof.crearQuiz(titulo, descripcion, niv, dur, obligatorio, tiempo, tipo, tipoPrueba, niv);
 		
 		System.out.println("¡Quiz creado con éxito!");
+		datos.addActividad(quiz);
+		
 		System.out.println("Aún no tiene preguntas, debes crearlas: ");
 
 		boolean continuar = true;
@@ -643,6 +710,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 	        }
 			
 		}
+		datos.actualizarActividad(quiz);
 	}
 	
 	private void añadirPreguntaMultiple(Profesor prof, Scanner scan, Quiz quiz) {
@@ -698,14 +766,18 @@ public class ConsolaProfesorCreadorLearningPaths {
 	    } catch (TipoDePreguntaInvalidaException e) {
 	        System.out.println("Error: Tipo de pregunta inválido.");
 	    }
+	    
 	}
 
 	
 	
-	private void crearExamen(Profesor prof, Scanner scan) {
+	private void crearExamen(Profesor prof, Scanner scan, ManejoDatos datos) {
 		
 		System.out.println("Para crear un Examen, proporciona la siguiente información: ");
 
+	    if (scan.hasNextLine()) {
+	        scan.nextLine();
+	    }
 		// Leer título
 		System.out.print("Título: ");
 		String titulo = scan.nextLine();
@@ -739,6 +811,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 
 		// Llamar al método del profesor para crear el examen
 		Examen exam = prof.crearExamen(titulo, descripcion, niv, dur, obligatorio, tiempo, tipo, tipoPrueba);
+		datos.addActividad(exam);
 		
 		System.out.println("¡Examen creado con éxito!");
 		
@@ -767,13 +840,17 @@ public class ConsolaProfesorCreadorLearningPaths {
 	        }
 			
 		}
+		datos.actualizarActividad(exam);
 
 	}
 	
-	private void crearEncuesta(Profesor prof, Scanner scan) {
+	private void crearEncuesta(Profesor prof, Scanner scan, ManejoDatos datos) {
 		
 		System.out.println("Para crear una Encuesta, proporciona la siguiente información: ");
 
+	    if (scan.hasNextLine()) {
+	        scan.nextLine();
+	    }
 		// Leer título
 		System.out.print("Título: ");
 		String titulo = scan.nextLine();
@@ -808,6 +885,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 
 		// Llamar al método del profesor para crear la encuesta
 		Encuesta encuesta = prof.crearEncuesta(titulo, descripcion, niv, dur, obligatorio, tiempo, tipo, tipoPrueba);
+		datos.addActividad(encuesta);
 		
 		System.out.println("¡Encuesta creada con éxito!");
 		
@@ -836,6 +914,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 	        }
 			
 		}
+		datos.actualizarActividad(encuesta);
 
 	}
 	
@@ -869,10 +948,14 @@ public class ConsolaProfesorCreadorLearningPaths {
 	}
 	
 	
-	public void crearTarea(Profesor prof, Scanner scan) {
+	public void crearTarea(Profesor prof, Scanner scan, ManejoDatos datos) {
 		
 		System.out.println("Para crear una Tarea, proporciona la siguiente información:");
 
+	    if (scan.hasNextLine()) {
+	        scan.nextLine();
+	    }
+		
 		// Leer título
 		System.out.print("Título: ");
 		String titulo = scan.nextLine();
@@ -906,8 +989,10 @@ public class ConsolaProfesorCreadorLearningPaths {
 
 
 		// Llamar al método del profesor para crear la tarea
-		prof.crearTarea(titulo, descripcion, niv, dur, obligatorio, tiempo, tipo, contenido);
+		Tarea tarea = prof.crearTarea(titulo, descripcion, niv, dur, obligatorio, tiempo, tipo, contenido);
 
+		datos.addActividad(tarea);
+		
 		System.out.println("¡Tarea creada con éxito!");
 	}
 

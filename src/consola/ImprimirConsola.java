@@ -181,7 +181,7 @@ public class ImprimirConsola {
 		else
 		{
 			System.out.println("\nNo hay actividades en el Learning Path");
-			System.out.println("-----------------------------------------------------");
+			System.out.println("--------------------------------------------------\n\n");
 		}
 
 		

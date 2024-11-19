@@ -22,5 +22,14 @@
         "correo": "m.martinez@gmail.com",
         "login": "Marta Martínez",
         "contraseña": "Mart123"
+    },
+    {
+        "actividadesCreadas": [],
+        "tipo": "profesor",
+        "tipoEspecifico": "Profesor",
+        "learningPathsCreados": ["Todo sobre gatos"],
+        "correo": "sarag123@gmail.com",
+        "login": "Sara García",
+        "contraseña": "sg1"
     }
 ]
