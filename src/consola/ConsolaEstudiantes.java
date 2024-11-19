@@ -22,9 +22,7 @@ public class ConsolaEstudiantes {
 		ImprimirConsola imprimir = new ImprimirConsola();
 		
 		datos.cargarDatos();
-		Map<List<String>, Usuario> usuarios = datos.getUsuarios();
-		
-//		consola.iniciarAplicacion(datos, scanner, imprimir);
+		consola.iniciarAplicacion(datos, scanner, imprimir);
 		scanner.close(); 
 	}
 	
@@ -104,6 +102,7 @@ public class ConsolaEstudiantes {
 		switch (op)
 		{
 		case 0:
+			datos.guardarDatos();
 			System.out.println("Gracias por usar la aplicación!!!");
 			
 		case 1:
