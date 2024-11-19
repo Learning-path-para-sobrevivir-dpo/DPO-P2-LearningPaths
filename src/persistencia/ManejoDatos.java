@@ -180,15 +180,40 @@ public class ManejoDatos {
 	}
 	
 	/**
+	 * Encuentra una actividad por su id
+	 * @param idActividad: nombre de la actividad
+	 * @return La actividad buscada. Si no se encuentra retorna null.
+	 */
+	public Actividad getActividad(String idActividad) {
+		Actividad actividad = null;
+		if (this.actividades.containsKey(idActividad))
+		{
+			actividad = this.actividades.get(idActividad);
+		}
+		return actividad;
+	}
+	
+	/**
 	 * Encuentra una actividad por su nombre
 	 * @param nombreActividad: nombre de la actividad
 	 * @return La actividad buscada. Si no se encuentra retorna null.
 	 */
-	public Actividad getActividad(String nombreActividad) {
+	public Actividad getActividadPorNombre(String nombreActividad) {
 		Actividad actividad = null;
-		if (this.actividades.containsKey(nombreActividad))
+		boolean encontrada = false;
+		Iterator<String> it = this.actividades.keySet().iterator();
+		Actividad currentAct;
+		while (!encontrada && it.hasNext())
 		{
-			actividad = this.actividades.get(nombreActividad);
+			currentAct = this.actividades.get(it.next());
+			if (currentAct != null)
+			{
+				if (nombreActividad.equals(currentAct.getTitulo()))
+				{
+					actividad = currentAct;
+					encontrada = true;
+				}
+			}
 		}
 		return actividad;
 	}
