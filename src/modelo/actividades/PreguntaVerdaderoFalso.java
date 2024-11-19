@@ -4,12 +4,14 @@ public class PreguntaVerdaderoFalso extends Pregunta{
 	
 	private boolean respuestaCorrecta;
 	private boolean opcionSeleccionada;
+	private boolean correcta;
 
 	public PreguntaVerdaderoFalso(String enunciado, boolean respuestaCorrecta) {
 		super(enunciado);
 		this.respuestaCorrecta = respuestaCorrecta;
 		this.opcionSeleccionada = false;
 		this.setTipo("Pregunta Verdadero Falso");
+		this.correcta = false;
 	}
 	
 	public PreguntaVerdaderoFalso(String enunciado) {
@@ -17,6 +19,7 @@ public class PreguntaVerdaderoFalso extends Pregunta{
 		this.opcionSeleccionada = false;
 		this.setTipo("Pregunta Verdadero Falso");
 		this.setNumero(0);
+		this.correcta = false;
 	}
 
 	
@@ -40,6 +43,19 @@ public class PreguntaVerdaderoFalso extends Pregunta{
 
 	public void setOpcionSeleccionada(boolean opcionSeleccionada) {
 		this.opcionSeleccionada = opcionSeleccionada;
+	}
+	
+	public boolean isCorrecta()
+	{
+		return correcta;
+	}
+	
+	public void verificarCorrecta()
+	{
+		if (this.opcionSeleccionada == this.respuestaCorrecta)
+		{
+			this.correcta = true;
+		}
 	}
 
 }
