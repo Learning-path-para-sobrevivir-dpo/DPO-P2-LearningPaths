@@ -180,11 +180,11 @@
         "objetivo": "Arte",
         "reviews": [],
         "tiempoCompletarSugerido": 40,
-        "enviada": false,
+        "enviada": true,
         "duracionMin": 30,
         "idEstudiante": "26440388",
         "id": "40579652",
-        "medioEntrega": ""
+        "medioEntrega": "Bloque Neon"
     },
     {
         "contenido": "describe el arte conceptual",

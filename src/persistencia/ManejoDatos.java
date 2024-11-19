@@ -180,15 +180,40 @@ public class ManejoDatos {
 	}
 	
 	/**
+	 * Encuentra una actividad por su id
+	 * @param idActividad: nombre de la actividad
+	 * @return La actividad buscada. Si no se encuentra retorna null.
+	 */
+	public Actividad getActividad(String idActividad) {
+		Actividad actividad = null;
+		if (this.actividades.containsKey(idActividad))
+		{
+			actividad = this.actividades.get(idActividad);
+		}
+		return actividad;
+	}
+	
+	/**
 	 * Encuentra una actividad por su nombre
 	 * @param nombreActividad: nombre de la actividad
 	 * @return La actividad buscada. Si no se encuentra retorna null.
 	 */
-	public Actividad getActividad(String nombreActividad) {
+	public Actividad getActividadPorNombre(String nombreActividad) {
 		Actividad actividad = null;
-		if (this.actividades.containsKey(nombreActividad))
+		boolean encontrada = false;
+		Iterator<String> it = this.actividades.keySet().iterator();
+		Actividad currentAct;
+		while (!encontrada && it.hasNext())
 		{
-			actividad = this.actividades.get(nombreActividad);
+			currentAct = this.actividades.get(it.next());
+			if (currentAct != null)
+			{
+				if (nombreActividad.equals(currentAct.getTitulo()))
+				{
+					actividad = currentAct;
+					encontrada = true;
+				}
+			}
 		}
 		return actividad;
 	}
@@ -197,6 +222,7 @@ public class ManejoDatos {
 	{
 		if (act != null)
 		{
+			
 			if (act.getIdEstudiante().equals(""))
 			{
 				this.actividades.replace(act.getId(), act);
@@ -261,6 +287,19 @@ public class ManejoDatos {
 			progreso.obtenerActividadesPath(lpProgreso);
 			this.progresos.put(List.of(progreso.getLearningPath(),progreso.getEstudiante()), progreso);
 			PersistenciaProgresos.guardarProgreso(progresos);
+		}
+	}
+	
+	public void actualizarProgreso(Progreso progreso) throws LearningPathIncorrectoProgresoException
+	{
+		if (progresos.containsKey(List.of(progreso.getLearningPath(), progreso.getEstudiante())))
+		{
+			progresos.replace(List.of(progreso.getLearningPath(), progreso.getEstudiante()), progreso);
+			PersistenciaProgresos.guardarProgreso(progresos);
+		}
+		else
+		{
+			addProgreso(progreso);
 		}
 	}
 	
