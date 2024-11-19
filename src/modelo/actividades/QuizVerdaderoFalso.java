@@ -43,6 +43,16 @@ public class QuizVerdaderoFalso extends Quiz {
 	public List<PreguntaVerdaderoFalso> getPreguntas() {
 		return preguntas;
 	}
+	
+	public PreguntaVerdaderoFalso obtenerPreguntaPorNumero(int numeroPregunta)
+	{
+		PreguntaVerdaderoFalso pregunta = null;
+		if (numeroPregunta > 0 && numeroPregunta <= preguntas.size())
+		{
+			pregunta = preguntas.get(numeroPregunta-1);
+		}
+		return pregunta;
+	}
 
 	public void setPreguntas(List<PreguntaVerdaderoFalso> preguntas) {
 		int i = 1;
@@ -91,7 +101,7 @@ public class QuizVerdaderoFalso extends Quiz {
 			int cantidadPreguntas = this.preguntas.size();
 			for (PreguntaVerdaderoFalso pregunta: this.preguntas)
 			{
-				if (pregunta.isRespuestaCorrecta() == pregunta.isOpcionSeleccionada())
+				if (pregunta.isCorrecta())
 				{
 					respuestasCorrectas++;
 				}
@@ -124,6 +134,7 @@ public class QuizVerdaderoFalso extends Quiz {
 			try {
 				preguntaRespondida = (PreguntaVerdaderoFalso) this.preguntas.get(i).clone();
 				preguntaRespondida.setOpcionSeleccionada(respuestas.get(i));
+				preguntaRespondida.verificarCorrecta();
 				preguntasRespondidas.add(preguntaRespondida);
 			} catch (CloneNotSupportedException e) {
 				// TODO Auto-generated catch block
