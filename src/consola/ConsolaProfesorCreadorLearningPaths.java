@@ -1,12 +1,14 @@
 package consola;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 import excepciones.LearningPathOActividadNoEncontradoException;
 import excepciones.TipoDePreguntaInvalidaException;
+import modelo.Estudiante;
 import modelo.LearningPath;
 import modelo.Profesor;
 import modelo.Progreso;
@@ -368,38 +370,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 
 	public void editarLearningPaths(Profesor prof, ImprimirConsola imprimir, Scanner scan, ManejoDatos datos) throws LearningPathOActividadNoEncontradoException {
 		
-	    Map<String, LearningPath> paths = prof.getLearningPathsCreados();
-
-	    if (paths.isEmpty()) {
-	        throw new LearningPathOActividadNoEncontradoException("No ha creado ningún Learning Path.");
-	    }
-
-	    System.out.println("Sus Learning Paths creados son:");
-	    for (String titulo : paths.keySet()) {
-	        System.out.println("- " + titulo);
-	    }
-	    
-	    
-
-	    String nomConsultar = "";
-	    LearningPath seleccionado = null;
-
-	    if (scan.hasNextLine()) {
-	        scan.nextLine();
-	    }
-	    
-	    while (nomConsultar.trim().isEmpty()) {
-	        System.out.println("Learning Path para editar: ");
-	        nomConsultar = scan.nextLine().trim();
-
-	        // Buscar el Learning Path en el mapa
-	        seleccionado = paths.get(nomConsultar);
-
-	        // Si no existe, lanzar excepción
-	        if (seleccionado == null) {
-	            throw new LearningPathOActividadNoEncontradoException("El Learning Path '" + nomConsultar + "' no existe.");
-	        }
-	    }
+		LearningPath seleccionado = seleccionarLearningPath(prof, imprimir, scan);
 		
 		System.out.println("Para tu learning path puedes: ");
 		System.out.println("1. Añadir actividad ");
@@ -489,8 +460,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 	}
 
 	
-	public void añadirActividad(Profesor prof, ImprimirConsola imprimir, Scanner scan, ManejoDatos datos, LearningPath path) {
-	    String nomAct = "";
+	public void añadirActividad(Profesor prof, ImprimirConsola imprimir, Scanner scan, ManejoDatos datos, LearningPath path) throws LearningPathOActividadNoEncontradoException {
 	    int pos = -1;
 
 	    
@@ -498,20 +468,21 @@ public class ConsolaProfesorCreadorLearningPaths {
 	        scan.nextLine();
 	    }
 	    
-	    while (nomAct.trim().isEmpty()) {
-	        System.out.println("Ingrese el nombre de la actividad que desea agregar: ");
-	        nomAct = scan.nextLine();
-	    }
+
+	    System.out.println("Para escoger actividad: ");
+	    
+	    Actividad actParaAñadir = seleccionarActividadDatos(prof, scan, datos);
+	    
+	    
 	    
 	    System.out.println("Ingrese la posición a la que desea agregarla (-1 si desea dejarla al final):  ");
 	    pos = leerEntero(scan);
 
 	    // Obtener la actividad del sistema
-	    Actividad actParaAñadir = datos.getActividadPorNombre(nomAct);
 
 	    // Verificar si la actividad existe
 	    if (actParaAñadir == null) {
-	        throw new IllegalArgumentException("Error: La actividad con nombre '" + nomAct + "' no existe.");
+	        throw new IllegalArgumentException("Error: La actividad con nombre no existe.");
 	    }
 	    
 	    if (pos>=0) {
@@ -836,10 +807,6 @@ public class ConsolaProfesorCreadorLearningPaths {
 	private void crearExamen(Profesor prof, Scanner scan, ManejoDatos datos, String titulo, String descripcion, int niv, int dur, boolean obligatorio, int tiempo, String tipo) {
 		
 
-	    if (scan.hasNextLine()) {
-	        scan.nextLine();
-	    }
-
 		String tipoPrueba = "Examen";
 
 
@@ -943,7 +910,10 @@ public class ConsolaProfesorCreadorLearningPaths {
 	        PreguntaAbierta pregunta = prof.crearPreguntaAbierta(contenido);
 
 	        if (actividad instanceof Examen) {
+	        	
 	            prof.addPreguntaExamen((Examen) actividad, pregunta);
+	            System.out.println(((Examen) actividad).getPreguntas());
+	            
 	            System.out.println("Pregunta añadida con éxito al examen.");
 	        } else if (actividad instanceof Encuesta) {
 	            prof.addPreguntaEncuesta((Encuesta) actividad, pregunta);
@@ -952,6 +922,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 	    } catch (TipoDePreguntaInvalidaException e) {
 	        System.out.println("Error: No se pudo añadir la pregunta. Detalles: " + e.getMessage());
 	    }
+	    
 	}
 	
 	
@@ -980,6 +951,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 	
 	
 	private void editarActividad(Profesor prof, ImprimirConsola imprimir, Scanner scan, ManejoDatos datos) throws LearningPathOActividadNoEncontradoException {
+
 		
 	    List<Actividad> acts = prof.getActCreadas();
 
@@ -1014,7 +986,12 @@ public class ConsolaProfesorCreadorLearningPaths {
 	    		seleccionado = act;
 	    	}
 	    }
-	    		
+	    	
+	    if (seleccionado instanceof Examen) {
+	    	
+	    	System.out.println(((Examen)seleccionado).getPreguntas());
+	    	
+	    }
 	    		
 	    if (seleccionado == null) {
 	    	throw new LearningPathOActividadNoEncontradoException("El Learning Path '" + nomConsultar + "' no existe.");
@@ -1032,14 +1009,14 @@ public class ConsolaProfesorCreadorLearningPaths {
 		System.out.println("4. Modificar duración ");
 		System.out.println("5. Modificar obligatorio ");
 		System.out.println("6. Modificar tiempo sugerido completar ");
-		if (seleccionado.getTipoActividad() == "Prueba") {
+		if (seleccionado instanceof Prueba) {
 			System.out.println("7. Añadir pregunta ");
 			System.out.println("8. Eliminar pregunta ");
 
 		}
-		else if ((seleccionado.getTipoActividad()=="Recurso Educativo")||seleccionado.getTipoActividad() == "Tarea") {
+		else if (seleccionado instanceof RecursoEducativo||seleccionado instanceof Tarea) {
 			System.out.println("9. Modificar contenido ");
-			if (seleccionado.getTipoActividad()=="Recurso Educativo") {
+			if (seleccionado instanceof RecursoEducativo) {
 				
 				System.out.println("10. Modificar Enlace ");
 			}
@@ -1054,6 +1031,10 @@ public class ConsolaProfesorCreadorLearningPaths {
 
         	String nuevoTitulo = "";
         	
+    	    if (scan.hasNextLine()) {
+    	        scan.nextLine();
+    	    }
+
         	
     		while (nuevoTitulo.trim().isEmpty())
     		{
@@ -1069,6 +1050,11 @@ public class ConsolaProfesorCreadorLearningPaths {
 
         	String nuevaDes = "";
         	
+    	    if (scan.hasNextLine()) {
+    	        scan.nextLine();
+    	    }
+
+        	
     		while (nuevaDes.trim().isEmpty())
     		{
     			System.out.println("Ingrese la nueva descripción: ");
@@ -1081,6 +1067,11 @@ public class ConsolaProfesorCreadorLearningPaths {
             
         case 3: 
         	int nuevoNiv = 0;
+        	
+    	    if (scan.hasNextLine()) {
+    	        scan.nextLine();
+    	    }
+
         	
     		while (nuevoNiv == (0))
     		{
@@ -1097,6 +1088,11 @@ public class ConsolaProfesorCreadorLearningPaths {
 
         	int nuevaDur = 0;
         	
+    	    if (scan.hasNextLine()) {
+    	        scan.nextLine();
+    	    }
+
+        	
     		while (nuevaDur == (0))
     		{
     			System.out.println("Ingrese la nueva duración: ");
@@ -1109,6 +1105,11 @@ public class ConsolaProfesorCreadorLearningPaths {
            
         case 5: 
         	boolean obligatorio = seleccionado.isObligatorio();
+        	
+    	    if (scan.hasNextLine()) {
+    	        scan.nextLine();
+    	    }
+
         	
     		while (obligatorio == (seleccionado.isObligatorio()))
     		{
@@ -1124,6 +1125,11 @@ public class ConsolaProfesorCreadorLearningPaths {
 
         	int nuevoTsug = 0;
         	
+    	    if (scan.hasNextLine()) {
+    	        scan.nextLine();
+    	    }
+
+        	
     		while (nuevoTsug == (0))
     		{
     			System.out.println("Ingrese el nuevo tiempo sugerido para completar: ");
@@ -1137,34 +1143,71 @@ public class ConsolaProfesorCreadorLearningPaths {
         
         case 7: 
         	
-        	Prueba prueba = (Prueba)seleccionado;
-        	if ((prueba.getTipoPrueba()== "Encuesta") || (prueba.getTipoPrueba()== "Examen")){
-        		
-        		añadirPreguntaAbierta(prof, scan, prueba);
-        		
+        	if (seleccionado instanceof Prueba) {
+        	    Prueba prueba = (Prueba) seleccionado;
+        	    
+            	
+        	    if (scan.hasNextLine()) {
+        	        scan.nextLine();
+        	    }
+
+        	    
+            	if ((prueba.getTipoPrueba().equals( "Encuesta")) || (prueba.getTipoPrueba().equals("Examen"))){
+            		
+            		if (prueba instanceof Encuesta) {
+            			Encuesta enc = (Encuesta)prueba;
+            		
+            		añadirPreguntaAbierta(prof, scan, enc);
+            		}
+            		
+            		
+            		else if (prueba instanceof Examen) {
+            			Examen exam = (Examen)prueba;
+            			
+        	        	System.out.println(exam.getPreguntas());
+
+            		
+            		añadirPreguntaAbierta(prof, scan, exam);
+            		}
+            	}
+            	else if (prueba.getTipoPrueba().equals("Quiz Verdadero Falso")){
+            		
+            		if (prueba instanceof QuizVerdaderoFalso) {
+            			QuizVerdaderoFalso quiz = (QuizVerdaderoFalso)prueba;
+            
+            		
+            			añadirPreguntaVoF(prof, scan, quiz);
+            		}
+            		
+            	}
+            	else if (prueba.getTipoPrueba()== "Quiz Opcion Multiple"){
+            		
+            		QuizOpcionMultiple quiz = (QuizOpcionMultiple)prueba;
+            		
+            		añadirPreguntaMultiple(prof, scan, quiz);
+            		
+            	}
+            	datos.actualizarActividad(prueba);
+            	
+            	
+            	
+
+        	} else {
+        	    System.out.println("La actividad seleccionada no es una prueba.");
         	}
-        	else if (prueba.getTipoPrueba()== "Quiz Verdadero Falso"){
-        		
-        		QuizVerdaderoFalso quiz = (QuizVerdaderoFalso)prueba;
-        		
-        		añadirPreguntaVoF(prof, scan, quiz);
-        		
-        	}
-        	else if (prueba.getTipoPrueba()== "Quiz Opcion Multiple"){
-        		
-        		QuizOpcionMultiple quiz = (QuizOpcionMultiple)prueba;
-        		
-        		añadirPreguntaMultiple(prof, scan, quiz);
-        		
-        	}
-        	
-        	
+
+        
         	
         	break;
         	
         	
         	
         case 8: 
+        	
+    	    if (scan.hasNextLine()) {
+    	        scan.nextLine();
+    	    }
+
         	
         	Prueba prueba1 = (Prueba)seleccionado;
 
@@ -1183,6 +1226,11 @@ public class ConsolaProfesorCreadorLearningPaths {
         case 9: 
         	
         	String newCont = "";
+        	
+    	    if (scan.hasNextLine()) {
+    	        scan.nextLine();
+    	    }
+
         	
     		while (newCont.trim().isEmpty())
     		{
@@ -1206,6 +1254,11 @@ public class ConsolaProfesorCreadorLearningPaths {
         case 10: 
         	
     		RecursoEducativo rec = (RecursoEducativo)seleccionado;
+    		
+    	    if (scan.hasNextLine()) {
+    	        scan.nextLine();
+    	    }
+
 
         	
         	String newLink = "";
@@ -1251,6 +1304,93 @@ public class ConsolaProfesorCreadorLearningPaths {
 
 		
 	}
+	
+	
+	
+	private LearningPath seleccionarLearningPath(Profesor prof, ImprimirConsola imprimir, Scanner scan) throws LearningPathOActividadNoEncontradoException
+	{
+		LearningPath lpSeleccionado = null;
+		Map<String, LearningPath>lps = prof.getLearningPathsCreados();
+		if (!lps.isEmpty())
+		{
+			int i = 1;
+			Map<Integer, String> indexLPs = new HashMap<Integer, String>();
+
+			System.out.println("Tus Learning Paths:");
+			System.out.println("-----------------------------------------------------");
+			for (String nombreLp: lps.keySet())
+			{
+				System.out.println(Integer.toString(i) + ". "+ nombreLp);
+				indexLPs.put(i, nombreLp);
+				i++;
+			}
+		
+			System.out.println("-----------------------------------------------------");
+			System.out.println("\n Seleccione el número del Learning Path que quiere: ");
+			int op = scan.nextInt();
+			while(!indexLPs.containsKey(op))
+			{
+				System.out.println("Opción invalida");
+				System.out.println("Ingrese el número del Learning Path que desea: ");
+				op = scan.nextInt();
+			}
+			String nombreLpSeleccionado = indexLPs.get(op);
+			lpSeleccionado = lps.get(nombreLpSeleccionado);
+		}
+		else
+		{
+	        throw new LearningPathOActividadNoEncontradoException("No ha creado ningún Learning Path.");
+		}
+		return lpSeleccionado;
+	}
+	
+	
+	
+	private Actividad seleccionarActividadDatos(Profesor prof, Scanner scan, ManejoDatos datos) throws LearningPathOActividadNoEncontradoException
+	{
+		
+		Actividad actSeleccionada = null;
+		Map<String, Actividad> actividades = datos.getActividades();
+		if (!actividades.isEmpty())
+		{
+			int i = 1;
+			Map<Integer, String> indexActs = new HashMap<Integer, String>();
+
+			System.out.println("Las actividades en el sistema son:");
+			System.out.println("-----------------------------------------------------");
+			for (Actividad act: actividades.values())
+			{
+				String nombreAct = act.getTitulo();
+				System.out.println(Integer.toString(i) + ". "+ nombreAct);
+				indexActs.put(i, nombreAct);
+				i++;
+			}
+		
+			System.out.println("-----------------------------------------------------");
+			System.out.println("\n Seleccione el número de Actividad que quiere: ");
+			int op = scan.nextInt();
+			while(!indexActs.containsKey(op))
+			{
+				System.out.println("Opción invalida");
+				System.out.println("Ingrese el número del Learning Path que desea: ");
+				op = scan.nextInt();
+			}
+			String nombreSeleccionado = indexActs.get(op);
+			for (Actividad act : actividades.values()) {
+				if (act.getTitulo().equals(nombreSeleccionado)){
+					actSeleccionada = act;
+				}
+			}
+			
+
+		}
+		else
+		{
+	        throw new LearningPathOActividadNoEncontradoException("No ha creado ningún Learning Path.");
+		}
+		return actSeleccionada;
+	}
+	
 
 	
 	

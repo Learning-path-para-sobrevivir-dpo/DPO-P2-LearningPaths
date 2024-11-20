@@ -6,7 +6,7 @@
         "rating": 0,
         "titulo": "Todo sobre gatos",
         "estudiantes": [],
-        "actividades": {},
+        "actividades": {"1": "27290200"},
         "version": 1,
         "autor": "Sara García",
         "objetivo": "aprender sobre gatos",
