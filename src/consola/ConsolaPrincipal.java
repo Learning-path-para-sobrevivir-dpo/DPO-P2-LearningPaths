@@ -107,9 +107,9 @@ public class ConsolaPrincipal {
 		String login = "";
 		String password = "";
 		
+		System.out.println("Ingrese su nombre de usuario: ");
 		while (login.trim().isEmpty())
 		{
-			System.out.println("Ingrese su nombre de usuario: ");
 			login = scan.nextLine();
 		}
 		

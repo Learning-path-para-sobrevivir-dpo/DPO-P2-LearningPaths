@@ -102,6 +102,23 @@
         "medioEntrega": ""
     },
     {
+        "tipoRecurso": "k",
+        "estado": "Sin completar",
+        "contenido": "k",
+        "nivelDificultad": 1,
+        "titulo": "Un recurso",
+        "obligatorio": false,
+        "tipoActividad": "Recurso Educativo",
+        "completada": false,
+        "objetivo": "x",
+        "reviews": [],
+        "tiempoCompletarSugerido": 10,
+        "duracionMin": 20,
+        "idEstudiante": "",
+        "enlace": "k",
+        "id": "81079519"
+    },
+    {
         "tipoRecurso": "Lectura",
         "estado": "Sin completar",
         "contenido": "contenido",
