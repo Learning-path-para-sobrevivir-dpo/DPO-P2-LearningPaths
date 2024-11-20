@@ -37,8 +37,8 @@
         "estado": "Sin completar",
         "contenido": "describe el arte conceptual",
         "nivelDificultad": 1,
-        "titulo": "El arte conceptual",
-        "obligatorio": false,
+        "titulo": "El arte en tu vida",
+        "obligatorio": true,
         "tipoActividad": "Tarea",
         "completada": false,
         "objetivo": "Arte",
@@ -47,7 +47,7 @@
         "enviada": false,
         "duracionMin": 30,
         "idEstudiante": "",
-        "id": "40579652",
+        "id": "31997514",
         "medioEntrega": ""
     },
     {
@@ -103,18 +103,19 @@
     {
         "estado": "Sin completar",
         "contenido": "1. Hallar mapas de los datos. 2. Hacer un mapa con los datos de clase.",
+
         "nivelDificultad": 1,
-        "titulo": "Ejercicios Mapas Java",
-        "obligatorio": true,
+        "titulo": "El arte conceptual",
+        "obligatorio": false,
         "tipoActividad": "Tarea",
         "completada": false,
         "objetivo": "Completar estos ejercicios de mapas",
         "reviews": [],
-        "tiempoCompletarSugerido": 10,
-        "enviada": false,
-        "duracionMin": 40,
+        "tiempoCompletarSugerido": 40,
+        "enviada": true,
+        "duracionMin": 30,
         "idEstudiante": "",
-        "id": "32733940",
+        "id": "40579652",
         "medioEntrega": ""
     },
     {
@@ -130,11 +131,12 @@
         "reviews": [],
         "tiempoCompletarSugerido": 30,
         "duracionMin": 30,
-        "idEstudiante": "89436968",
+        "idEstudiante": "",
         "enlace": "nada",
         "id": "95752950"
     },
     {
+
         "calificado": false,
         "estado": "Sin completar",
         "nivelDificultad": 3,
@@ -172,17 +174,17 @@
         "estado": "Sin completar",
         "contenido": "describe el arte ",
         "nivelDificultad": 1,
-        "titulo": "El arte en tu vida",
+        "titulo": "Ejercicios Mapas Java",
         "obligatorio": true,
         "tipoActividad": "Tarea",
         "completada": false,
         "objetivo": "Arte",
         "reviews": [],
-        "tiempoCompletarSugerido": 40,
+        "tiempoCompletarSugerido": 10,
         "enviada": false,
-        "duracionMin": 30,
+        "duracionMin": 40,
         "idEstudiante": "",
-        "id": "31997514",
+        "id": "32733940",
         "medioEntrega": ""
     },
     {
@@ -198,7 +200,7 @@
         "reviews": [],
         "tiempoCompletarSugerido": 30,
         "duracionMin": 30,
-        "idEstudiante": "",
+        "idEstudiante": "89436968",
         "enlace": "nada",
         "id": "95752950"
     },

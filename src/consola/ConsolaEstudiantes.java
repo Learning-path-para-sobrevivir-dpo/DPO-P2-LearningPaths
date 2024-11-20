@@ -22,8 +22,6 @@ public class ConsolaEstudiantes {
 		ImprimirConsola imprimir = new ImprimirConsola();
 		
 		datos.cargarDatos();
-		Map<List<String>, Usuario> usuarios = datos.getUsuarios();
-		
 		consola.iniciarAplicacion(datos, scanner, imprimir);
 		scanner.close(); 
 	}
@@ -85,7 +83,7 @@ public class ConsolaEstudiantes {
 	private int mostrarOpcionesApp(Scanner scan)
 	{
 		int op;
-		System.out.println("Bienvenido al menu de Estudiantes");
+		System.out.println("\nBienvenido al menu de Estudiantes");
 	    System.out.println("Seleccione lo que quiere hacer: ");
 	    System.out.println("1. Inscribir un Learning Path");
 	    System.out.println("2. Ver Learning Paths inscritos");
@@ -104,23 +102,24 @@ public class ConsolaEstudiantes {
 		switch (op)
 		{
 		case 0:
+			datos.guardarDatos();
 			System.out.println("Gracias por usar la aplicación!!!");
-			
+			break;
 		case 1:
 			verInscribirLearningPath(datos, es, imprimir, scan);
-			
+			break;
 		case 2:
 			verLearningPaths(es, imprimir, scan);
-			
+			break;
 		case 3:
 			verActividadesLearningPath(es, imprimir, scan);
-			
+			break;
 		case 4:
 			verProgresoLearningPath(es, imprimir, scan);
-			
+			break;
 		case 5:
 			verIniciarActividad(es, imprimir, scan);
-			
+			break;
 		}
 	}
 	
@@ -136,14 +135,17 @@ public class ConsolaEstudiantes {
 		if (lpSeleccionado != null)
 		{
 			String nombreLpSeleccionado = lpSeleccionado.getTitulo();
-			es.inscribirLearningPath(lpSeleccionado);
-			System.out.println("\n El Learning Path '"+nombreLpSeleccionado+"' fue inscrito exitosamenete\n");
-				
-			}
-		else
-			{
+			try {
+	            es.inscribirLearningPath(lpSeleccionado);
+	            System.out.println("\nEl Learning Path '" + nombreLpSeleccionado + "' fue inscrito exitosamente\n");
+	        } catch (IllegalStateException e) {
+	            // Manejo de la excepción: imprime el mensaje de error y continúa.
+	            System.out.println("\nError: " + e.getMessage() + "\n");
+	        }
+	    } else {
 				System.out.println("Hubo un problema al tratar de inscribir el Learning Path\n");
 			}
+		return;
 	}
 	
 	/**
@@ -167,6 +169,7 @@ public class ConsolaEstudiantes {
 		else {
 			System.out.println("\nNo hay Learning Paths inscritos\n");
 		}
+		return;
 	}
 	
 	private void verActividadesLearningPath(Estudiante es, ImprimirConsola imprimir, Scanner scan)
@@ -191,6 +194,7 @@ public class ConsolaEstudiantes {
 			{
 				System.out.println("Este Learning Path no existe\n");
 			}
+		return;
 	}
 	
 	private void verProgresoLearningPath(Estudiante es, ImprimirConsola imprimir, Scanner scan)
@@ -199,36 +203,48 @@ public class ConsolaEstudiantes {
 		Map<String, Progreso> progresos = lpSeleccionado.getProgresosEstudiantiles();
 		Progreso progreso = progresos.get(es.getLogin());
 		imprimir.imprimirProgreso(progreso);
+		
+		return;
 	}
 	
 	private void verIniciarActividad(Estudiante es, ImprimirConsola imprimir, Scanner scan)
 	{
 		LearningPath lpSeleccionado = seleccionarLearningPathE(es, imprimir, scan);
+		Progreso progreso = es.getProgresosLearningPaths().get(lpSeleccionado.getTitulo());
 		Actividad actividad = seleccionarActividad(es, imprimir, scan, lpSeleccionado, true);
-		//es.iniciarActividad(actividad, lpSeleccionado.getTitulo());
+		if (actividad == null) {
+            System.out.println("No se seleccionó una actividad válida o no hay actividades disponibles.");
+            return;
+        }
+
+		try {
+			progreso.empezarActividad(actividad);
+		} catch (YaExisteActividadEnProgresoException e) {
+			e.printStackTrace();
+		}
 		String tipoActividad = actividad.getTipoActividad();
 		switch (tipoActividad) {
 		case "Prueba":
 			String tipoPrueba = ((Prueba) actividad).getTipoPrueba();
 			switch (tipoPrueba) {
 			case "Encuesta":
-				iniciarEncuesta((Encuesta) actividad); 
+				iniciarEncuesta((Encuesta) actividad,scan); 
 				break;
 			case "Quiz Opcion Multiple":
-				iniciarQuizMultiple((QuizOpcionMultiple) actividad); 
+				iniciarQuizMultiple((QuizOpcionMultiple) actividad,scan); 
 				break;
 			case "Quiz Verdadero Falso":
-				iniciarQuizVF((QuizVerdaderoFalso) actividad);
+				iniciarQuizVF((QuizVerdaderoFalso) actividad,scan);
 				break;
 			case "Examen":
-				iniciarExamen((Examen) actividad); 
+				iniciarExamen((Examen) actividad,scan); 
 				break;
 			default:
 				throw new IllegalArgumentException("Tipo de prueba desconocido: " + tipoPrueba);
 			}
 			break;
 		case "Tarea":
-			responderTarea((Tarea)actividad);
+			responderTarea((Tarea)actividad,scan);
 			break;
 		case "Recurso Educativo":
 			completarRecurso((RecursoEducativo) actividad);
@@ -236,6 +252,12 @@ public class ConsolaEstudiantes {
 		default:
 			throw new IllegalArgumentException("Tipo de actividad desconocido: " + tipoActividad);
 		}
+		try {
+			progreso.completarActividad(actividad);
+		} catch (CompletarActividadQueNoEstaEnProgresoException e) {
+			e.printStackTrace();
+		}
+		return;
 	}
 	
 	
@@ -397,9 +419,8 @@ public class ConsolaEstudiantes {
 		return act;
 	}
 	
-	public void iniciarQuizMultiple(QuizOpcionMultiple quiz) 
+	public void iniciarQuizMultiple(QuizOpcionMultiple quiz, Scanner scanner) 
 	{
-        Scanner scanner = new Scanner(System.in);
         List<Integer> respuestas = new ArrayList<>();
 
         System.out.println("Quiz: " + quiz.getTitulo());
@@ -446,12 +467,11 @@ public class ConsolaEstudiantes {
             System.out.println("Número de respuestas incorrecto. Inténtalo de nuevo.");
         }
         
-        scanner.close();
+        return;
     }
 	
-	public void iniciarQuizVF(QuizVerdaderoFalso quiz) 
+	public void iniciarQuizVF(QuizVerdaderoFalso quiz, Scanner scanner) 
 	{
-        Scanner scanner = new Scanner(System.in);
         List<Boolean> respuestas = new ArrayList<>();
 
         System.out.println("Quiz: " + quiz.getTitulo());
@@ -493,12 +513,11 @@ public class ConsolaEstudiantes {
             System.out.println("Número de respuestas incorrecto. Inténtalo de nuevo.");
         }
         
-        scanner.close();
+        return;
     }
 
-	public void iniciarEncuesta(Encuesta quiz) 
+	public void iniciarEncuesta(Encuesta quiz, Scanner scanner) 
 	{
-        Scanner scanner = new Scanner(System.in);
         List<String> respuestas = new ArrayList<>();
 
         System.out.println("Quiz: " + quiz.getTitulo());
@@ -529,12 +548,11 @@ public class ConsolaEstudiantes {
             System.out.println("Número de respuestas incorrecto. Inténtalo de nuevo.");
         }
         
-        scanner.close();
+        return;
     }
 
-	private void iniciarExamen(Examen examen) 
+	private void iniciarExamen(Examen examen, Scanner scanner) 
 	{	
-		Scanner scanner = new Scanner(System.in);
         System.out.println("Respondiendo el examen...");
         List<String> respuestas = new ArrayList<>();
         
@@ -549,14 +567,12 @@ public class ConsolaEstudiantes {
         } catch (RespuestasInconsistentesPruebaException e) {
             System.out.println("Error: " + e.getMessage());
         }
-        scanner.close();
+        return;
     }
 
-	private void responderTarea(Tarea tarea) {
-		Scanner scanner = new Scanner(System.in);
+	private void responderTarea(Tarea tarea, Scanner scanner) {
         if (tarea.isEnviado()) {
             System.out.println("La tarea ya ha sido enviada.");
-            scanner.close();
             return;
         }
 
@@ -566,7 +582,7 @@ public class ConsolaEstudiantes {
 
         tarea.setEnviado(true);
         System.out.println("La tarea ha sido marcada como enviada.");
-        scanner.close();
+        return;
     }
 
 	private void completarRecurso(RecursoEducativo recursoEducativo) {
@@ -576,5 +592,7 @@ public class ConsolaEstudiantes {
             recursoEducativo.completarActividad();
             System.out.println("El recurso ha sido marcado como completado.");
         }
+        return;
     }
+	
 }
