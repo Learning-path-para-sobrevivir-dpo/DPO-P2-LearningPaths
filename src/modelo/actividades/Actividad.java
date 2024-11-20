@@ -289,9 +289,9 @@ public abstract class Actividad implements Cloneable {
 	 * Funcion para calcular el rating promedio de la actividad en base a
 	 * los reviews y ratings dejados por usuarios
 	 */
-	private void calcularRatingPromedio()
+	protected void calcularRatingPromedio()
 	{
-		if (this.numRatings != 0)
+		if (this.numRatings >= 0)
 		{
 			this.ratingPromedio = this.ratingAcumulado / this.numRatings;
 		}

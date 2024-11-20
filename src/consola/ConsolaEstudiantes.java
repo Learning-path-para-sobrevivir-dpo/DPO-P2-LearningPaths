@@ -24,7 +24,7 @@ public class ConsolaEstudiantes {
 		datos.cargarDatos();
 		Map<List<String>, Usuario> usuarios = datos.getUsuarios();
 		
-//		consola.iniciarAplicacion(datos, scanner, imprimir);
+		consola.iniciarAplicacion(datos, scanner, imprimir);
 		scanner.close(); 
 	}
 	
