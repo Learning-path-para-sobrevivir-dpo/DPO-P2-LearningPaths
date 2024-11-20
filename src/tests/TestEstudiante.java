@@ -87,7 +87,7 @@ class TestEstudiante {
         estudiante.inscribirLearningPath(learningPath);
         learningPath.addActividadDeUltimas(quizOM);
 
-        Actividad actividadObtenida = estudiante.obtenerActividadDePath(learningPath.getTitulo(), 0);
+        Actividad actividadObtenida = estudiante.obtenerActividadDePath(learningPath.getTitulo(), 1);
         assertNotNull(actividadObtenida);
         assertEquals(quizOM, actividadObtenida);
     }
@@ -111,15 +111,14 @@ class TestEstudiante {
         learningPath.addActividadDeUltimas(tarea);
         Progreso progreso = estudiante.getProgresosLearningPaths().get(learningPath.getTitulo());
 
-        estudiante.iniciarActividad(progreso.getNumero(tarea, false), learningPath.getTitulo());
+       progreso.empezarActividad(tarea);
 
         Tarea tarea2 = (Tarea) tarea;
         tarea2.setMedioEntrega("URL de entrega");
         tarea2.setEnviado(true);
-        tarea2.completarActividad();
+        estudiante.completarActividad(tarea2,learningPath.getTitulo());
 
-        boolean completada = estudiante.completarActividad(progreso.getNumero(tarea2,true), learningPath.getTitulo());
-        assertTrue(completada);
+        assertEquals("Completada",tarea2.getEstado());
     }
 
     @Test
@@ -130,6 +129,6 @@ class TestEstudiante {
             estudiante.inscribirLearningPath(learningPath);
         });
 
-        assertEquals("Ya está inscrito en" + learningPath.getTitulo(), exception.getMessage());
+        assertEquals("Ya está inscrito en " + learningPath.getTitulo(), exception.getMessage());
     }
 }

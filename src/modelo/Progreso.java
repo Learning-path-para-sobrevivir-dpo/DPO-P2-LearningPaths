@@ -182,17 +182,16 @@ public class Progreso {
 		this.actividadEnProgreso = act;
 	}
 	
-	public boolean completarActividad(Actividad act) throws CompletarActividadQueNoEstaEnProgresoException {
+	public void completarActividad(Actividad act) throws CompletarActividadQueNoEstaEnProgresoException {
 		boolean completada = false;
 		if (!act.equals(this.actividadEnProgreso))
 		{
 			throw new CompletarActividadQueNoEstaEnProgresoException(act);
 		}
-		completada = act.completarActividad();
+		act.completarActividad();
 		eliminarActividadPendiente(act);
 		addActividadCompletada(act);
 		this.calcularProgreso();
-		return completada;
 	}
 	
 	public void descompletarActividad(Actividad act){
