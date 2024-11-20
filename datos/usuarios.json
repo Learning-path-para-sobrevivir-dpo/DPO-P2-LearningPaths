@@ -24,7 +24,10 @@
         "contraseña": "Mart123"
     },
     {
-        "actividadesCreadas": [],
+        "actividadesCreadas": [
+            "75356584",
+            "14544138"
+        ],
         "tipo": "profesor",
         "tipoEspecifico": "Profesor",
         "learningPathsCreados": ["Todo sobre gatos"],

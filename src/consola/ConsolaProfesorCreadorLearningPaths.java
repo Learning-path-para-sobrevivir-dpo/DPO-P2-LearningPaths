@@ -18,6 +18,7 @@ import modelo.actividades.Examen;
 import modelo.actividades.PreguntaAbierta;
 import modelo.actividades.PreguntaMultiple;
 import modelo.actividades.PreguntaVerdaderoFalso;
+import modelo.actividades.Prueba;
 import modelo.actividades.Quiz;
 import modelo.actividades.QuizOpcionMultiple;
 import modelo.actividades.QuizVerdaderoFalso;
@@ -181,8 +182,9 @@ public class ConsolaProfesorCreadorLearningPaths {
 	    System.out.println("4. Editar Learning Path");
 	    System.out.println("5. Clonar actividad");
 	    System.out.println("6. Crear actividad");
+	    System.out.println("7. Editar Learning Path");
 
-	    System.out.println("0. Salir de la aplicacion");
+	    System.out.println("0. Guardar cambios y salir de la aplicacion");
 	    
 	    System.out.print("Opción: ");
         op = scan.nextInt();
@@ -255,9 +257,15 @@ public class ConsolaProfesorCreadorLearningPaths {
             }
                   
             break;
+            
+        case 7: 
+        	editarActividad(prof, imprimir, scan, datos);
+        	
+        	break;
 						
         case 0:
             System.out.println("Gracias por usar la aplicación! Saliendo...");
+            datos.guardarDatos();
             
             System.exit(0);
          
@@ -270,6 +278,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 	}
 
 	
+
 	/**
 	 * Método para ver todos los Learning Paths creados por un profesor
 	 * @param prof instancia de la sesion iniciada del profesor
@@ -409,7 +418,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 	    }
 	    
 	    while (nomConsultar.trim().isEmpty()) {
-	        System.out.println("¿De cuál Learning Path desea ver las reseñas? (Escriba 'salir' para cancelar)");
+	        System.out.println("Learning Path para editar: ");
 	        nomConsultar = scan.nextLine().trim();
 
 	        // Buscar el Learning Path en el mapa
@@ -573,7 +582,8 @@ public class ConsolaProfesorCreadorLearningPaths {
 	    Actividad actClonar = datos.getActividad(nomAct);
 
 		
-		prof.clonarActividad(actClonar);
+		Actividad actClonada = prof.clonarActividad(actClonar);
+		datos.addActividad(actClonada);
 		datos.actualizarUsuario(prof);
 	}
 	
@@ -631,6 +641,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 		RecursoEducativo recCreado = prof.crearRecursoEducativo(titulo, descripcion, niv, dur, obligatorio, tiempo, tipo, tipoRecurso, contenido, enlace);
 
 		datos.addActividad(recCreado);
+		datos.actualizarUsuario(prof);
 		
 		System.out.println("¡Recurso educativo creado con éxito!");
 		
@@ -676,8 +687,11 @@ public class ConsolaProfesorCreadorLearningPaths {
 
 		Quiz quiz = prof.crearQuiz(titulo, descripcion, niv, dur, obligatorio, tiempo, tipo, tipoPrueba, niv);
 		
-		System.out.println("¡Quiz creado con éxito!");
+		
 		datos.addActividad(quiz);
+		datos.actualizarUsuario(prof);
+		System.out.println("¡Quiz creado con éxito!");
+
 		
 		System.out.println("Aún no tiene preguntas, debes crearlas: ");
 
@@ -691,14 +705,15 @@ public class ConsolaProfesorCreadorLearningPaths {
 			
 	        System.out.print("Ingrese su opción: ");
 	        
-	        int opcion = leerEntero(scan);
-	        switch (opcion) {
+	        int actop = scan.nextInt();
+	        
+	        switch (actop) {
 	            case 1:
-	    			if (tipoPrueba == "Quiz Opcion Multiple")
+	    			if (quiz.getTipoPrueba() == "Quiz Opcion Multiple")
 	    			{
 	    				añadirPreguntaMultiple( prof,  scan,  quiz);
 	    			}
-	    			else if (tipoPrueba == "Quiz Verdadero Falso")
+	    			else if (quiz.getTipoPrueba()  == "Quiz Verdadero Falso")
 	    			{
 	    				añadirPreguntaVoF( prof,  scan,  quiz);
 	    			}	                break;
@@ -711,6 +726,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 			
 		}
 		datos.actualizarActividad(quiz);
+		datos.actualizarUsuario(prof);
 	}
 	
 	private void añadirPreguntaMultiple(Profesor prof, Scanner scan, Quiz quiz) {
@@ -841,6 +857,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 			
 		}
 		datos.actualizarActividad(exam);
+		datos.actualizarUsuario(prof);
 
 	}
 	
@@ -914,7 +931,9 @@ public class ConsolaProfesorCreadorLearningPaths {
 	        }
 			
 		}
-		datos.actualizarActividad(encuesta);
+		datos.addActividad(encuesta);
+		datos.actualizarUsuario(prof);
+
 
 	}
 	
@@ -992,8 +1011,249 @@ public class ConsolaProfesorCreadorLearningPaths {
 		Tarea tarea = prof.crearTarea(titulo, descripcion, niv, dur, obligatorio, tiempo, tipo, contenido);
 
 		datos.addActividad(tarea);
-		
+		datos.actualizarUsuario(prof);
 		System.out.println("¡Tarea creada con éxito!");
+		
+	}
+	
+	
+	private void editarActividad(Profesor prof, ImprimirConsola imprimir, Scanner scan, ManejoDatos datos) {
+		
+	    List<Actividad> acts = prof.getActCreadas();
+
+	    if (acts.isEmpty()) {
+	    	System.out.println("No ha creado ninguna Actividad.");
+	    }
+
+	    System.out.println("Sus Actividades creadas son:");
+	    for (Actividad act : acts) {
+	        System.out.println("- " + act.getTitulo());
+	    }
+	    
+	    
+
+	    String nomConsultar = "";
+	    Actividad seleccionado = null;
+
+	    if (scan.hasNextLine()) {
+	        scan.nextLine();
+	    }
+	    
+	    while (nomConsultar.trim().isEmpty()) {
+	        System.out.println("Actividad para editar: ");
+	        nomConsultar = scan.nextLine().trim();
+
+	    }
+
+	    for (Actividad act : acts) {
+	    	if(act.getTitulo() == nomConsultar) {
+	    		seleccionado = act;
+	    	}	    }
+	    
+	    
+		
+		System.out.println("Para tu actividad puedes: ");
+		System.out.println("1. Modificar título ");
+		System.out.println("2. Modificar descripción ");
+		System.out.println("3. Modificar nivel de dificultad ");
+		System.out.println("4. Modificar duración ");
+		System.out.println("5. Modificar obligatorio ");
+		System.out.println("6. Modificar tiempo sugerido completar ");
+		if (seleccionado.getTipoActividad() == "Prueba") {
+			System.out.println("7. Añadir pregunta ");
+			System.out.println("8. Eliminar pregunta ");
+
+		}
+		else if ((seleccionado.getTipoActividad()=="Recurso Educativo")||seleccionado.getTipoActividad() == "Tarea") {
+			System.out.println("9. Modificar contenido ");
+			if (seleccionado.getTipoActividad()=="Recurso Educativo") {
+				
+				System.out.println("10. Modificar Enlace ");
+			}
+		}
+			
+        System.out.print("Opción: ");
+        int actop = scan.nextInt();
+        
+        switch (actop) {
+        
+        case 1:
+
+        	String nuevoTitulo = "";
+        	
+        	
+    		while (nuevoTitulo.trim().isEmpty())
+    		{
+    			System.out.println("Ingrese el nuevo título para el Learning Path: ");
+    			nuevoTitulo = scan.nextLine();
+    		}
+        	
+    		seleccionado.setTitulo(nuevoTitulo);
+           
+            break;
+            
+        case 2: 
+
+        	String nuevaDes = "";
+        	
+    		while (nuevaDes.trim().isEmpty())
+    		{
+    			System.out.println("Ingrese la nueva descripción: ");
+    			nuevaDes = scan.nextLine();
+    		}
+        	
+    		seleccionado.setObjetivo(nuevaDes);
+        	
+            break;
+            
+        case 3: 
+        	int nuevoNiv = 0;
+        	
+    		while (nuevoNiv == (0))
+    		{
+    			System.out.println("Ingrese la nueva dificultad de 1 (fácil) a 3 (difícil): ");
+    			nuevoNiv = leerEntero(scan);
+  
+    		}
+    		seleccionado.setNivelDificultad(nuevoNiv);
+
+        	
+        	break;
+            
+        case 4: 
+
+        	int nuevaDur = 0;
+        	
+    		while (nuevaDur == (0))
+    		{
+    			System.out.println("Ingrese la nueva duración: ");
+    			nuevaDur = leerEntero(scan);
+  
+    		}
+    		seleccionado.setDuracionMin(nuevaDur);
+        	
+            break;
+           
+        case 5: 
+        	boolean obligatorio = seleccionado.isObligatorio();
+        	
+    		while (obligatorio == (seleccionado.isObligatorio()))
+    		{
+    			System.out.println("Es obligatorio? (true/false): ");
+    			obligatorio = leerBooleano(scan);
+    		}
+        	
+    		seleccionado.setObligatorio(obligatorio);
+        	
+            break;
+            
+        case 6: 
+
+        	int nuevoTsug = 0;
+        	
+    		while (nuevoTsug == (0))
+    		{
+    			System.out.println("Ingrese el nuevo tiempo sugerido para completar: ");
+    			nuevoTsug = leerEntero(scan);
+  
+    		}
+    		seleccionado.setTiempoCompletarSugerido(nuevoTsug);
+
+            break;    
+        
+        
+        case 7: 
+        	
+        	Prueba prueba = (Prueba)seleccionado;
+        	if ((prueba.getTipoPrueba()== "Encuesta") || (prueba.getTipoPrueba()== "Examen")){
+        		
+        		añadirPreguntaAbierta(prof, scan, prueba);
+        		
+        	}
+        	else if (prueba.getTipoPrueba()== "Quiz Verdadero Falso"){
+        		
+        		Quiz quiz = (Quiz)prueba;
+        		
+        		añadirPreguntaVoF(prof, scan, quiz);
+        		
+        	}
+        	else if (prueba.getTipoPrueba()== "Quiz Opcion Multiple"){
+        		
+        		Quiz quiz = (Quiz)prueba;
+        		
+        		añadirPreguntaMultiple(prof, scan, quiz);
+        		
+        	}
+        	
+        	
+        	
+        	break;
+        	
+        	
+        	
+        case 8: 
+        	
+        	Prueba prueba1 = (Prueba)seleccionado;
+
+        	int posPreg = -1;
+        	
+    		while (posPreg == (-1))
+    		{
+    			System.out.println("Ingrese la posición de la pregunta a eliminar: ");
+    			posPreg = leerEntero(scan);
+  
+    		}
+    		
+    		prueba1.eliminarPregunta(posPreg);
+        	
+        	 	
+        case 9: 
+        	
+        	String newCont = "";
+        	
+    		while (newCont.trim().isEmpty())
+    		{
+    			System.out.println("Ingrese la nueva descripción: ");
+    			newCont = scan.nextLine();
+    		}
+
+        	
+        	if (seleccionado.getTipoActividad() == "Recurso Educativo") {
+        		
+        		RecursoEducativo act = (RecursoEducativo)seleccionado;
+        		act.setContenido(newCont);
+
+        	}
+        	else if (seleccionado.getTipoActividad() == "Tarea") {
+        		
+        		Tarea act = (Tarea)seleccionado;
+        		act.setContenido(newCont);
+        	}
+        	
+        case 10: 
+        	
+    		RecursoEducativo rec = (RecursoEducativo)seleccionado;
+
+        	
+        	String newLink = "";
+        	
+    		while (newLink.trim().isEmpty())
+    		{
+    			System.out.println("Ingrese la nueva descripción: ");
+    			newLink = scan.nextLine();
+    		}
+
+    		rec.setEnlace(newLink);
+        	
+        	break; 
+              
+        	
+		
+        }
+        
+        	
+        	
+		
 	}
 
 	
