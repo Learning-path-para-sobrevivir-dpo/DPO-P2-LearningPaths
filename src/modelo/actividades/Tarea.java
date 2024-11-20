@@ -1,4 +1,4 @@
-ñ,,,lpackage modelo.actividades;
+package modelo.actividades;
 
 import java.util.List;
 

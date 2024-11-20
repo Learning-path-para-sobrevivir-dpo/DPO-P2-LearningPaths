@@ -10,8 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import excepciones.RespuestasInconsistentesPruebaException;
 import excepciones.TipoDePreguntaInvalidaException;
-import modelo.actividades.Examen;
-import modelo.actividades.PreguntaAbierta;
+import modelo.actividades.*;
 
 public class TestExamen {
 	
@@ -50,7 +49,7 @@ public class TestExamen {
     @Test
     public void testAgregarPreguntaInvalida() {
         Exception exception = assertThrows(TipoDePreguntaInvalidaException.class, () -> {
-            examen.addPregunta(new PreguntaAbierta("Pregunta tipo incorrecto", 0) {
+            examen.addPregunta(new PreguntaVerdaderoFalso("Pregunta tipo incorrecto", 0) {
                 @Override
                 public String getTipo() {
                     return "Invalido";

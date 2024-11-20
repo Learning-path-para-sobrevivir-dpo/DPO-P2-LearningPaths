@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import excepciones.RespuestasInconsistentesPruebaException;
 import excepciones.TipoDePreguntaInvalidaException;
 
-class EncuestaTest {
+class TestEncuesta {
 
     private Encuesta encuesta;
     private List<PreguntaAbierta> preguntasIniciales;
@@ -46,7 +46,7 @@ class EncuestaTest {
 
         encuesta.setPreguntas(nuevasPreguntas);
         assertEquals(2, encuesta.getPreguntas().size());
-        assertEquals("Pregunta A", encuesta.getPreguntas().get(0).getTexto());
+        assertEquals("Pregunta A", encuesta.getPreguntas().get(0).getEnunciado());
         assertEquals(1, encuesta.getPreguntas().get(0).getNumero());
     }
 
@@ -75,12 +75,12 @@ class EncuestaTest {
         encuesta.addPregunta(nuevaPregunta);
 
         assertEquals(3, encuesta.getPreguntas().size());
-        assertEquals("Pregunta 3", encuesta.getPreguntas().get(2).getTexto());
+        assertEquals("Pregunta 3", encuesta.getPreguntas().get(2).getEnunciado());
     }
 
     @Test
     void testAddPreguntaInvalida() {
-        Pregunta preguntaInvalida = new Pregunta("Pregunta Invalida", "Otro tipo");
+        Pregunta preguntaInvalida = new PreguntaVerdaderoFalso("Pregunta Invalida", true);
 
         assertThrows(TipoDePreguntaInvalidaException.class, () -> {
             encuesta.addPregunta(preguntaInvalida);
@@ -92,7 +92,7 @@ class EncuestaTest {
         encuesta.eliminarPregunta(1);
 
         assertEquals(1, encuesta.getPreguntas().size());
-        assertEquals("Pregunta 2", encuesta.getPreguntas().get(0).getTexto());
+        assertEquals("Pregunta 2", encuesta.getPreguntas().get(0).getEnunciado());
     }
 
     @Test
