@@ -105,6 +105,11 @@ public class TestLearningPath {
 		assertEquals(2, actsTest.size(), "No se eliminó correctamente");	
 		assertEquals("Examen final", (actsTest.get(2)).getTitulo(), "No se eliminó correctamente");
 
+		path1.addActividadDeUltimas(act4);
+		actsTest= path1.getActividades();
+		assertEquals(3, actsTest.size(), "No se eliminó correctamente");	
+		assertEquals("Tarea 1", (actsTest.get(3)).getTitulo(), "No se añadió correctamente de última"+actsTest);
+
 		
 		assertThrows(IllegalArgumentException.class, ()->path1.eliminarActividadPorPos(-2));
 	}
