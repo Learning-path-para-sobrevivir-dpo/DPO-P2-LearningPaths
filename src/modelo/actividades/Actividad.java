@@ -307,17 +307,13 @@ public abstract class Actividad implements Cloneable {
 	 * Método para completar una actividad, dado que se cumplan los requisitos
 	 * @return true si se marco con exito la actividad completada, false de lo contrario
 	 */
-	public void completarActividad() {
-		this.setEstado("Completada");
-	}
+	public abstract boolean completarActividad();
 	
 	/**
 	 * Método para profesores para marcar como no completadas las actividades 
 	 * en caso de que el estudiante no obtenga una buena calificación
 	 */
-	public void descompletarActividad() {
-		this.setEstado("Sin completar");
-	}
+	public abstract void descompletarActividad();
 
 	public abstract void setReviews(List<Review> listaReviews);
 }
