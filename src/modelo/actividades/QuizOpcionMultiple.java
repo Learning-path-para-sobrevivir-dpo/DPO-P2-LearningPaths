@@ -53,6 +53,16 @@ public class QuizOpcionMultiple extends Quiz {
 		}
 		this.preguntas = preguntas;
 	}
+	
+	public PreguntaMultiple getPreguntaPorNumero(int numeroPregunta)
+	{
+		PreguntaMultiple p = null;
+		if (numeroPregunta > 0 && numeroPregunta <= preguntas.size())
+		{
+			p = preguntas.get(numeroPregunta-1);
+		}
+		return p;
+	}
 
 	public List<PreguntaMultiple> getPreguntas() {
 		return preguntas;
