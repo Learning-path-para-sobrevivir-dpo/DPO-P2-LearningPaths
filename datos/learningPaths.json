@@ -12,7 +12,7 @@
         "objetivo": "aprender sobre gatos",
         "progresosEstudiantiles": {},
         "duracion": 0,
-        "fechaCreacion": "2024-11-19"
+        "fechaCreacion": "2024-11-20"
     },
     {
         "descripcion": "Curso que te enseña todo sobre Estructuras de Datos en Java",
@@ -27,7 +27,7 @@
         "objetivo": "Conocer todo sobre Estructuras de Datos en Java",
         "progresosEstudiantiles": {},
         "duracion": 0,
-        "fechaCreacion": "2024-11-19"
+        "fechaCreacion": "2024-11-20"
     },
     {
         "descripcion": "Curso creativo de arte",
@@ -50,6 +50,6 @@
             "Juliana Hernandez"
         ]},
         "duracion": 0,
-        "fechaCreacion": "2024-11-19"
+        "fechaCreacion": "2024-11-20"
     }
 ]

@@ -1012,14 +1012,16 @@ public class ConsolaProfesorCreadorLearningPaths {
 	    for (Actividad act : acts) {
 	    	if(act.getTitulo().equals(nomConsultar)) {
 	    		seleccionado = act;
-	    		
-		        // Si no existe, lanzar excepción
-		        if (seleccionado == null) {
-		            throw new LearningPathOActividadNoEncontradoException("El Learning Path '" + nomConsultar + "' no existe.");
-		        }
 	    	}
+	    }
+	    		
+	    		
+	    if (seleccionado == null) {
+	    	throw new LearningPathOActividadNoEncontradoException("El Learning Path '" + nomConsultar + "' no existe.");
+		        }
+	    	
 		       
-	    	}	    
+	    		    
 	    
 	    
 		

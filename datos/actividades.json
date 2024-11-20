@@ -68,6 +68,23 @@
         "medioEntrega": ""
     },
     {
+        "tipoRecurso": "Video",
+        "estado": "Sin completar",
+        "contenido": "video de gatos",
+        "nivelDificultad": 3,
+        "titulo": "Video interesante sobre gatos",
+        "obligatorio": true,
+        "tipoActividad": "Recurso Educativo",
+        "completada": false,
+        "objetivo": "gatos video ",
+        "reviews": [],
+        "tiempoCompletarSugerido": 40,
+        "duracionMin": 30,
+        "idEstudiante": "",
+        "enlace": "www.videogatos.com",
+        "id": "27290200"
+    },
+    {
         "tipoRecurso": "Lectura",
         "estado": "Sin completar",
         "contenido": "contenido",
