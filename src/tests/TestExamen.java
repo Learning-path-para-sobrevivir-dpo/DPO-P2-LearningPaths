@@ -63,6 +63,23 @@ public class TestExamen {
     }
 
     @Test
+    void testExamenSinPreguntas() {
+    	 examen = new Examen(
+                 "No hay titulo creativo",
+                 "No hacer nada",
+                 1, 
+                 10, 
+                 true, 
+                 15, 
+                 "Prueba", 
+                 "Examen"
+         );
+    	 assertEquals("No hay titulo creativo", examen.getTitulo());
+    	 assertEquals("No hacer nada", examen.getObjetivo());
+    	 assertTrue(examen.getPreguntas().isEmpty());
+     }
+    
+    @Test
     public void testEliminarPregunta() {
         examen.eliminarPregunta(1);
 

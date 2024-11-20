@@ -32,11 +32,28 @@ class TestEncuesta {
                 10, // Duración en minutos
                 true, // Obligatorio
                 15, // Tiempo sugerido para completar
-                "Encuesta", // Tipo de actividad
+                "Prueba",
                 preguntasIniciales,
                 "Encuesta"
         );
     }
+    
+    @Test
+    void testEncuestaSinPreguntas() {
+    	 encuesta = new Encuesta(
+                 "No hay titulo creativo",
+                 "No hacer nada",
+                 1, 
+                 10, 
+                 true, 
+                 15, 
+                 "Prueba", 
+                 "Encuesta"
+         );
+    	 assertEquals("No hay titulo creativo", encuesta.getTitulo());
+    	 assertEquals("No hacer nada", encuesta.getObjetivo());
+    	 assertTrue(encuesta.getPreguntas().isEmpty());
+     }
 
     @Test
     void testSetPreguntas() {

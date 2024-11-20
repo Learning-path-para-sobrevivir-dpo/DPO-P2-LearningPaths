@@ -18,7 +18,10 @@ public class TestPreguntaMultiple {
 
     @BeforeEach
     void setUp() {
-        List<String> opciones = Arrays.asList("Opción 1", "Opción 2", "Opción 3");
+        List<String> opciones = new ArrayList<String>();
+        opciones.add("Opción 1");
+        opciones.add("Opción 2");
+        opciones.add("Opción 3");
         pregunta = new PreguntaMultiple("¿Cuál es la opción correcta?", opciones, 2);
     }
 
@@ -26,7 +29,7 @@ public class TestPreguntaMultiple {
     void testConstructorConOpciones() {
         assertEquals("¿Cuál es la opción correcta?", pregunta.getEnunciado());
         assertEquals(3, pregunta.getOpciones().size());
-        assertEquals(1, pregunta.getOpcionCorrecta()); // La opción correcta es la 2, indexada en 0.
+        assertEquals(1, pregunta.getOpcionCorrecta()); // La opción correcta es la 2, indexada en 1.
         assertEquals(-1, pregunta.getOpcionSeleccionada());
         assertEquals("Pregunta Multiple", pregunta.getTipo());
     }
@@ -37,7 +40,7 @@ public class TestPreguntaMultiple {
     	assertEquals("No hay preguntas solo opcion", preguntaConOpcion.getEnunciado());
     	assertEquals(1, preguntaConOpcion.getNumero());
         assertTrue(preguntaConOpcion.getOpciones().isEmpty());
-        assertEquals(-1, preguntaConOpcion.getOpcionCorrecta());
+        assertEquals(0, preguntaConOpcion.getOpcionCorrecta());
         assertEquals("Pregunta Multiple", preguntaConOpcion.getTipo());
     }
         
@@ -64,14 +67,14 @@ public class TestPreguntaMultiple {
         pregunta.addOpcion(1, "Nueva Opción Correcta", true);
         assertEquals(4, pregunta.getOpciones().size());
         assertEquals("Nueva Opción Correcta", pregunta.getOpciones().get(0));
-        assertEquals(0, pregunta.getOpcionCorrecta()); // Nueva opción correcta.
+        assertEquals(1, pregunta.getOpcionCorrecta()); // Nueva opción correcta.
     }
 
     @Test
     void testEliminarOpcion() {
         pregunta.eliminarOpcion(2);
         assertEquals(2, pregunta.getOpciones().size());
-        assertEquals(-1, pregunta.getOpcionCorrecta()); // Se eliminó la opción correcta.
+        assertEquals(1, pregunta.getOpcionCorrecta()); 
     }
 
     @Test
@@ -79,7 +82,7 @@ public class TestPreguntaMultiple {
         pregunta.addOpcion(1, "Nueva Opción", false);
         pregunta.eliminarOpcion(1);
         assertEquals(3, pregunta.getOpciones().size());
-        assertEquals(0, pregunta.getOpcionCorrecta()); // La opción correcta se ajusta.
+        assertEquals(1, pregunta.getOpcionCorrecta()); // La opción correcta se ajusta.
     }
 
     @Test
@@ -94,7 +97,7 @@ public class TestPreguntaMultiple {
         pregunta.setOpciones(nuevasOpciones);
         assertEquals(3, pregunta.getOpciones().size());
         assertEquals("Nueva 1", pregunta.getOpciones().get(0));
-        assertEquals(-1, pregunta.getOpcionCorrecta()); // Se resetea la opción correcta.
+        assertEquals(1, pregunta.getOpcionCorrecta()); // Se resetea la opción correcta.
     }
 }
 

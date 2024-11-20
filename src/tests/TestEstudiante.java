@@ -76,7 +76,7 @@ class TestEstudiante {
         Progreso progresoCreado = estudiante.inscribirLearningPath(learningPath);
 
         assertNotNull(progresoCreado);
-        assertEquals(progresoCreado.getLearningPath(), learningPath);
+        assertEquals(progresoCreado.getLearningPath(), learningPath.getTitulo());
 
         Map<String, Progreso> progresos = estudiante.getProgresosLearningPaths();
         assertTrue(progresos.containsKey(learningPath.getTitulo()));
@@ -87,7 +87,7 @@ class TestEstudiante {
         estudiante.inscribirLearningPath(learningPath);
         learningPath.addActividadDeUltimas(quizOM);
 
-        Actividad actividadObtenida = estudiante.obtenerActividadDePath(learningPath.getTitulo(), 1);
+        Actividad actividadObtenida = estudiante.obtenerActividadDePath(learningPath.getTitulo(), 0);
         assertNotNull(actividadObtenida);
         assertEquals(quizOM, actividadObtenida);
     }

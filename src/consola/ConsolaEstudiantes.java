@@ -1,6 +1,7 @@
 package consola;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,6 +73,7 @@ public class ConsolaEstudiantes {
 	    
 	    System.out.print("Opción: ");
         op = scan.nextInt();
+        scan.nextLine();
 		return op;
 	}
 	
@@ -94,6 +96,7 @@ public class ConsolaEstudiantes {
 	    
 	    System.out.print("Opción: ");
         op = scan.nextInt();
+        scan.nextLine();
 		return op;
 	}
 	
