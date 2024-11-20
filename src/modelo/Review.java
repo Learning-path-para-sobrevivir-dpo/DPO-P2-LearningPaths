@@ -14,6 +14,14 @@ public class Review {
 		this.rating = 0;
 		this.tipo = tipo;
 	}
+	
+	public Review(String fecha, String contenido, String tipo, double rating ) {
+		super();
+		this.fecha = fecha;
+		this.contenido = contenido;
+		this.rating = rating;
+		this.tipo = tipo;
+	}
 
 	public String getFecha() {
 		return fecha;

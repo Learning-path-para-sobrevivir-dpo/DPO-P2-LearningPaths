@@ -1,5 +1,20 @@
 [
     {
+        "descripcion": "curso sobre gatos",
+        "fechaModificacion": "2024-11-18",
+        "nivelDificultad": 3,
+        "rating": 0,
+        "titulo": "Todo sobre gatos",
+        "estudiantes": [],
+        "actividades": {},
+        "version": 1,
+        "autor": "Sara García",
+        "objetivo": "aprender sobre gatos",
+        "progresosEstudiantiles": {},
+        "duracion": 0,
+        "fechaCreacion": "2024-11-19"
+    },
+    {
         "descripcion": "Curso que te enseña todo sobre Estructuras de Datos en Java",
         "fechaModificacion": "22/10/2024",
         "nivelDificultad": 1,

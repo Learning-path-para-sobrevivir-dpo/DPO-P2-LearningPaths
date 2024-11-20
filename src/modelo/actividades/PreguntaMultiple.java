@@ -27,7 +27,7 @@ public class PreguntaMultiple extends Pregunta{
 	public PreguntaMultiple(String enunciado, int numero) {
 		super(enunciado);
 		this.opciones = new ArrayList<String>();
-		this.opcionCorrecta = -1;
+		this.opcionCorrecta = 0;
 		this.setNumero(numero);
 		this.setTipo("Pregunta Multiple");
 	}
@@ -37,13 +37,13 @@ public class PreguntaMultiple extends Pregunta{
 	}
 
 	public void addOpcion(int pos, String opcion, boolean correcta) {
-		this.opciones.add(pos, opcion);
+		this.opciones.add(pos-1, opcion);
 		if (correcta)
 		{
-			this.opcionCorrecta = pos - 1;
+			this.opcionCorrecta = pos;
 		} else
 		{
-			if (this.opcionCorrecta >= pos - 1)
+			if (this.opcionCorrecta >= pos)
 			{
 				this.opcionCorrecta++;
 			}
@@ -52,10 +52,10 @@ public class PreguntaMultiple extends Pregunta{
 	
 	public void eliminarOpcion(int pos) {
 		this.opciones.remove(pos - 1);
-		if (this.opcionCorrecta == pos - 1)
+		if (this.opcionCorrecta == pos)
 		{
-			this.opcionCorrecta = -1;
-		} else if (this.opcionCorrecta > pos - 1)
+			this.opcionCorrecta = 0;
+		} else if (this.opcionCorrecta > pos)
 		{
 			this.opcionCorrecta--;
 		}

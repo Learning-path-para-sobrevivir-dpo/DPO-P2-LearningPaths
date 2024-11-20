@@ -146,7 +146,7 @@ public class TestProfesor {
 	@Test
 	public void testCrearQuiz() {
 		
-		Quiz quizParaCrear = prof.crearQuiz("Quiz 3", "quiz del curso", 2, 120, true, 120, "Prueba", "Quiz Opcion Multiple", 1);
+		QuizOpcionMultiple quizParaCrear = prof.crearQuizMultiple("Quiz 3", "quiz del curso", 2, 120, true, 120, "Prueba", "Quiz Opcion Multiple", 1);
 		
 		
 	    List<Actividad> actsCreadas = prof.getActCreadas();

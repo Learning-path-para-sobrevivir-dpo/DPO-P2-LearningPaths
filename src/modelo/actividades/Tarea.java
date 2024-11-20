@@ -76,6 +76,13 @@ public class Tarea extends Actividad{
 	}
 	
 	public void setReviews(List<Review> listaReviews) {
-		this.reviews= listaReviews; 	
+		this.reviews= listaReviews; 
+		for (Review rev: listaReviews) {
+			if (rev.getRating()>0) {
+				this.addRating(rev.getRating());
+			}
+			
+		}
+		super.calcularRatingPromedio();
 	}
 }
