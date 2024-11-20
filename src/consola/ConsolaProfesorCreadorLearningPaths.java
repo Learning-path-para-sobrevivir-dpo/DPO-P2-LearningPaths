@@ -711,6 +711,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 			
 		}
 		datos.actualizarActividad(quiz);
+		datos.actualizarUsuario(prof);
 	}
 	
 	private void añadirPreguntaMultiple(Profesor prof, Scanner scan, Quiz quiz) {
