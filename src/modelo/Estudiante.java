@@ -90,11 +90,12 @@ public class Estudiante extends Usuario {
      * @param nombrePath: nombre del Learning Path
      * @return True si se completo con exito la actividad, False de lo contrario
      */
-    public void completarActividad(Actividad actividad, String nombrePath) {
+    public boolean completarActividad(int numActividad, String nombrePath) {
     	boolean completada = false;
-        if (actividad == null)
+    	Actividad actividad = this.obtenerActividadDePath(nombrePath, numActividad);
+    	if (actividad == null)
         {
-        	return;
+        	return completada;
         }
         String tipoActividad = actividad.getTipoActividad();
         Progreso progreso = this.progresosLearningPaths.get(nombrePath);
@@ -120,11 +121,12 @@ public class Estudiante extends Usuario {
         }
         
         try {
-			progreso.completarActividad(actividad);
+        	completada = progreso.completarActividad(actividad);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+        return completada;
     }
 
 	public Map<String, Progreso> getProgresosLearningPaths() {
