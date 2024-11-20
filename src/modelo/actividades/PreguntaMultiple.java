@@ -1,6 +1,7 @@
 package modelo.actividades;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class PreguntaMultiple extends Pregunta{
@@ -37,7 +38,7 @@ public class PreguntaMultiple extends Pregunta{
 	}
 
 	public void addOpcion(int pos, String opcion, boolean correcta) {
-		this.opciones.add(pos-1, opcion);
+		opciones.add(pos-1, opcion);
 		if (correcta)
 		{
 			this.opcionCorrecta = pos;
@@ -82,4 +83,5 @@ public class PreguntaMultiple extends Pregunta{
 	public void setOpciones(List<String> opciones) {
 		this.opciones = opciones;
 	}
+	
 }

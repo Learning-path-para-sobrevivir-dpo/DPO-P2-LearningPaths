@@ -30,7 +30,7 @@ public class Estudiante extends Usuario {
         String titulo = nuevoLP.getTitulo();
 
         if (learningPaths.containsKey(titulo)) {
-            throw new IllegalStateException("Ya está inscrito en" + titulo);
+            throw new IllegalStateException("Ya está inscrito en " + titulo);
         }
         //Si aún no está inscrito
         learningPaths.put(titulo, nuevoLP);
@@ -90,12 +90,11 @@ public class Estudiante extends Usuario {
      * @param nombrePath: nombre del Learning Path
      * @return True si se completo con exito la actividad, False de lo contrario
      */
-    public boolean completarActividad(int numActividad, String nombrePath) {
+    public void completarActividad(Actividad actividad, String nombrePath) {
     	boolean completada = false;
-        Actividad actividad = this.obtenerActividadDePath(nombrePath, numActividad);
         if (actividad == null)
         {
-        	return completada;
+        	return;
         }
         String tipoActividad = actividad.getTipoActividad();
         Progreso progreso = this.progresosLearningPaths.get(nombrePath);
@@ -121,12 +120,11 @@ public class Estudiante extends Usuario {
         }
         
         try {
-			completada = progreso.completarActividad(actividad);
+			progreso.completarActividad(actividad);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        return completada;
     }
 
 	public Map<String, Progreso> getProgresosLearningPaths() {

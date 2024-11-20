@@ -182,17 +182,16 @@ public class Progreso {
 		this.actividadEnProgreso = act;
 	}
 	
-	public boolean completarActividad(Actividad act) throws CompletarActividadQueNoEstaEnProgresoException {
+	public void completarActividad(Actividad act) throws CompletarActividadQueNoEstaEnProgresoException {
 		boolean completada = false;
 		if (!act.equals(this.actividadEnProgreso))
 		{
 			throw new CompletarActividadQueNoEstaEnProgresoException(act);
 		}
-		completada = act.completarActividad();
+		act.completarActividad();
 		eliminarActividadPendiente(act);
 		addActividadCompletada(act);
 		this.calcularProgreso();
-		return completada;
 	}
 	
 	public void descompletarActividad(Actividad act){
@@ -417,6 +416,46 @@ public class Progreso {
 		if (actTotales != 0)
 			this.progresoObligatorio = (actCompletadas / actTotales) * 100;
 	}
+	
+	
+	public int obtenerPosicionActividadPendiente(Actividad actividad) {
+        if (actividad == null || actPendientes == null) {
+            throw new IllegalArgumentException("Actividad o lista no pueden ser nulas.");
+        }
 
+        for (int i = 0; i < actPendientes.size(); i++) {
+            if (actPendientes.get(i).equals(actividad)) {
+                return i;
+            }
+        }
+
+        return -1; // No se encontró la actividad
+        
+    }
+	
+	public int obtenerPosicionActividadCompletada(Actividad actividad) {
+        if (actividad == null || actCompletadas == null) {
+            throw new IllegalArgumentException("Actividad o lista no pueden ser nulas.");
+        }
+
+        for (int i = 0; i < actCompletadas.size(); i++) {
+            if (actCompletadas.get(i).equals(actividad)) {
+                return i;
+            }
+        }
+
+        return -1; // No se encontró la actividad
+	}
+        
+     public int getNumero(Actividad actividad, boolean completado) {
+    	 int i;
+    	 if (completado) {
+    		 i = obtenerPosicionActividadCompletada(actividad) ;
+    	 }
+    	 else {
+    		 i = obtenerPosicionActividadPendiente(actividad) ;
+    	 }
+    	 return i;
+     }
 	
 }

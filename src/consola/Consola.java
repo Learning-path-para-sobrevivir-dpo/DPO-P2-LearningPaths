@@ -158,7 +158,7 @@ public class Consola {
                     
                 case 3: 
                 	
-                	Actividad quiz = profesor1.crearQuiz("Quiz Prueba", "", 1, 30,true,
+                	Actividad quiz = profesor1.crearQuizMultiple("Quiz Prueba", "", 1, 30,true,
                 	        50, "Prueba","Quiz", 1);
                 	datos.addActividad(quiz);
                 	System.out.println("Se creó el quiz"+ quiz.getTitulo());
