@@ -182,7 +182,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 	    System.out.println("4. Editar Learning Path");
 	    System.out.println("5. Clonar actividad");
 	    System.out.println("6. Crear actividad");
-	    System.out.println("7. Editar Learning Path");
+	    System.out.println("7. Editar Actividad");
 
 	    System.out.println("0. Guardar cambios y salir de la aplicacion");
 	    
