@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-class EstudianteTest {
+class TestEstudiante {
 
 	private Profesor profesor;
     private Estudiante estudiante;

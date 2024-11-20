@@ -13,6 +13,7 @@ import modelo.*;
 import modelo.actividades.*;
 
 public class TestPreguntaMultiple {
+	
 	private PreguntaMultiple pregunta;
 
     @BeforeEach
@@ -29,6 +30,17 @@ public class TestPreguntaMultiple {
         assertEquals(-1, pregunta.getOpcionSeleccionada());
         assertEquals("Pregunta Multiple", pregunta.getTipo());
     }
+    
+    @Test
+    void testConstructorConOpcion() {
+    	PreguntaMultiple preguntaConOpcion = new PreguntaMultiple("No hay preguntas solo opcion",1);
+    	assertEquals("No hay preguntas solo opcion", preguntaConOpcion.getEnunciado());
+    	assertEquals(1, preguntaConOpcion.getNumero());
+        assertTrue(preguntaConOpcion.getOpciones().isEmpty());
+        assertEquals(-1, preguntaConOpcion.getOpcionCorrecta());
+        assertEquals("Pregunta Multiple", preguntaConOpcion.getTipo());
+    }
+        
 
     @Test
     void testConstructorSinOpciones() {

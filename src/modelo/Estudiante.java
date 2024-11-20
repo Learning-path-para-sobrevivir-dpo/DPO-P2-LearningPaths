@@ -30,7 +30,7 @@ public class Estudiante extends Usuario {
         String titulo = nuevoLP.getTitulo();
 
         if (learningPaths.containsKey(titulo)) {
-            throw new IllegalStateException("Ya está inscrito en" + titulo);
+            throw new IllegalStateException("Ya está inscrito en " + titulo);
         }
         //Si aún no está inscrito
         learningPaths.put(titulo, nuevoLP);
