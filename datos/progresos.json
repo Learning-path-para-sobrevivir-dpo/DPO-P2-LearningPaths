@@ -9,8 +9,8 @@
   ],
   "actObligatoriasCompletadas": [],
   "progresoTotal": 0,
-  "actCompletadas": [],
-  "actividadEnProgreso": null,
+  "actCompletadas": [""],
+  "actividadEnProgreso": "",
   "idActividadesOriginales": {
     "31997514": "83259024",
     "40579652": "26440388",

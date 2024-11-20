@@ -252,7 +252,11 @@ public class ConsolaEstudiantes {
 		default:
 			throw new IllegalArgumentException("Tipo de actividad desconocido: " + tipoActividad);
 		}
-		
+		try {
+			progreso.completarActividad(actividad);
+		} catch (CompletarActividadQueNoEstaEnProgresoException e) {
+			e.printStackTrace();
+		}
 		return;
 	}
 	
