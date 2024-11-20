@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import excepciones.LearningPathNoEncontradoException;
+import excepciones.LearningPathOActividadNoEncontradoException;
 import excepciones.TipoDePreguntaInvalidaException;
 import modelo.LearningPath;
 import modelo.Profesor;
@@ -28,7 +28,7 @@ import persistencia.ManejoDatos;
 
 public class ConsolaProfesorCreadorLearningPaths {
 
-	public static void main(String[] args) throws LearningPathNoEncontradoException {
+	public static void main(String[] args) throws LearningPathOActividadNoEncontradoException {
 		ManejoDatos datos = new ManejoDatos();
 		Scanner scanner = new Scanner(System.in);
 		ConsolaProfesorCreadorLearningPaths consola = new ConsolaProfesorCreadorLearningPaths();
@@ -46,7 +46,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 		super();
 	}
 	
-	public void iniciarAplicacion(ManejoDatos datos, Scanner scan, ImprimirConsola imprimir) throws LearningPathNoEncontradoException
+	public void iniciarAplicacion(ManejoDatos datos, Scanner scan, ImprimirConsola imprimir) throws LearningPathOActividadNoEncontradoException
 	{
 		int op = 1;
 		Profesor usuario = null;
@@ -191,7 +191,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 		return op;
 	}
 	
-	private void routerOpciones(Profesor prof, int op, ImprimirConsola imprimir, ManejoDatos datos, Scanner scan) throws LearningPathNoEncontradoException
+	private void routerOpciones(Profesor prof, int op, ImprimirConsola imprimir, ManejoDatos datos, Scanner scan) throws LearningPathOActividadNoEncontradoException
 	{
 		switch (op)
 		{
@@ -209,9 +209,12 @@ public class ConsolaProfesorCreadorLearningPaths {
 			break;
 			
 		case 4:
-			editarLearningPaths(prof, imprimir, scan, datos);
+            try {
+                editarLearningPaths(prof, imprimir, scan, datos);
+            } catch (LearningPathOActividadNoEncontradoException e) {
+                System.out.println(e.getMessage()); // Mensaje de error
+            }
 			break;
-			
 		case 5:
 			clonarActividad(prof, imprimir, scan, datos);
 			break;
@@ -221,9 +224,13 @@ public class ConsolaProfesorCreadorLearningPaths {
             break;
             
         case 7: 
-        	editarActividad(prof, imprimir, scan, datos);
+            try {
+            	editarActividad(prof, imprimir, scan, datos);
+            } catch (LearningPathOActividadNoEncontradoException e) {
+                System.out.println(e.getMessage()); // Mensaje de error
+            }
+			break;
         	
-        	break;
 						
         case 0:
             System.out.println("Gracias por usar la aplicación! Saliendo...");
@@ -309,12 +316,12 @@ public class ConsolaProfesorCreadorLearningPaths {
 		datos.actualizarUsuario(prof);
 	}
 	
-	public void verReseñas(Profesor prof, ImprimirConsola imprimir, Scanner scan) throws LearningPathNoEncontradoException {
+	public void verReseñas(Profesor prof, ImprimirConsola imprimir, Scanner scan) throws LearningPathOActividadNoEncontradoException {
 	    // Obtener los Learning Paths creados por el profesor
 	    Map<String, LearningPath> paths = prof.getLearningPathsCreados();
 
 	    if (paths.isEmpty()) {
-	        throw new LearningPathNoEncontradoException("No ha creado ningún Learning Path.");
+	        throw new LearningPathOActividadNoEncontradoException("No ha creado ningún Learning Path.");
 	    }
 
 	    System.out.println("Sus Learning Paths creados son:");
@@ -359,12 +366,12 @@ public class ConsolaProfesorCreadorLearningPaths {
 
 
 
-	public void editarLearningPaths(Profesor prof, ImprimirConsola imprimir, Scanner scan, ManejoDatos datos) throws LearningPathNoEncontradoException {
+	public void editarLearningPaths(Profesor prof, ImprimirConsola imprimir, Scanner scan, ManejoDatos datos) throws LearningPathOActividadNoEncontradoException {
 		
 	    Map<String, LearningPath> paths = prof.getLearningPathsCreados();
 
 	    if (paths.isEmpty()) {
-	        throw new LearningPathNoEncontradoException("No ha creado ningún Learning Path.");
+	        throw new LearningPathOActividadNoEncontradoException("No ha creado ningún Learning Path.");
 	    }
 
 	    System.out.println("Sus Learning Paths creados son:");
@@ -390,7 +397,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 
 	        // Si no existe, lanzar excepción
 	        if (seleccionado == null) {
-	            throw new LearningPathNoEncontradoException("El Learning Path '" + nomConsultar + "' no existe.");
+	            throw new LearningPathOActividadNoEncontradoException("El Learning Path '" + nomConsultar + "' no existe.");
 	        }
 	    }
 		
@@ -972,13 +979,14 @@ public class ConsolaProfesorCreadorLearningPaths {
 	}
 	
 	
-	private void editarActividad(Profesor prof, ImprimirConsola imprimir, Scanner scan, ManejoDatos datos) {
+	private void editarActividad(Profesor prof, ImprimirConsola imprimir, Scanner scan, ManejoDatos datos) throws LearningPathOActividadNoEncontradoException {
 		
 	    List<Actividad> acts = prof.getActCreadas();
 
 	    if (acts.isEmpty()) {
-	    	System.out.println("No ha creado ninguna Actividad.");
+	        throw new LearningPathOActividadNoEncontradoException("No ha creado ninguna Actividad.");
 	    }
+
 
 	    System.out.println("Sus Actividades creadas son:");
 	    for (Actividad act : acts) {
@@ -997,13 +1005,21 @@ public class ConsolaProfesorCreadorLearningPaths {
 	    while (nomConsultar.trim().isEmpty()) {
 	        System.out.println("Actividad para editar: ");
 	        nomConsultar = scan.nextLine().trim();
+	        
 
 	    }
 
 	    for (Actividad act : acts) {
 	    	if(act.getTitulo().equals(nomConsultar)) {
 	    		seleccionado = act;
-	    	}	    }
+	    		
+		        // Si no existe, lanzar excepción
+		        if (seleccionado == null) {
+		            throw new LearningPathOActividadNoEncontradoException("El Learning Path '" + nomConsultar + "' no existe.");
+		        }
+	    	}
+		       
+	    	}	    
 	    
 	    
 		
@@ -1175,14 +1191,14 @@ public class ConsolaProfesorCreadorLearningPaths {
         	
         	if (seleccionado.getTipoActividad() == "Recurso Educativo") {
         		
-        		RecursoEducativo act = (RecursoEducativo)seleccionado;
-        		act.setContenido(newCont);
+        		RecursoEducativo act1 = (RecursoEducativo)seleccionado;
+        		act1.setContenido(newCont);
 
         	}
         	else if (seleccionado.getTipoActividad() == "Tarea") {
         		
-        		Tarea act = (Tarea)seleccionado;
-        		act.setContenido(newCont);
+        		Tarea act1 = (Tarea)seleccionado;
+        		act1.setContenido(newCont);
         	}
         	
         case 10: 
@@ -1201,12 +1217,10 @@ public class ConsolaProfesorCreadorLearningPaths {
     		rec.setEnlace(newLink);
         	
         	break; 
-              
         	
-		
         }
         
-        	
+	    
         	
 		
 	}
