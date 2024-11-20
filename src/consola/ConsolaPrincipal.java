@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
-import excepciones.LearningPathNoEncontradoException;
+import excepciones.LearningPathOActividadNoEncontradoException;
 import modelo.Estudiante;
 import modelo.Profesor;
 import modelo.Usuario;
@@ -56,7 +56,7 @@ public class ConsolaPrincipal {
 						{
 							try {
 								consolaCreador.iniciarAplicacion(datos, scan, imprimir);
-							} catch (LearningPathNoEncontradoException e) {
+							} catch (LearningPathOActividadNoEncontradoException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
