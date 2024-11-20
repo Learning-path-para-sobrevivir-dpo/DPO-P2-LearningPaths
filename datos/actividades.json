@@ -51,6 +51,23 @@
         "medioEntrega": ""
     },
     {
+        "estado": "Sin completar",
+        "calificacionMinima": 3,
+        "nivelDificultad": 3,
+        "titulo": "Quiz vf",
+        "obligatorio": true,
+        "tipoActividad": "Prueba",
+        "completada": false,
+        "objetivo": "q",
+        "reviews": [],
+        "tiempoCompletarSugerido": 10,
+        "tipoPrueba": "Quiz",
+        "duracionMin": 10,
+        "idEstudiante": "",
+        "preguntas": [""],
+        "id": "61581837"
+    },
+    {
         "tipoRecurso": "Video",
         "estado": "Sin completar",
         "contenido": "video de gatos",
@@ -80,11 +97,7 @@
         "tipoPrueba": "Encuesta",
         "duracionMin": 20,
         "idEstudiante": "",
-        "preguntas": [
-            "Le gustó el curso?",
-            "Que le gustó?",
-            "Qué no le gustó?"
-        ],
+        "preguntas": [],
         "id": "14544138"
     },
     {

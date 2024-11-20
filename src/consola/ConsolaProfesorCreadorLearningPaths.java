@@ -221,7 +221,8 @@ public class ConsolaProfesorCreadorLearningPaths {
             System.out.println("Cuál actividad?: ");
             System.out.println("1. Recurso Educativo");
             System.out.println("2. Examen");
-            System.out.println("3. Quiz");
+            System.out.println("31. Quiz Multiple");
+            System.out.println("32. Quiz Verdadero Falso");
             System.out.println("4. Encuesta");
             System.out.println("5. Tarea");
             
@@ -240,8 +241,14 @@ public class ConsolaProfesorCreadorLearningPaths {
 
                 break;
                 
-            case 3: 
-            	crearQuiz(prof, scan, datos);
+            case 31: 
+            	crearQuizMultiple(prof, scan, datos);
+
+                break;
+                
+                
+            case 32: 
+            	crearQuizVoF(prof, scan, datos);
 
                 break;
                 
@@ -647,7 +654,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 		
 	}
 
-	private void crearQuiz(Profesor prof, Scanner scan, ManejoDatos datos) {
+	private void crearQuizMultiple(Profesor prof, Scanner scan, ManejoDatos datos) {
 		
 		System.out.println("Para crear un quiz, proporciona la siguiente información:");
 
@@ -681,11 +688,11 @@ public class ConsolaProfesorCreadorLearningPaths {
 		String tipo = scan.nextLine();
 
 		
-		System.out.print("Tipo de prueba (Quiz Opcion Multiple/Quiz Verdadero Falso): ");
+		System.out.print("Tipo de prueba (Quiz Opcion Multiple): ");
 		String tipoPrueba = scan.nextLine();
 
 
-		Quiz quiz = prof.crearQuiz(titulo, descripcion, niv, dur, obligatorio, tiempo, tipo, tipoPrueba, niv);
+		QuizOpcionMultiple quiz = prof.crearQuizMultiple(titulo, descripcion, niv, dur, obligatorio, tiempo, tipo, tipoPrueba, niv);
 		
 		
 		datos.addActividad(quiz);
@@ -709,14 +716,10 @@ public class ConsolaProfesorCreadorLearningPaths {
 	        
 	        switch (actop) {
 	            case 1:
-	    			if (quiz.getTipoPrueba() == "Quiz Opcion Multiple")
-	    			{
-	    				añadirPreguntaMultiple( prof,  scan,  quiz);
-	    			}
-	    			else if (quiz.getTipoPrueba()  == "Quiz Verdadero Falso")
-	    			{
-	    				añadirPreguntaVoF( prof,  scan,  quiz);
-	    			}	                break;
+
+	    			añadirPreguntaMultiple( prof,  scan,  quiz);
+	    			break;
+	    			
 	            case 2:
 	                continuar = false;
 	                break;
@@ -728,6 +731,86 @@ public class ConsolaProfesorCreadorLearningPaths {
 		datos.actualizarActividad(quiz);
 		datos.actualizarUsuario(prof);
 	}
+	
+	
+
+	private void crearQuizVoF(Profesor prof, Scanner scan, ManejoDatos datos) {
+		
+		System.out.println("Para crear un quiz, proporciona la siguiente información:");
+
+	    if (scan.hasNextLine()) {
+	        scan.nextLine();
+	    }
+		// Leer título
+		System.out.print("Título: ");
+		String titulo = scan.nextLine();
+
+		// Leer descripción
+		System.out.print("Descripción: ");
+		String descripcion = scan.nextLine();
+
+		System.out.print("Nivel de Dificultad de 1 (fácil) a 3 (difícil): : ");
+		int niv = leerEntero(scan);
+		
+		// Leer duración
+		System.out.print("Duración estimada (en minutos): ");
+		int dur = leerEntero(scan);
+
+		// Leer si es obligatorio
+		System.out.print("¿Es obligatorio? (true/false): ");
+		boolean obligatorio = leerBooleano(scan);
+
+		// Leer tiempo recomendado
+		System.out.print("Tiempo recomendado de dedicación (en minutos): ");
+		int tiempo = leerEntero(scan);
+
+		System.out.print("Tipo de actividad: ");
+		String tipo = scan.nextLine();
+
+		
+		System.out.print("Tipo de prueba (Quiz Verdadero Falso): ");
+		String tipoPrueba = scan.nextLine();
+
+
+		QuizVerdaderoFalso quiz = prof.crearQuizVoF(titulo, descripcion, niv, dur, obligatorio, tiempo, tipo, tipoPrueba, niv);
+		
+		
+		datos.addActividad(quiz);
+		datos.actualizarUsuario(prof);
+		System.out.println("¡Quiz creado con éxito!");
+
+		
+		System.out.println("Aún no tiene preguntas, debes crearlas: ");
+
+		boolean continuar = true;
+		
+		while(continuar) {
+			
+			System.out.println("Su quiz es de tipo " + tipoPrueba + ", por ende, las preguntas deben ser de ese tipo.");
+			System.out.println("1. Añadir pregunta");
+			System.out.println("2. Finalizar adición de preguntas");
+			
+	        System.out.print("Ingrese su opción: ");
+	        
+	        int actop = scan.nextInt();
+	        
+	        switch (actop) {
+	            case 1:
+
+	    			añadirPreguntaVoF( prof,  scan,  quiz);
+	    			                break;
+	            case 2:
+	                continuar = false;
+	                break;
+	            default:
+	                System.out.println("Opción inválida. Intente de nuevo.");
+	        }
+			
+		}
+		datos.actualizarActividad(quiz);
+		datos.actualizarUsuario(prof);
+	}
+	
 	
 	private void añadirPreguntaMultiple(Profesor prof, Scanner scan, Quiz quiz) {
 	    System.out.println("Creando pregunta de opción múltiple: ");
