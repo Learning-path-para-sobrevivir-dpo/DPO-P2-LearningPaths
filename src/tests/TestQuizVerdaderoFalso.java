@@ -119,6 +119,9 @@ public class TestQuizVerdaderoFalso {
 		preguntasObtenidas = quizPrueba.getPreguntas();
 		assertFalse(preguntasObtenidas.contains(p3), "No se elimino la pregunta como se esperaba");
 		assertEquals(preguntasEsperadas.size(), preguntasObtenidas.size(), "No se elimino la pregunta como se esperaba");
+		
+		//se verifica que se haya actualizado el número de la pregunta 4
+		assertEquals(3, p4.getNumero(), "No se reasignaron los números de las preguntas correctamente");
 	}
 		
 	

@@ -80,6 +80,12 @@ public class QuizVerdaderoFalso extends Quiz {
 		else
 		{
 			this.preguntas.add(numPregunta - 1, (PreguntaVerdaderoFalso) pregunta);
+			int i = 1;
+			for (PreguntaVerdaderoFalso p: preguntas)
+			{
+				p.setNumero(i);
+				i++;
+			}
 		}
 
 	}
@@ -89,6 +95,12 @@ public class QuizVerdaderoFalso extends Quiz {
 		if (numPregunta > 0 && numPregunta <= this.preguntas.size())
 		{
 			this.preguntas.remove(numPregunta - 1);
+			int i = 1;
+			for (PreguntaVerdaderoFalso p: preguntas)
+			{
+				p.setNumero(i);
+				i++;
+			}
 		}
 	}
 
