@@ -24,7 +24,7 @@ public class ImprimirConsola {
 		super();
 	}
 	
-	public void imprimirActividad(Actividad act, boolean imprimirActPrevias, boolean imprimirTipoAct, boolean imprimirInfoAdicional)
+	public static void imprimirActividad(Actividad act, boolean imprimirActPrevias, boolean imprimirTipoAct, boolean imprimirInfoAdicional)
 	{
 		int nivel = act.getNivelDificultad();
 		String nivelDif = "-";
@@ -69,7 +69,7 @@ public class ImprimirConsola {
 		}
 	}
 	
-	public void imprimirInfoTipoActividad(Actividad act, boolean imprimirInfoAdicional)
+	public static void imprimirInfoTipoActividad(Actividad act, boolean imprimirInfoAdicional)
 	{
 		String tipoActividad = act.getTipoActividad();
 		switch (tipoActividad)
@@ -189,7 +189,7 @@ public class ImprimirConsola {
 	}
 	
 	
-	public void imprimirProgreso(Progreso prog)
+	public static void imprimirProgreso(Progreso prog)
 	{
 		System.out.println("\n"+ prog.getEstudiante());
 		System.out.println("- Progreso en el  Learning Path " + prog.getLearningPath());

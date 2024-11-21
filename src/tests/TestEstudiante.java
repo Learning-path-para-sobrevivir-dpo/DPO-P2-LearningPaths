@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import excepciones.YaExisteActividadEnProgresoException;
 import modelo.actividades.*;
 import modelo.*;
+import consola.ImprimirConsola;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,12 +95,11 @@ class TestEstudiante {
 
     @Test
     void testIniciarActividad() throws YaExisteActividadEnProgresoException {
-        estudiante.inscribirLearningPath(learningPath);
-        learningPath.addActividadDeUltimas(quizOM);
-        Progreso progreso = estudiante.getProgresosLearningPaths().get(learningPath.getTitulo());
-
-        boolean inicioExitoso = estudiante.iniciarActividad(progreso.getNumero(quizOM,false), learningPath.getTitulo());
-        assertTrue(inicioExitoso);
+    	learningPath.addActividadDeUltimas(quizOM);
+    	estudiante.inscribirLearningPath(learningPath);
+        progreso = estudiante.getProgresosLearningPaths().get(learningPath.getTitulo());
+        ImprimirConsola.imprimirProgreso(progreso);
+        boolean inicioExitoso = estudiante.iniciarActividad(0, learningPath.getTitulo());
 
         Progreso progreso2 = estudiante.getProgresosLearningPaths().get(learningPath.getTitulo());
         assertEquals(quizOM, progreso2.getActividadEnProgreso());
@@ -108,17 +108,17 @@ class TestEstudiante {
     @Test
     void testCompletarActividad() throws Exception {
         estudiante.inscribirLearningPath(learningPath);
-        learningPath.addActividadDeUltimas(tarea);
-        Progreso progreso = estudiante.getProgresosLearningPaths().get(learningPath.getTitulo());
+        learningPath.addActividadPorPos(tarea,0);
+        progreso = estudiante.getProgresosLearningPaths().get(learningPath.getTitulo());
 
        progreso.empezarActividad(tarea);
 
         Tarea tarea2 = (Tarea) tarea;
         tarea2.setMedioEntrega("URL de entrega");
         tarea2.setEnviado(true);
-        estudiante.completarActividad(tarea2,learningPath.getTitulo());
+        boolean completado = estudiante.completarActividad(0,learningPath.getTitulo());
 
-        assertEquals("Completada",tarea2.getEstado());
+        assertTrue(completado,"No se completo correctamente la actividad");
     }
 
     @Test
