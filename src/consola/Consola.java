@@ -91,7 +91,7 @@ public class Consola {
         RecursoEducativo recurso1 = new RecursoEducativo("Listas y Arreglos", "Video sobre listas y arreglos en Java", 1, 40,
         		false, 60, "Recurso Educativo", "Video", "Enlace a video sobre listas y arreglos en Java", "www.youtube.com/listasyarreglosjava");
         Tarea tarea1 = new Tarea("Ejercicios Mapas Java", "Completar estos ejercicios de mapas", 1, 40, true,
-        		10, "Tarea", "1. Hallar mapas de los datos. 2. Hacer un mapa con los datos de clase.");
+        		10, "Tarea", "1. Hallar mapas de los datos. 2. Hacer un mapa con los datos de clase.", "");
 
         datos.addActividad(tarea1);
         datos.addActividad(recurso1);
@@ -175,7 +175,7 @@ public class Consola {
                 case 5: 
                 	
                 	Actividad tarea = profesor1.crearTarea("Quiz Datos Java", "Quiz sobre datos en Java", 2, 20, true,
-                	        30, "Quiz", "");
+                	        30, "Quiz", "", "");
                 	datos.addActividad(tarea);
                 	System.out.println("Se creó la tarea"+ tarea.getTitulo());
                     break;
