@@ -6,12 +6,15 @@
         "rating": 0,
         "titulo": "Todo sobre gatos",
         "estudiantes": [],
-        "actividades": {"1": "27290200"},
+        "actividades": {
+            "1": "27290200",
+            "2": "69504730"
+        },
         "version": 1,
         "autor": "Sara García",
         "objetivo": "aprender sobre gatos",
         "progresosEstudiantiles": {},
-        "duracion": 0,
+        "duracion": 50,
         "fechaCreacion": "2024-11-20"
     },
     {
