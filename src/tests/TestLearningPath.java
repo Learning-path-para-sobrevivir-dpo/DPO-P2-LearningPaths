@@ -40,7 +40,7 @@ public class TestLearningPath {
 		act2 = new QuizVerdaderoFalso("Quiz VoF 2", "Evaluar conocimientos", 3, 40, true, 50, "Prueba", 1, "Quiz Verdadero Falso");
 				
 		act3 = new Examen("Examen final", "Evalua todo el curso", 3, 120, true, 120, "Prueba", "Examen");
-		act4 = new Tarea("Tarea 1", "Practicar el conocimiento", 1, 20, false, 360, "Tarea", "Hacer los ejercicios 4-14");
+		act4 = new Tarea("Tarea 1", "Practicar el conocimiento", 1, 20, false, 360, "Tarea", "Hacer los ejercicios 4-14", "Bloque Neon");
 
 		progreso = new Progreso(path1.getTitulo(), "Shrek");
 
@@ -104,6 +104,11 @@ public class TestLearningPath {
 		actsTest= path1.getActividades();
 		assertEquals(2, actsTest.size(), "No se eliminó correctamente");	
 		assertEquals("Examen final", (actsTest.get(2)).getTitulo(), "No se eliminó correctamente");
+
+		path1.addActividadDeUltimas(act4);
+		actsTest= path1.getActividades();
+		assertEquals(3, actsTest.size(), "No se eliminó correctamente");	
+		assertEquals("Tarea 1", (actsTest.get(3)).getTitulo(), "No se añadió correctamente de última"+actsTest);
 
 		
 		assertThrows(IllegalArgumentException.class, ()->path1.eliminarActividadPorPos(-2));

@@ -83,10 +83,10 @@ public class Profesor extends Usuario{
 	}
 	
 	public Tarea crearTarea(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
-	        int tiempoCompletarSugerido, String tipo, String contenido) {
+	        int tiempoCompletarSugerido, String tipo, String contenido, String medioEntrega) {
 	
 		Tarea newAct = new Tarea(titulo, descripcion, nivelDificultad, duracionMin, obligatorio,
-    			tiempoCompletarSugerido, tipo, contenido);
+    			tiempoCompletarSugerido, tipo, contenido, medioEntrega);
 		this.actCreadas.add(newAct);
 		return newAct;
 	}

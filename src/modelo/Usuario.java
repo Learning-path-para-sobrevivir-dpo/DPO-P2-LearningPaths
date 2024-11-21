@@ -61,24 +61,24 @@ public abstract class Usuario {
 		this.tipo = tipo;
 	}
 	
-	public Review addReview(String contenido, String tipo) {
+	public Review addReview(String contenido) {
 		
         LocalDate fechaActual = LocalDate.now();
         String fecha = fechaActual.toString();
         
-		Review review = new Review(fecha, contenido, tipo);
+		Review review = new Review(fecha, contenido, this.getTipo());
 		
 		reviews.add(review);
 		 
 		return review;
 	}
 	
-	public Review addReviewRating(String contenido, String tipo, double rating) {
+	public Review addReviewRating(String contenido, double rating) {
 		
         LocalDate fechaActual = LocalDate.now();
         String fecha = fechaActual.toString();
         
-		Review review = new Review(fecha, contenido, tipo);
+		Review review = new Review(fecha, contenido, this.getTipo());
 		review.setRating(rating);
 		reviews.add(review);
 		return review;
@@ -90,7 +90,7 @@ public abstract class Usuario {
         LocalDate fechaActual = LocalDate.now();
         String fecha = fechaActual.toString();
         
-		Review review = new Review(fecha, contenido, tipo);
+		Review review = new Review(fecha, contenido, this.getTipo());
 		review.setRating(rating);
 		reviews.add(review);
 		return review;

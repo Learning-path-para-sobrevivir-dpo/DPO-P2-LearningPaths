@@ -28,38 +28,9 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 		ImprimirConsola imprimir = new ImprimirConsola();
 		
 		datos.cargarDatos();
-		Map<List<String>, Usuario> usuarios = datos.getUsuarios();
-		
-//		Usuario u = null;
-//		Profesor up;
-//		Estudiante ue = null;
-//		int i = 0;
-//		for (List<String> llave: usuarios.keySet())
-//		{
-//			u = usuarios.get(llave);
-//			System.out.println(u.getLogin());
-//			if (i == 0)
-//			{
-//				ue = (Estudiante) u;
-//			}
-//			i++;
-//		}
-//		up = (Profesor) u;
-//		Map<String, LearningPath> m = up.getLearningPathsCreados();
-//		System.out.println(m);
-//		LearningPath lp = m.get("Arte y Sociedad");
-//		System.out.println(lp.getActividades());
-//		Progreso pr = lp.getProgresosEstudiantiles().get("Juliana Hernandez");
-//		
-//		
-//		System.out.println(ue.getProgresosLearningPaths());
-//		for (String p : ue.getProgresosLearningPaths().keySet())
-//		{
-//			imprimir.imprimirProgreso(ue.getProgresosLearningPaths().get(p));
-//		}
 		
 		
-		consola.iniciarAplicacion(datos, scanner, imprimir);
+		//consola.iniciarAplicacion(datos, scanner, imprimir);
 		scanner.close(); 
 	}
 	
@@ -67,35 +38,16 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 		super();
 	}
 
-	public void iniciarAplicacion(ManejoDatos datos, Scanner scan, ImprimirConsola imprimir)
+	public void iniciarAplicacion(ManejoDatos datos, Scanner scan, ImprimirConsola imprimir, Usuario usuario)
 	{
 		int op = 1;
-		Profesor usuario = null;
+		Profesor prof = (Profesor) usuario;
 		while (op != 0)
 		{
-			op = mostrarOpcionesInicial(scan);
-			if (op == 1)
-			{
-				usuario = iniciarSesion(datos, scan);
-				if (usuario != null)
-				{
-					while (op != 0)
-					{
-						op = mostrarOpcionesApp(scan);
-						routerOpciones(usuario, op, imprimir, datos, scan);
-					}
-					op = 1;
-				}
-				else
-				{
-					System.out.println("Contraseña o usuario incorrectos");
-				}
-			}
-			else if (op == 2)
-			{
-				crearUsuario(datos, scan);
-			}
+			op = mostrarOpcionesApp(scan);
+			routerOpciones(prof, op, imprimir, datos, scan);
 		}
+				
 	}
 	
 	private int mostrarOpcionesInicial(Scanner scan)
@@ -476,50 +428,5 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 			System.out.println("No hay actividades pendientes por calificar en el Learning Path '"+nombreLpSeleccionado+"'\n");
 		}
 		return actEstudiante;
-	}
-	
-	/**
-	 * Funcion para iniciar sesion en la aplicacion
-	 * @param datos datos de la aplicacion
-	 * @param scan scanner para leer inputs
-	 * @return El usuario del profesor. Si el usuario no existe o si es el usuario
-	 * de un estudiante registrado, retorna null.
-	 */
-	private Profesor iniciarSesion(ManejoDatos datos, Scanner scan)
-	{
-		Usuario usuario = null;
-		Profesor prof = null;
-		String login = "";
-		String password = "";
-		
-		while (login.trim().isEmpty())
-		{
-			System.out.println("Ingrese su nombre de usuario: ");
-			login = scan.nextLine();
-		}
-		
-		while (password.trim().isEmpty())
-		{
-			System.out.println("Ingrese su contraseña: ");
-			password = scan.nextLine();
-		}
-		
-		usuario = datos.getUsuario(login, password);
-		if (usuario instanceof Profesor)
-		{
-			prof = (Profesor) usuario;
-		}
-		
-		return prof;
-	}
-	
-	/**
-	 * Funcion para crear un usuario en la app
-	 * @param datos
-	 * @param scan
-	 */
-	private void crearUsuario(ManejoDatos datos, Scanner scan)
-	{
-		System.out.println("");
 	}
 }

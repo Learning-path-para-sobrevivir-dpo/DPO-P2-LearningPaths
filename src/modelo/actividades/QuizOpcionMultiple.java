@@ -78,12 +78,18 @@ public class QuizOpcionMultiple extends Quiz {
 		int numPregunta = pregunta.getNumero();
 		if (numPregunta <= 0 || numPregunta > this.preguntas.size())
 		{
-			pregunta.setNumero(this.preguntas.size());
+			pregunta.setNumero(this.preguntas.size()+1);
 			this.preguntas.add((PreguntaMultiple) pregunta);
 		}
 		else
 		{
 			this.preguntas.add(numPregunta - 1, (PreguntaMultiple) pregunta);
+			int i = 1;
+			for (PreguntaMultiple p: preguntas)
+			{
+				p.setNumero(i);
+				i++;
+			}
 		}
 	}
 	
@@ -93,6 +99,12 @@ public class QuizOpcionMultiple extends Quiz {
 		if (numPregunta > 0 && numPregunta <= this.preguntas.size())
 		{
 			this.preguntas.remove(numPregunta - 1);
+			int i = 1;
+			for (PreguntaMultiple p: preguntas)
+			{
+				p.setNumero(i);
+				i++;
+			}
 		}
 	}
 	

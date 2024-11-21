@@ -131,7 +131,7 @@ public class PersistenciaActividades {
             			String contenido = jsonActividad.getString("contenido");
             			String medio = jsonActividad.getString("medioEntrega");
             			boolean enviada = jsonActividad.getBoolean("enviada");
-            			actividad = new Tarea(titulo, objetivo, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, contenido, id, idEstudiante);
+            			actividad = new Tarea(titulo, objetivo, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, contenido, id, idEstudiante, medio);
             			Tarea t = (Tarea) actividad;
             			t.setEnviado(enviada);
             			t.setMedioEntrega(medio);
@@ -216,7 +216,7 @@ public class PersistenciaActividades {
 
                 } else if (actividad instanceof QuizOpcionMultiple) {
                     QuizOpcionMultiple quiz = (QuizOpcionMultiple) actividad;
-                    jsonActividad.put("tipoPrueba", "Quiz");
+                    jsonActividad.put("tipoPrueba", "Quiz Opcion Multiple");
                     jsonActividad.put("calificacionMinima", quiz.getCalificacionMinima());
 
                     // Convertir las preguntas de Quiz
@@ -228,7 +228,7 @@ public class PersistenciaActividades {
                     
                 } else if (actividad instanceof QuizVerdaderoFalso) {
                 	QuizVerdaderoFalso quiz = (QuizVerdaderoFalso) actividad;
-                    jsonActividad.put("tipoPrueba", "Quiz");
+                    jsonActividad.put("tipoPrueba", "Quiz Verdadero Falso");
                     jsonActividad.put("calificacionMinima", quiz.getCalificacionMinima());
 
                     // Convertir las preguntas de Quiz
