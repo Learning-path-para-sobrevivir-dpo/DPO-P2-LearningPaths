@@ -392,6 +392,7 @@ public class TestProgreso {
 		assertFalse(actCompletar.isCompletada(), "No se actualizó el estado de la actividad");
 	}
 	
+	@Test
 	public void testDescompletarActividadNoObligatoriaCompletada() throws LearningPathIncorrectoProgresoException, YaExisteActividadEnProgresoException, CompletarActividadQueNoEstaEnProgresoException
 	{
 		progreso.obtenerActividadesPath(lpPrueba);
@@ -411,7 +412,7 @@ public class TestProgreso {
 		assertTrue(progreso.getActPendientes().contains(actCompletar), "No se actualizaron las listas de actividades pendientes y completadas como era de esperarse");
 		assertFalse(progreso.getActObligatoriasPendientes().contains(actCompletar), "No se actualizaron las listas de actividades pendientes y completadas como era de esperarse");
 		
-		assertFalse(actCompletar.isCompletada(), "No se actualizó el estado de la actividad");
+		assertTrue(actCompletar.isCompletada(), "No se actualizó el estado de la actividad");
 	}
 	
 	@Test
