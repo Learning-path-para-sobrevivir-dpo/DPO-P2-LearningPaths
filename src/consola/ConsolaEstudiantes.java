@@ -23,7 +23,7 @@ public class ConsolaEstudiantes {
 		ImprimirConsola imprimir = new ImprimirConsola();
 		
 		datos.cargarDatos();
-		consola.iniciarAplicacion(datos, scanner, imprimir);
+		//consola.iniciarAplicacion(datos, scanner, imprimir);
 		scanner.close(); 
 	}
 	
@@ -31,50 +31,15 @@ public class ConsolaEstudiantes {
 		super();
 	}
 
-	public void iniciarAplicacion(ManejoDatos datos, Scanner scan, ImprimirConsola imprimir)
+	public void iniciarAplicacion(ManejoDatos datos, Scanner scan, ImprimirConsola imprimir, Usuario usuario)
 	{
 		int op = 1;
-		Estudiante usuario = null;
+		Estudiante estudiante = (Estudiante) usuario;
 		while (op != 0)
 		{
-			op = mostrarOpcionesInicial(scan);
-			if (op == 1)
-			{
-				usuario = iniciarSesion(datos, scan);
-				if (usuario != null)
-				{
-					while (op != 0)
-					{
-						op = mostrarOpcionesApp(scan);
-						routerOpciones(usuario, op, imprimir, datos, scan);
-					}
-					op = 1;
-				}
-				else
-				{
-					System.out.println("Contraseña o usuario incorrectos");
-				}
-			}
-			else if (op == 2)
-			{
-				crearUsuario(datos, scan);
-			}
+			op = mostrarOpcionesApp(scan);
+			routerOpciones(estudiante, op, imprimir, datos, scan);
 		}
-	}
-	
-	private int mostrarOpcionesInicial(Scanner scan)
-	{
-		int op;
-		System.out.println("Bienvenido a la app de estudiantes");
-	    System.out.println("Seleccione lo que quiere hacer: ");
-	    System.out.println("1. Iniciar Sesión");
-	    System.out.println("2. Crear perfil");
-	    System.out.println("0. Salir de la aplicacion");
-	    
-	    System.out.print("Opción: ");
-        op = scan.nextInt();
-        scan.nextLine();
-		return op;
 	}
 	
 	/**
@@ -261,79 +226,6 @@ public class ConsolaEstudiantes {
 			e.printStackTrace();
 		}
 		return;
-	}
-	
-	
-	/**
-	 * Funcion para iniciar sesion en la aplicacion
-	 * @param datos datos de la aplicacion
-	 * @param scan scanner para leer inputs
-	 * @return El usuario del profesor. Si el usuario no existe o si es el usuario
-	 * de un estudiante registrado, retorna null.
-	 */
-	private Estudiante iniciarSesion(ManejoDatos datos, Scanner scan)
-	{
-		Usuario usuario = null;
-		Estudiante es = null;
-		String login = "";
-		String password = "";
-		
-		while (login.trim().isEmpty())
-		{
-			System.out.println("Ingrese su nombre de usuario: ");
-			login = scan.nextLine();
-		}
-		
-		while (password.trim().isEmpty())
-		{
-			System.out.println("Ingrese su contraseña: ");
-			password = scan.nextLine();
-		}
-		
-		usuario = datos.getUsuario(login, password);
-		if (usuario instanceof Estudiante)
-		{
-			es = (Estudiante) usuario;
-		}
-		
-		return es;
-	}
-	
-	/**
-	 * Funcion para crear un usuario en la app
-	 * @param datos
-	 * @param scan
-	 */
-	private void crearUsuario(ManejoDatos datos, Scanner scan)
-	{
-	    String login = "";
-	    String password = "";
-	    String correo = "";
-
-	    if (scan.hasNextLine()) {
-	        scan.nextLine();
-	    }
-
-	    while (login.trim().isEmpty()) {
-	        System.out.println("Ingrese su nombre de usuario: ");
-	        login = scan.nextLine();
-	    }
-
-	    while (password.trim().isEmpty()) {
-	        System.out.println("Ingrese su contraseña: ");
-	        password = scan.nextLine();
-	    }
-	    
-	    while (correo.trim().isEmpty()) {
-	        System.out.println("Ingrese su correo: ");
-	        correo = scan.nextLine();
-	    }
-
-	    Usuario usuario = new Profesor (login, correo, password, "Estudiante");
-	    datos.addUsuario(usuario);
-
-	    System.out.println("El usuario fue creado exitosamente!!");
-	    
 	}
 
 

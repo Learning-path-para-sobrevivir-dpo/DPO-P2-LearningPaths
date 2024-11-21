@@ -47,7 +47,7 @@ public class ConsolaPrincipal {
 				{
 					if (usuario instanceof Estudiante)
 					{
-						consolaEstudiantes.iniciarAplicacion(datos, scan, imprimir);
+						consolaEstudiantes.iniciarAplicacion(datos, scan, imprimir, usuario);
 					}
 					else if (usuario instanceof Profesor)
 					{
@@ -55,7 +55,7 @@ public class ConsolaPrincipal {
 						if (op == 1)
 						{
 							try {
-								consolaCreador.iniciarAplicacion(datos, scan, imprimir);
+								consolaCreador.iniciarAplicacion(datos, scan, imprimir, usuario);
 							} catch (LearningPathOActividadNoEncontradoException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();

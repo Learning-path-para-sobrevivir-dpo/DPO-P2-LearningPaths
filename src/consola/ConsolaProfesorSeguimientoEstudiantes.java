@@ -50,20 +50,6 @@ public class ConsolaProfesorSeguimientoEstudiantes {
 				
 	}
 	
-	private int mostrarOpcionesInicial(Scanner scan)
-	{
-		int op;
-		System.out.println("Bienvenido a la app de profesores");
-	    System.out.println("Seleccione lo que quiere hacer: ");
-	    System.out.println("1. Iniciar Sesión");
-	    System.out.println("2. Crear perfil");
-	    System.out.println("0. Salir de la aplicacion");
-	    
-	    System.out.print("Opción: ");
-        op = scan.nextInt();
-		return op;
-	}
-	
 	/**
 	 * Muestra las opciones de la aplicación
 	 * @param scan scanner para leer inputs
