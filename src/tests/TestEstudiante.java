@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import excepciones.TipoDePreguntaInvalidaException;
 import excepciones.YaExisteActividadEnProgresoException;
 import modelo.actividades.*;
 import modelo.*;
@@ -12,6 +13,7 @@ import consola.ImprimirConsola;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 class TestEstudiante {
@@ -20,56 +22,31 @@ class TestEstudiante {
     private Estudiante estudiante;
     private LearningPath learningPath;
     private Progreso progreso;
-    private QuizOpcionMultiple quizOM;
-    private Tarea tarea;
+    private QuizOpcionMultiple act1;
+    private QuizVerdaderoFalso act2;
+    private List<Boolean> res;
 
     @BeforeEach
     void setUp() {
-    	List<String> opciones1 = new ArrayList<>();
-        opciones1.add("Arte de doblar papel");
-        opciones1.add("Técnica de escritura japonesa");
-        opciones1.add("Danza tradicional japonesa");
-
-        List<String> opciones2 = new ArrayList<>();
-        opciones2.add("Japón");
-        opciones2.add("China");
-        opciones2.add("Corea del Sur");
-
-        List<String> opciones3 = new ArrayList<>();
-        opciones3.add("Grulla de papel");
-        opciones3.add("Flor de loto");
-        opciones3.add("Barco de papel");
-
-       PreguntaMultiple pregunta1 = new PreguntaMultiple(
-                "¿Qué significa la palabra origami?",
-                opciones1,
-                1 // Primera opción es correcta
-        );
-
-        PreguntaMultiple pregunta2 = new PreguntaMultiple(
-                "¿En qué país se originó el origami?",
-                opciones2,
-                1 // Primera opción es correcta
-        );
-
-        PreguntaMultiple pregunta3 = new PreguntaMultiple(
-                "¿Cuál es la figura más popular en el origami?",
-                opciones3,
-                1 // Primera opción es correcta
-        );
-
-        // Crear la lista de preguntas
-        List<PreguntaMultiple> preguntas = new ArrayList<>();
-        preguntas.add(pregunta1);
-        preguntas.add(pregunta2);
-        preguntas.add(pregunta3);
-
-        quizOM = new QuizOpcionMultiple(
-                "Quiz sobre Origami","Evaluar conocimientos básicos sobre el arte del origami",1, 30,true, 20, "Prueba", 70,preguntas, "Opción Múltiple" );
+    	res = new ArrayList<Boolean>();
+    	res.add(false);
+        act1 = new QuizOpcionMultiple("Quiz Multiple 1","Quiz que evalua los conocimientos.", 2, 40, true, 50, "Prueba", 1, "Quiz Opcion Multiple");
+		act2 = new QuizVerdaderoFalso("Quiz VoF 2", "Evaluar conocimientos", 3, 40, true, 50, "Prueba", 1, "Quiz Verdadero Falso");
+		try {
+			act2.addPregunta(new PreguntaVerdaderoFalso("Es feliz?",false));
+		} catch (TipoDePreguntaInvalidaException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	profesor = new Profesor("Amelie Gautier", "a.gautier@gmail.com", "1234", "profesor");
         estudiante = new Estudiante("Mariana Marinez", "mmar@gmail.com", "1234", "estudiante");
         learningPath = new LearningPath("Origami para principiantes","Todo lo necesario para que aprendas a hacer tus propios origamis","Aprender a hacer un grulla y un barquito de origami.",1,4,"18/11/2024","18/11/2024",1,profesor.getLogin());
-        tarea = new Tarea("Hacer una grulla","Seguir un tutorial de como hacer una grulla",2,30,true, 20,"Tarea","link al video del youtube, debe enviar una foto al correo electronico");
+        Map<Integer, Actividad> acts = new HashMap<Integer, Actividad>();
+    	
+		acts.put(1, act1);
+		acts.put(2, act2);
+		
+		learningPath.setActividades(acts);
     }
 
     @Test
@@ -85,37 +62,33 @@ class TestEstudiante {
 
     @Test
     void testObtenerActividadDePath() {
-        estudiante.inscribirLearningPath(learningPath);
-        learningPath.addActividadDeUltimas(quizOM);
+    	Progreso progresoCreado = estudiante.inscribirLearningPath(learningPath);
+    	ImprimirConsola.imprimirLearningPath(learningPath);
+        String lp2 = progresoCreado.getLearningPath();
 
-        Actividad actividadObtenida = estudiante.obtenerActividadDePath(learningPath.getTitulo(), 1);
+        Actividad actividadObtenida = estudiante.obtenerActividadDePath(lp2, 1);
         assertNotNull(actividadObtenida);
-        assertEquals(quizOM, actividadObtenida);
+        assertEquals(act1, actividadObtenida);
     }
 
     @Test
     void testIniciarActividad() throws YaExisteActividadEnProgresoException {
-    	learningPath.addActividadDeUltimas(quizOM);
     	estudiante.inscribirLearningPath(learningPath);
         progreso = estudiante.getProgresosLearningPaths().get(learningPath.getTitulo());
-        ImprimirConsola.imprimirProgreso(progreso);
         boolean inicioExitoso = estudiante.iniciarActividad(0, learningPath.getTitulo());
 
         Progreso progreso2 = estudiante.getProgresosLearningPaths().get(learningPath.getTitulo());
-        assertEquals(quizOM, progreso2.getActividadEnProgreso());
+        assertEquals(act1, progreso2.getActividadEnProgreso());
     }
 
     @Test
     void testCompletarActividad() throws Exception {
         estudiante.inscribirLearningPath(learningPath);
-        learningPath.addActividadPorPos(tarea,0);
+        learningPath.addActividadPorPos(act2,0);
         progreso = estudiante.getProgresosLearningPaths().get(learningPath.getTitulo());
 
-       progreso.empezarActividad(tarea);
-
-        Tarea tarea2 = (Tarea) tarea;
-        tarea2.setMedioEntrega("URL de entrega");
-        tarea2.setEnviado(true);
+       progreso.empezarActividad(act2);
+       act2.responderQuiz(res);
         boolean completado = estudiante.completarActividad(0,learningPath.getTitulo());
 
         assertTrue(completado,"No se completo correctamente la actividad");

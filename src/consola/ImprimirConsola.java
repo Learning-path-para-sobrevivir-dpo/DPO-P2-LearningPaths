@@ -156,7 +156,7 @@ public class ImprimirConsola {
 		}
 	}
 	
-	public void imprimirLearningPath(LearningPath lp)
+	public static void imprimirLearningPath(LearningPath lp)
 	{
 		System.out.println("Learning Path: "+ lp.getTitulo());
 		System.out.println("Descripción: "+ "\n" +lp.getDescripcion());
