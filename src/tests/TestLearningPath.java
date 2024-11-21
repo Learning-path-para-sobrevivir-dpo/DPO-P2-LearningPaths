@@ -40,7 +40,7 @@ public class TestLearningPath {
 		act2 = new QuizVerdaderoFalso("Quiz VoF 2", "Evaluar conocimientos", 3, 40, true, 50, "Prueba", 1, "Quiz Verdadero Falso");
 				
 		act3 = new Examen("Examen final", "Evalua todo el curso", 3, 120, true, 120, "Prueba", "Examen");
-		act4 = new Tarea("Tarea 1", "Practicar el conocimiento", 1, 20, false, 360, "Tarea", "Hacer los ejercicios 4-14");
+		act4 = new Tarea("Tarea 1", "Practicar el conocimiento", 1, 20, false, 360, "Tarea", "Hacer los ejercicios 4-14", "Bloque Neon");
 
 		progreso = new Progreso(path1.getTitulo(), "Shrek");
 
