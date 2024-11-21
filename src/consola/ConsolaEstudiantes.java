@@ -188,7 +188,7 @@ public class ConsolaEstudiantes {
 		try {
 			progreso.empezarActividad(actividad);
 		} catch (YaExisteActividadEnProgresoException e) {
-			e.printStackTrace();
+			System.out.println("Ya hay una actividad en progreso");
 		}
 		String tipoActividad = actividad.getTipoActividad();
 		boolean completado;
