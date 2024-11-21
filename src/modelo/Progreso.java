@@ -182,11 +182,7 @@ public class Progreso {
 		this.actividadEnProgreso = act;
 	}
 	
-	public void desempezarActividad(Actividad act) throws YaExisteActividadEnProgresoException {
-		if (this.actividadEnProgreso == null)
-		{
-			throw new YaExisteActividadEnProgresoException(this.actividadEnProgreso);
-		}
+	public void desempezarActividad() {
 		this.actividadEnProgreso = null;
 	}
 	
@@ -415,6 +411,19 @@ public class Progreso {
 	 * obligatorias completadas y el número de actividades totales completadas
 	 */
 	private void calcularProgreso() {
+		// Verifica si las listas son null y las inicializa si es necesario
+	    if (this.actPendientes == null) {
+	        this.actPendientes = new ArrayList<Actividad>();
+	    }
+	    if (this.actCompletadas == null) {
+	        this.actCompletadas = new ArrayList<Actividad>();
+	    }
+	    if (this.actObligatoriasCompletadas == null) {
+	        this.actObligatoriasCompletadas = new ArrayList<Actividad>();
+	    }
+	    if (this.actObligatoriasPendientes == null) {
+	        this.actObligatoriasPendientes = new ArrayList<Actividad>();
+	    }
 		int actTotales = this.actPendientes.size() + this.actCompletadas.size();
 		int actCompletadas = this.actCompletadas.size();
 		if (actTotales != 0)

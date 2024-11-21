@@ -224,6 +224,7 @@ public class ConsolaEstudiantes {
 		if (completado) {
 		try {
 			progreso.completarActividad(actividad);
+			progreso.desempezarActividad();
 		} catch (CompletarActividadQueNoEstaEnProgresoException e) {
 		    e.printStackTrace();
 		} catch (Exception e) {
@@ -231,8 +232,8 @@ public class ConsolaEstudiantes {
 		}}
 		else {
 			try {
-				progreso.desempezarActividad(actividad);
-			} catch (YaExisteActividadEnProgresoException e) {
+				progreso.desempezarActividad();
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			System.out.println("Hubo un error con la actividad, vuelva a intentar con otra actividad.");
@@ -528,6 +529,10 @@ public class ConsolaEstudiantes {
         if (tarea.isEnviado()) {
             System.out.println("La tarea ya ha sido enviada.");
             return false;
+        }
+        
+        if (scanner.hasNextLine()) {
+            scanner.nextLine();
         }
 
         System.out.print("Especifique el medio de entrega (por ejemplo, correo electrónico, plataforma): ");
