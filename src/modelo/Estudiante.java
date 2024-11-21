@@ -128,6 +128,44 @@ public class Estudiante extends Usuario {
 		}
         return completada;
     }
+    
+    public boolean completarActividadA(Actividad actividad, String nombrePath) {
+    	boolean completada = false;
+    	if (actividad == null)
+        {
+        	return completada;
+        }
+        String tipoActividad = actividad.getTipoActividad();
+        Progreso progreso = this.progresosLearningPaths.get(nombrePath);
+        if (tipoActividad.equals("Prueba"))
+        {
+        	Prueba prueba = (Prueba) actividad;
+        	if (prueba.isRespondida())
+        	{
+        		completada = true;
+        	}
+        } 
+        else if (tipoActividad.equals("Tarea"))
+        {
+			Tarea tarea = (Tarea) actividad;
+			if (tarea.isEnviado() && tarea.getMedioEntrega() != null)
+			{
+				completada = true;
+			}
+        }
+        else if (tipoActividad.equals("Recurso Educativo"))
+        {
+        	completada = true;
+        }
+        
+        try {
+        	completada = progreso.completarActividad(actividad);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return completada;
+    }
 
 	public Map<String, Progreso> getProgresosLearningPaths() {
 		return this.progresosLearningPaths;
