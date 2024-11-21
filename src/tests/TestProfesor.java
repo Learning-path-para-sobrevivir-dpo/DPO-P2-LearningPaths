@@ -46,7 +46,7 @@ public class TestProfesor {
 		prof = new Profesor("Amanda Fernández", "a.fernandez@gmail.com", "afer26", "profesor");
 		path1 = new LearningPath ("Algoritmos en Excel", "algoritmos en excel", "Aprender algoritmos", 3, 4, "2023-10-20", "11", 1, prof.getLogin());
 		
-		actParaClonar = new Tarea("Tarea 1", "Practicar el conocimiento", 1, 20, false, 360, "Tarea", "Hacer los ejercicios 4-14");
+		actParaClonar = new Tarea("Tarea 1", "Practicar el conocimiento", 1, 20, false, 360, "Tarea", "Hacer los ejercicios 4-14", "");
 		
 		act1 = new QuizOpcionMultiple("Quiz Multiple 1","Quiz que evalua los conocimientos.", 2, 40, true, 50, "Prueba", 1, "Quiz Opcion Multiple");
 		act2 = new QuizVerdaderoFalso("Quiz VoF 2", "Evaluar conocimientos", 3, 40, true, 50, "Prueba", 1, "Quiz Verdadero Falso");
@@ -272,7 +272,7 @@ public class TestProfesor {
 	@Test
 	public void testCrearTarea() {
 		
-		Tarea tareaParaCrear = prof.crearTarea("Tarea 2", "Tarea corta para practicar", 1, 30, false, 120, "Tarea", "Ejercicios 12-25");
+		Tarea tareaParaCrear = prof.crearTarea("Tarea 2", "Tarea corta para practicar", 1, 30, false, 120, "Tarea", "Ejercicios 12-25", "");
 		
 		
 	    List<Actividad> actsCreadas = prof.getActCreadas();
