@@ -8,13 +8,14 @@
         "estudiantes": [],
         "actividades": {
             "1": "27290200",
-            "2": "69504730"
+            "2": "69504730",
+            "3": "45020453"
         },
         "version": 1,
         "autor": "Sara García",
         "objetivo": "aprender sobre gatos",
         "progresosEstudiantiles": {},
-        "duracion": 0,
+        "duracion": 110,
         "fechaCreacion": "2024-11-20"
     },
     {

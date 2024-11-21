@@ -1,1 +1,32 @@
-[]
+[
+    {
+        "correcta": false,
+        "tipoPregunta": "PreguntaAbierta",
+        "enunciado": "Dibuje un gato.",
+        "respuesta": "No hay respuesta"
+    },
+    {
+        "opciones": [
+            "negro",
+            "amarillo",
+            "blanco",
+            "todos"
+        ],
+        "opcionCorrecta": 3,
+        "tipoPregunta": "PreguntaMultiple",
+        "enunciado": "Cual es el color más bonito en gatos?",
+        "opcionSeleccionada": -1
+    },
+    {
+        "opciones": [
+            "3",
+            "5",
+            "4",
+            "2"
+        ],
+        "opcionCorrecta": 2,
+        "tipoPregunta": "PreguntaMultiple",
+        "enunciado": "Cuantas patas tiene un gato?",
+        "opcionSeleccionada": -1
+    }
+]

@@ -726,7 +726,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 	        switch (actop) {
 	            case 1:
 
-	    			añadirPreguntaMultiple( prof,  scan,  quiz);
+	    			añadirPreguntaMultiple( prof,  scan,  quiz, datos);
 	    			break;
 	    			
 	            case 2:
@@ -784,7 +784,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 	        switch (actop) {
 	            case 1:
 
-	    			añadirPreguntaVoF( prof,  scan,  quiz);
+	    			añadirPreguntaVoF( prof,  scan,  quiz, datos);
 	    			                break;
 	            case 2:
 	                continuar = false;
@@ -799,7 +799,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 	}
 	
 	
-	private void añadirPreguntaMultiple(Profesor prof, Scanner scan, QuizOpcionMultiple quiz) {
+	private void añadirPreguntaMultiple(Profesor prof, Scanner scan, QuizOpcionMultiple quiz, ManejoDatos datos) {
 	    System.out.println("Creando pregunta de opción múltiple: ");
 	    
 	    
@@ -823,6 +823,8 @@ public class ConsolaProfesorCreadorLearningPaths {
 	    try {
 	        PreguntaMultiple pregunta = prof.crearPreguntaMultiple(contenido, opciones, correcta - 1);
 	        prof.addPreguntaQuizMultiple((QuizOpcionMultiple) quiz, pregunta);
+		    datos.addPregunta(pregunta);
+
 	        System.out.println("Pregunta de opción múltiple añadida con éxito.");
 	    } catch (ClassCastException e) {
 	        System.out.println("Error: El quiz no admite preguntas de opción múltiple.");
@@ -832,7 +834,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 	}
 
 	
-	private void añadirPreguntaVoF(Profesor prof, Scanner scan, QuizVerdaderoFalso quiz) {
+	private void añadirPreguntaVoF(Profesor prof, Scanner scan, QuizVerdaderoFalso quiz, ManejoDatos datos) {
 	    System.out.println("Creando pregunta de verdadero/falso: ");
 
 
@@ -851,6 +853,8 @@ public class ConsolaProfesorCreadorLearningPaths {
 	    try {
 	        PreguntaVerdaderoFalso pregunta = prof.crearPreguntaVoF(contenido, correcta);
 	        prof.addPreguntaVoF((QuizVerdaderoFalso) quiz, pregunta);
+		    datos.addPregunta(pregunta);
+
 	        System.out.println("Pregunta de verdadero/falso añadida con éxito.");
 	    } catch (ClassCastException e) {
 	        System.out.println("Error: El quiz no admite preguntas de verdadero/falso.");
@@ -889,7 +893,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 	        int opcion = leerEntero(scan);
 	        switch (opcion) {
 	            case 1:
-	            	añadirPreguntaAbierta(prof, scan, exam);
+	            	añadirPreguntaAbierta(prof, scan, exam, datos);
 	            	break;
 	            case 2:
 	                continuar = false;
@@ -931,7 +935,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 	        int opcion = leerEntero(scan);
 	        switch (opcion) {
 	            case 1:
-	            	añadirPreguntaAbierta(prof, scan, encuesta);
+	            	añadirPreguntaAbierta(prof, scan, encuesta, datos);
 	            	break;
 	            case 2:
 	                continuar = false;
@@ -947,7 +951,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 	}
 	
 	
-	private void añadirPreguntaAbierta(Profesor prof, Scanner scan, Object actividad) {
+	private void añadirPreguntaAbierta(Profesor prof, Scanner scan, Object actividad, ManejoDatos datos) {
 	    if (!(actividad instanceof Examen) && !(actividad instanceof Encuesta)) {
 	        System.out.println("Error: La actividad no es válida para añadir preguntas.");
 	        return;
@@ -966,13 +970,14 @@ public class ConsolaProfesorCreadorLearningPaths {
 	        if (actividad instanceof Examen) {
 	        	
 	            prof.addPreguntaExamen((Examen) actividad, pregunta);
-	            System.out.println(((Examen) actividad).getPreguntas());
 	            
 	            System.out.println("Pregunta añadida con éxito al examen.");
 	        } else if (actividad instanceof Encuesta) {
 	            prof.addPreguntaEncuesta((Encuesta) actividad, pregunta);
 	            System.out.println("Pregunta añadida con éxito a la encuesta.");
 	        }
+		    datos.addPregunta(pregunta);
+
 	    } catch (TipoDePreguntaInvalidaException e) {
 	        System.out.println("Error: No se pudo añadir la pregunta. Detalles: " + e.getMessage());
 	    }
@@ -1175,24 +1180,19 @@ public class ConsolaProfesorCreadorLearningPaths {
         	        scan.nextLine();
         	    }
 
-        	    
-            	if ((prueba.getTipoPrueba().equals( "Encuesta")) || (prueba.getTipoPrueba().equals("Examen"))){
-            		
-            		if (prueba instanceof Encuesta) {
-            			Encuesta enc = (Encuesta)prueba;
-            		
-            		añadirPreguntaAbierta(prof, scan, enc);
-            		}
-            		
-            		
-            		else if (prueba instanceof Examen) {
-            			Examen exam = (Examen)prueba;
-            			
-        	        	System.out.println(exam.getPreguntas());
 
+        	    if (prueba instanceof Encuesta) {
+        	    	Encuesta enc = (Encuesta)prueba;
+
+        	    	añadirPreguntaAbierta(prof, scan, enc, datos);
+        	    }
+
+
+        	    else if (prueba instanceof Examen) {
+        	    	Examen exam = (Examen)prueba;
+
+        	    	añadirPreguntaAbierta(prof, scan, exam, datos);
             		
-            		añadirPreguntaAbierta(prof, scan, exam);
-            		}
             	}
             	else if (prueba.getTipoPrueba().equals("Quiz Verdadero Falso")){
             		
@@ -1200,7 +1200,7 @@ public class ConsolaProfesorCreadorLearningPaths {
             			QuizVerdaderoFalso quiz = (QuizVerdaderoFalso)prueba;
             
             		
-            			añadirPreguntaVoF(prof, scan, quiz);
+            			añadirPreguntaVoF(prof, scan, quiz, datos);
             		}
             		
             	}
@@ -1208,7 +1208,7 @@ public class ConsolaProfesorCreadorLearningPaths {
             		
             		QuizOpcionMultiple quiz = (QuizOpcionMultiple)prueba;
             		
-            		añadirPreguntaMultiple(prof, scan, quiz);
+            		añadirPreguntaMultiple(prof, scan, quiz, datos);
             		
             	}
             	datos.actualizarActividad(prueba);
@@ -1245,7 +1245,9 @@ public class ConsolaProfesorCreadorLearningPaths {
     		}
     		
     		prueba1.eliminarPregunta(posPreg);
+    		System.out.println("Pregunta eliminada exitosamente.");
         	
+    		break;
         	 	
         case 9: 
         	
@@ -1447,7 +1449,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 			int i = 1;
 			Map<Integer, String> indexActs = new HashMap<Integer, String>();
 
-			System.out.println("Las actividades en el sistema son:");
+			System.out.println("Sus actividades creadas son:");
 			System.out.println("-----------------------------------------------------");
 			for (Actividad act: actividades)
 			{

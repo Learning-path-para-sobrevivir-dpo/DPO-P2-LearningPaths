@@ -149,7 +149,10 @@
         "tipoPrueba": "Quiz Opcion Multiple",
         "duracionMin": 20,
         "idEstudiante": "",
-        "preguntas": [],
+        "preguntas": [
+            "Cual es el color más bonito en gatos?",
+            "Cuantas patas tiene un gato?"
+        ],
         "id": "69504730"
     },
     {
@@ -213,7 +216,7 @@
         "tipoActividad": "Recurso Educativo",
         "completada": false,
         "objetivo": "una actividad educativa",
-        "reviews": ["La actividad es muy interesante."],
+        "reviews": [],
         "tiempoCompletarSugerido": 30,
         "duracionMin": 30,
         "idEstudiante": "",
