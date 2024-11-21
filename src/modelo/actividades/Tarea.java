@@ -19,11 +19,12 @@ public class Tarea extends Actividad{
 	}
 	
 	public Tarea(String titulo, String descripcion, int nivelDificultad, int duracionMin, boolean obligatorio,
-			int tiempoCompletarSugerido, String tipo, String contenido, String id, String idEstudiante) {
+			int tiempoCompletarSugerido, String tipo, String contenido, String id, String idEstudiante, String medio) {
 		super(titulo, descripcion, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipo, id, idEstudiante);
 		this.contenido = contenido;
 		this.enviado = false;
 		this.setTipoActividad("Tarea");
+		this.medioEntrega = medio;
 	}
 
 	public String getMedioEntrega() {

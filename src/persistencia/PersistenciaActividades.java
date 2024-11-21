@@ -131,7 +131,7 @@ public class PersistenciaActividades {
             			String contenido = jsonActividad.getString("contenido");
             			String medio = jsonActividad.getString("medioEntrega");
             			boolean enviada = jsonActividad.getBoolean("enviada");
-            			actividad = new Tarea(titulo, objetivo, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, contenido, id, idEstudiante);
+            			actividad = new Tarea(titulo, objetivo, nivelDificultad, duracionMin, obligatorio, tiempoCompletarSugerido, tipoActividad, contenido, id, idEstudiante, medio);
             			Tarea t = (Tarea) actividad;
             			t.setEnviado(enviada);
             			t.setMedioEntrega(medio);
