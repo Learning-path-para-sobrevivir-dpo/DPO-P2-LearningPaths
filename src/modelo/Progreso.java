@@ -182,6 +182,14 @@ public class Progreso {
 		this.actividadEnProgreso = act;
 	}
 	
+	public void desempezarActividad(Actividad act) throws YaExisteActividadEnProgresoException {
+		if (this.actividadEnProgreso == null)
+		{
+			throw new YaExisteActividadEnProgresoException(this.actividadEnProgreso);
+		}
+		this.actividadEnProgreso = null;
+	}
+	
 	public boolean completarActividad(Actividad act) throws CompletarActividadQueNoEstaEnProgresoException {
 		boolean completada = false;
 		if (!act.equals(this.actividadEnProgreso))

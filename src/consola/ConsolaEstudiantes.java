@@ -191,39 +191,49 @@ public class ConsolaEstudiantes {
 			e.printStackTrace();
 		}
 		String tipoActividad = actividad.getTipoActividad();
+		boolean completado;
 		switch (tipoActividad) {
 		case "Prueba":
 			String tipoPrueba = ((Prueba) actividad).getTipoPrueba();
 			switch (tipoPrueba) {
 			case "Encuesta":
-				iniciarEncuesta((Encuesta) actividad,scan); 
+				completado = iniciarEncuesta((Encuesta) actividad,scan); 
 				break;
 			case "Quiz Opcion Multiple":
-				iniciarQuizMultiple((QuizOpcionMultiple) actividad,scan); 
+				completado = iniciarQuizMultiple((QuizOpcionMultiple) actividad,scan); 
 				break;
 			case "Quiz Verdadero Falso":
-				iniciarQuizVF((QuizVerdaderoFalso) actividad,scan);
+				completado = iniciarQuizVF((QuizVerdaderoFalso) actividad,scan);
 				break;
 			case "Examen":
-				iniciarExamen((Examen) actividad,scan); 
+				completado = iniciarExamen((Examen) actividad,scan); 
 				break;
 			default:
 				throw new IllegalArgumentException("Tipo de prueba desconocido: " + tipoPrueba);
 			}
 			break;
 		case "Tarea":
-			responderTarea((Tarea)actividad,scan);
+			completado = responderTarea((Tarea)actividad,scan);
 			break;
 		case "Recurso Educativo":
-			completarRecurso((RecursoEducativo) actividad);
+			completado = completarRecurso((RecursoEducativo) actividad);
 			break;
 		default:
 			throw new IllegalArgumentException("Tipo de actividad desconocido: " + tipoActividad);
 		}
+		if (completado) {
 		try {
 			progreso.completarActividad(actividad);
 		} catch (CompletarActividadQueNoEstaEnProgresoException e) {
 			e.printStackTrace();
+		}}
+		else {
+			try {
+				progreso.desempezarActividad(actividad);
+			} catch (YaExisteActividadEnProgresoException e) {
+				e.printStackTrace();
+			}
+			System.out.println("Hubo un error con la actividad, vuelva a intentar con otra actividad.");
 		}
 		return;
 	}
@@ -342,13 +352,18 @@ public class ConsolaEstudiantes {
 		return act;
 	}
 	
-	public void iniciarQuizMultiple(QuizOpcionMultiple quiz, Scanner scanner) 
+	public boolean iniciarQuizMultiple(QuizOpcionMultiple quiz, Scanner scanner) 
 	{
         List<Integer> respuestas = new ArrayList<>();
 
         System.out.println("Quiz: " + quiz.getTitulo());
         System.out.println("Objetivo: " + quiz.getObjetivo());
         System.out.println("-----------------------------------");
+        
+        if (quiz.getPreguntas() == null) {
+        	System.out.println("Este quiz no tiene preguntas.");
+        	return false;
+        }
 
         // Mostrar todas las preguntas y opciones primero
         for (PreguntaMultiple pregunta : quiz.getPreguntas()) {
@@ -390,10 +405,10 @@ public class ConsolaEstudiantes {
             System.out.println("Número de respuestas incorrecto. Inténtalo de nuevo.");
         }
         
-        return;
+        return true;
     }
 	
-	public void iniciarQuizVF(QuizVerdaderoFalso quiz, Scanner scanner) 
+	public boolean iniciarQuizVF(QuizVerdaderoFalso quiz, Scanner scanner) 
 	{
         List<Boolean> respuestas = new ArrayList<>();
 
@@ -401,6 +416,11 @@ public class ConsolaEstudiantes {
         System.out.println("Objetivo: " + quiz.getObjetivo());
         System.out.println("-----------------------------------");
 
+        if (quiz.getPreguntas() == null) {
+        	System.out.println("Este quiz no tiene preguntas.");
+        	return false;
+        }
+        
         // Mostrar todas las preguntas 
         for (PreguntaVerdaderoFalso pregunta : quiz.getPreguntas()) {
             System.out.println("Pregunta " + pregunta.getNumero() + ": " + pregunta.getEnunciado());
@@ -436,16 +456,21 @@ public class ConsolaEstudiantes {
             System.out.println("Número de respuestas incorrecto. Inténtalo de nuevo.");
         }
         
-        return;
+        return true;
     }
 
-	public void iniciarEncuesta(Encuesta quiz, Scanner scanner) 
+	public boolean iniciarEncuesta(Encuesta quiz, Scanner scanner) 
 	{
         List<String> respuestas = new ArrayList<>();
 
         System.out.println("Quiz: " + quiz.getTitulo());
         System.out.println("Descripción: " + quiz.getObjetivo());
         System.out.println("-----------------------------------");
+        
+        if (quiz.getPreguntas() == null) {
+        	System.out.println("Este quiz no tiene preguntas.");
+        	return false;
+        }
 
         // Mostrar todas las preguntas de verdadero/falso
         for (PreguntaAbierta pregunta : quiz.getPreguntas()) {
@@ -471,10 +496,10 @@ public class ConsolaEstudiantes {
             System.out.println("Número de respuestas incorrecto. Inténtalo de nuevo.");
         }
         
-        return;
+        return true;
     }
 
-	private void iniciarExamen(Examen examen, Scanner scanner) 
+	private boolean iniciarExamen(Examen examen, Scanner scanner) 
 	{	
         System.out.println("Respondiendo el examen...");
         List<String> respuestas = new ArrayList<>();
@@ -484,19 +509,23 @@ public class ConsolaEstudiantes {
             respuestas.add(scanner.nextLine());
         }
         
+        if (examen.getPreguntas() == null) {
+        	System.out.println("Este examen no tiene preguntas.");
+        	return false;
+        }
         try {
             examen.responderExamen(respuestas);
             System.out.println("Examen respondido exitosamente.");
         } catch (RespuestasInconsistentesPruebaException e) {
             System.out.println("Error: " + e.getMessage());
         }
-        return;
+        return true;
     }
 
-	private void responderTarea(Tarea tarea, Scanner scanner) {
+	private boolean responderTarea(Tarea tarea, Scanner scanner) {
         if (tarea.isEnviado()) {
             System.out.println("La tarea ya ha sido enviada.");
-            return;
+            return false;
         }
 
         System.out.print("Especifique el medio de entrega (por ejemplo, correo electrónico, plataforma): ");
@@ -505,17 +534,18 @@ public class ConsolaEstudiantes {
 
         tarea.setEnviado(true);
         System.out.println("La tarea ha sido marcada como enviada.");
-        return;
+        return true;
     }
 
-	private void completarRecurso(RecursoEducativo recursoEducativo) {
+	private boolean completarRecurso(RecursoEducativo recursoEducativo) {
         if (recursoEducativo.isCompletada()) {
             System.out.println("El recurso ya está completado.");
+            return false;
         } else {
             recursoEducativo.completarActividad();
             System.out.println("El recurso ha sido marcado como completado.");
         }
-        return;
+        return true;
     }
 	
 }
