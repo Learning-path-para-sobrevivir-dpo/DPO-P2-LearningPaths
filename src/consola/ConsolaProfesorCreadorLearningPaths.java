@@ -185,6 +185,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 	    System.out.println("5. Clonar actividad");
 	    System.out.println("6. Crear actividad");
 	    System.out.println("7. Editar Actividad");
+	    System.out.println("8. Añadir reseña a Actividad");
 
 	    System.out.println("0. Guardar cambios y salir de la aplicacion");
 	    
@@ -232,6 +233,12 @@ public class ConsolaProfesorCreadorLearningPaths {
                 System.out.println(e.getMessage()); // Mensaje de error
             }
 			break;
+			
+            
+        case 8:   	
+        	añadirReseña(prof, scan, datos);
+            break;
+            
         	
 						
         case 0:
@@ -251,6 +258,45 @@ public class ConsolaProfesorCreadorLearningPaths {
 	
 
 
+
+	private void añadirReseña(Profesor prof, Scanner scan, ManejoDatos datos) throws LearningPathOActividadNoEncontradoException {
+		
+		String contenido = "";
+		
+		System.out.println("Para escoger la actividad que se desea reseñar: ");
+		Actividad act = seleccionarActividadDatos(prof,scan, datos);
+		
+
+	    if (scan.hasNextLine()) {
+	        scan.nextLine();
+	    }
+		
+		while (contenido.trim().isEmpty())
+		{
+			System.out.println("Ingrese el contenido de la reseña: ");
+			contenido = scan.nextLine();
+		}
+
+
+		System.out.println("1. Añadir rating (true/false)");
+		boolean hasRating = leerBooleano(scan);
+			
+		if (hasRating) {
+			double rating = leerDouble(scan);
+			Review rev = prof.addReviewRating(contenido, rating);
+			act.addReview(rev);
+		}
+		else {
+			Review rev= prof.addReview(contenido);
+			act.addReview(rev);
+
+		}
+		
+		datos.actualizarActividad(act);
+		datos.actualizarUsuario(prof);
+
+		
+	}
 
 	/**
 	 * Método para ver todos los Learning Paths creados por un profesor
@@ -1275,6 +1321,16 @@ public class ConsolaProfesorCreadorLearningPaths {
 	            return Float.parseFloat(scan.nextLine());
 	        } catch (NumberFormatException e) {
 	            System.out.print("Por favor, ingresa un número decimal válido (float): ");
+	        }
+	    }
+	}
+
+	private static double leerDouble(Scanner scan) {
+	    while (true) {
+	        try {
+	            return Double.parseDouble(scan.nextLine());
+	        } catch (NumberFormatException e) {
+	            System.out.print("Por favor, ingresa un número decimal válido (double): ");
 	        }
 	    }
 	}

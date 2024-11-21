@@ -81,7 +81,7 @@
         "tipoPrueba": "Quiz Verdadero Falso",
         "duracionMin": 20,
         "idEstudiante": "",
-        "preguntas": ["El color amarillo es muy bonito!!!"],
+        "preguntas": [],
         "id": "13625160"
     },
     {
@@ -213,7 +213,7 @@
         "tipoActividad": "Recurso Educativo",
         "completada": false,
         "objetivo": "una actividad educativa",
-        "reviews": [],
+        "reviews": ["La actividad es muy interesante."],
         "tiempoCompletarSugerido": 30,
         "duracionMin": 30,
         "idEstudiante": "",
