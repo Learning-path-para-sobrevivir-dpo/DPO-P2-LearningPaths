@@ -642,9 +642,6 @@ public class ConsolaProfesorCreadorLearningPaths {
 
 	private void crearQuizMultiple(Profesor prof, Scanner scan, ManejoDatos datos, String titulo, String descripcion, int niv, int dur, boolean obligatorio, int tiempo, String tipo) {
 
-	    if (scan.hasNextLine()) {
-	        scan.nextLine();
-	    }
 
 		String tipoPrueba = "Quiz Opcion Multiple";
 
@@ -739,11 +736,8 @@ public class ConsolaProfesorCreadorLearningPaths {
 	
 	private void añadirPreguntaMultiple(Profesor prof, Scanner scan, QuizOpcionMultiple quiz) {
 	    System.out.println("Creando pregunta de opción múltiple: ");
-	
-
-	    if (scan.hasNextLine()) {
-	        scan.nextLine();
-	    }
+	    
+	    
 	    // Leer contenido de la pregunta
 	    System.out.print("Ingrese el contenido de la pregunta: ");
 	    String contenido = scan.nextLine();
@@ -776,10 +770,6 @@ public class ConsolaProfesorCreadorLearningPaths {
 	private void añadirPreguntaVoF(Profesor prof, Scanner scan, QuizVerdaderoFalso quiz) {
 	    System.out.println("Creando pregunta de verdadero/falso: ");
 
-
-	    if (scan.hasNextLine()) {
-	        scan.nextLine();
-	    }
 	    
 	    // Leer contenido de la pregunta
 	    System.out.print("Ingrese el contenido de la pregunta: ");
@@ -952,49 +942,15 @@ public class ConsolaProfesorCreadorLearningPaths {
 	
 	private void editarActividad(Profesor prof, ImprimirConsola imprimir, Scanner scan, ManejoDatos datos) throws LearningPathOActividadNoEncontradoException {
 
-		
-	    List<Actividad> acts = prof.getActCreadas();
-
-	    if (acts.isEmpty()) {
-	        throw new LearningPathOActividadNoEncontradoException("No ha creado ninguna Actividad.");
-	    }
-
-
-	    System.out.println("Sus Actividades creadas son:");
-	    for (Actividad act : acts) {
-	        System.out.println("- " + act.getTitulo());
-	    }
-	    
-	    
-
-	    String nomConsultar = "";
-	    Actividad seleccionado = null;
+	    Actividad seleccionado = seleccionarActividadProfesor(prof,scan);
 
 	    if (scan.hasNextLine()) {
 	        scan.nextLine();
 	    }
 	    
-	    while (nomConsultar.trim().isEmpty()) {
-	        System.out.println("Actividad para editar: ");
-	        nomConsultar = scan.nextLine().trim();
-	        
-
-	    }
-
-	    for (Actividad act : acts) {
-	    	if(act.getTitulo().equals(nomConsultar)) {
-	    		seleccionado = act;
-	    	}
-	    }
-	    	
-	    if (seleccionado instanceof Examen) {
-	    	
-	    	System.out.println(((Examen)seleccionado).getPreguntas());
-	    	
-	    }
-	    		
+		
 	    if (seleccionado == null) {
-	    	throw new LearningPathOActividadNoEncontradoException("El Learning Path '" + nomConsultar + "' no existe.");
+	    	throw new LearningPathOActividadNoEncontradoException("No hay actividad.");
 		        }
 	    	
 		       
@@ -1392,6 +1348,51 @@ public class ConsolaProfesorCreadorLearningPaths {
 	}
 	
 
+	
+	private Actividad seleccionarActividadProfesor(Profesor prof, Scanner scan) throws LearningPathOActividadNoEncontradoException
+	{
+		
+		Actividad actSeleccionada = null;
+		List<Actividad> actividades = prof.getActCreadas();
+		if (!actividades.isEmpty())
+		{
+			int i = 1;
+			Map<Integer, String> indexActs = new HashMap<Integer, String>();
+
+			System.out.println("Las actividades en el sistema son:");
+			System.out.println("-----------------------------------------------------");
+			for (Actividad act: actividades)
+			{
+				String nombreAct = act.getTitulo();
+				System.out.println(Integer.toString(i) + ". "+ nombreAct);
+				indexActs.put(i, nombreAct);
+				i++;
+			}
+		
+			System.out.println("-----------------------------------------------------");
+			System.out.println("\n Seleccione el número de Actividad que quiere: ");
+			int op = scan.nextInt();
+			while(!indexActs.containsKey(op))
+			{
+				System.out.println("Opción invalida");
+				System.out.println("Ingrese el número del Learning Path que desea: ");
+				op = scan.nextInt();
+			}
+			String nombreSeleccionado = indexActs.get(op);
+			for (Actividad act : actividades) {
+				if (act.getTitulo().equals(nombreSeleccionado)){
+					actSeleccionada = act;
+				}
+			}
+			
+
+		}
+		else
+		{
+	        throw new LearningPathOActividadNoEncontradoException("No ha creado ningún Learning Path.");
+		}
+		return actSeleccionada;
+	}
 	
 	
 }

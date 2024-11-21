@@ -120,6 +120,23 @@
     },
     {
         "estado": "Sin completar",
+        "calificacionMinima": 1,
+        "nivelDificultad": 1,
+        "titulo": "Quiz gatos",
+        "obligatorio": true,
+        "tipoActividad": "Prueba",
+        "completada": false,
+        "objetivo": "quiz de gatos",
+        "reviews": [],
+        "tiempoCompletarSugerido": 20,
+        "tipoPrueba": "Quiz Opcion Multiple",
+        "duracionMin": 20,
+        "idEstudiante": "",
+        "preguntas": ["Cuantas patas tienen los gatos?"],
+        "id": "69504730"
+    },
+    {
+        "estado": "Sin completar",
         "contenido": "describe el arte ",
         "nivelDificultad": 1,
         "titulo": "El arte en tu vida",
