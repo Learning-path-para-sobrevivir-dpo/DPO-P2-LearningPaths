@@ -48,7 +48,7 @@ public class TestProgreso {
 		act1 = new RecursoEducativo("Tips para no perder la cabeza haciendo tests", "No perder la cabeza", 3, 10, true, 20, "Recurso Educativo", "Tutorial", "Haz click en el enlace", "https://www.youtube.com/watch?v=dQw4w9WgXcQ&pp=ygUJcmljayByb2xs");
 		lpPrueba.addActividadDeUltimas(act1);
 		
-		act2 = new Tarea("Ponerle un 5 a este proyecto", "Ponganos un 5, pliss :)", 1, 5, true, 5, "Tarea", "En bloque neon nos ponen 5");
+		act2 = new Tarea("Ponerle un 5 a este proyecto", "Ponganos un 5, pliss :)", 1, 5, true, 5, "Tarea", "En bloque neon nos ponen 5", "");
 		lpPrueba.addActividadDeUltimas(act2);
 		
 		act3 = new QuizOpcionMultiple("El quiz más botado de DPOO", "Si no la se, la C", 1, 20, false, 30, "Prueba", 4, "Quiz Opcion Multiple");
@@ -411,7 +411,6 @@ public class TestProgreso {
 		
 		assertTrue(progreso.getActPendientes().contains(actCompletar), "No se actualizaron las listas de actividades pendientes y completadas como era de esperarse");
 		assertFalse(progreso.getActObligatoriasPendientes().contains(actCompletar), "No se actualizaron las listas de actividades pendientes y completadas como era de esperarse");
-		
 		assertTrue(actCompletar.isCompletada(), "No se actualizó el estado de la actividad");
 	}
 	

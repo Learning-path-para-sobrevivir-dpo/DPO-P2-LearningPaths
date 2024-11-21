@@ -28,7 +28,7 @@ public class TestTarea {
 	@BeforeEach
 	public void setUp() {
 		
-		tarea = new Tarea ("Tarea", "Practicar conocimientos", 1, 30, true,  360, "Tarea",  "Hacer 5 ejercicios.");
+		tarea = new Tarea ("Tarea", "Practicar conocimientos", 1, 30, true,  360, "Tarea",  "Hacer 5 ejercicios.", "");
 		rev1 = new Review("2023-10-11", "Me encantó el video", "Reseña", 5);
 	
 		rev2 = new Review("2023-9-10", "Muy interesante", "Reseña", 4);

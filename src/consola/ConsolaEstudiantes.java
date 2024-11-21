@@ -306,8 +306,36 @@ public class ConsolaEstudiantes {
 	 */
 	private void crearUsuario(ManejoDatos datos, Scanner scan)
 	{
-		System.out.println("");
+	    String login = "";
+	    String password = "";
+	    String correo = "";
+
+	    if (scan.hasNextLine()) {
+	        scan.nextLine();
+	    }
+
+	    while (login.trim().isEmpty()) {
+	        System.out.println("Ingrese su nombre de usuario: ");
+	        login = scan.nextLine();
+	    }
+
+	    while (password.trim().isEmpty()) {
+	        System.out.println("Ingrese su contraseña: ");
+	        password = scan.nextLine();
+	    }
+	    
+	    while (correo.trim().isEmpty()) {
+	        System.out.println("Ingrese su correo: ");
+	        correo = scan.nextLine();
+	    }
+
+	    Usuario usuario = new Profesor (login, correo, password, "Estudiante");
+	    datos.addUsuario(usuario);
+
+	    System.out.println("El usuario fue creado exitosamente!!");
+	    
 	}
+
 
 	private LearningPath seleccionarLearningPathD(ManejoDatos datos, ImprimirConsola imprimir, Scanner scan)
 	{
