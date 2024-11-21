@@ -225,7 +225,9 @@ public class ConsolaEstudiantes {
 		try {
 			progreso.completarActividad(actividad);
 		} catch (CompletarActividadQueNoEstaEnProgresoException e) {
-			e.printStackTrace();
+		    e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("Hubo un error al calcular el progreso.");
 		}}
 		else {
 			try {
@@ -360,7 +362,7 @@ public class ConsolaEstudiantes {
         System.out.println("Objetivo: " + quiz.getObjetivo());
         System.out.println("-----------------------------------");
         
-        if (quiz.getPreguntas() == null) {
+        if (quiz.getPreguntas().isEmpty()) {
         	System.out.println("Este quiz no tiene preguntas.");
         	return false;
         }
@@ -416,7 +418,7 @@ public class ConsolaEstudiantes {
         System.out.println("Objetivo: " + quiz.getObjetivo());
         System.out.println("-----------------------------------");
 
-        if (quiz.getPreguntas() == null) {
+        if (quiz.getPreguntas().isEmpty()) {
         	System.out.println("Este quiz no tiene preguntas.");
         	return false;
         }
@@ -467,7 +469,7 @@ public class ConsolaEstudiantes {
         System.out.println("Descripción: " + quiz.getObjetivo());
         System.out.println("-----------------------------------");
         
-        if (quiz.getPreguntas() == null) {
+        if (quiz.getPreguntas().isEmpty()) {
         	System.out.println("Este quiz no tiene preguntas.");
         	return false;
         }
@@ -509,7 +511,7 @@ public class ConsolaEstudiantes {
             respuestas.add(scanner.nextLine());
         }
         
-        if (examen.getPreguntas() == null) {
+        if (examen.getPreguntas().isEmpty()) {
         	System.out.println("Este examen no tiene preguntas.");
         	return false;
         }
