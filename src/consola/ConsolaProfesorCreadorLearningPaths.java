@@ -642,10 +642,22 @@ public class ConsolaProfesorCreadorLearningPaths {
 
 	private void crearQuizMultiple(Profesor prof, Scanner scan, ManejoDatos datos, String titulo, String descripcion, int niv, int dur, boolean obligatorio, int tiempo, String tipo) {
 
+		
+		System.out.println("Para crear un Quiz, proporciona la siguiente información:");
+
+	    if (scan.hasNextLine()) {
+	        scan.nextLine();
+	    }
+
+
+		System.out.print("Calificación mínima: ");
+		float califMin = leerFloat(scan);
+
+
 
 		String tipoPrueba = "Quiz Opcion Multiple";
 
-		QuizOpcionMultiple quiz = prof.crearQuizMultiple(titulo, descripcion, niv, dur, obligatorio, tiempo, tipo, tipoPrueba, niv);
+		QuizOpcionMultiple quiz = prof.crearQuizMultiple(titulo, descripcion, niv, dur, obligatorio, tiempo, tipo, tipoPrueba, califMin);
 		
 		datos.addActividad(quiz);
 		System.out.println("¡Quiz creado con éxito!");
@@ -687,15 +699,22 @@ public class ConsolaProfesorCreadorLearningPaths {
 
 	private void crearQuizVoF(Profesor prof, Scanner scan, ManejoDatos datos, String titulo, String descripcion, int niv, int dur, boolean obligatorio, int tiempo, String tipo) {
 		
+		System.out.println("Para crear un Quiz, proporciona la siguiente información:");
 
 	    if (scan.hasNextLine()) {
 	        scan.nextLine();
 	    }
 
+
+		System.out.print("Calificación mínima: ");
+		float califMin = leerFloat(scan);
+
+
+		
 		String tipoPrueba = "Quiz Verdadero Falso";
 
 
-		QuizVerdaderoFalso quiz = prof.crearQuizVoF(titulo, descripcion, niv, dur, obligatorio, tiempo, tipo, tipoPrueba, niv);
+		QuizVerdaderoFalso quiz = prof.crearQuizVoF(titulo, descripcion, niv, dur, obligatorio, tiempo, tipo, tipoPrueba, califMin);
 		
 		
 		datos.addActividad(quiz);
@@ -770,7 +789,10 @@ public class ConsolaProfesorCreadorLearningPaths {
 	private void añadirPreguntaVoF(Profesor prof, Scanner scan, QuizVerdaderoFalso quiz) {
 	    System.out.println("Creando pregunta de verdadero/falso: ");
 
-	    
+
+	    if (scan.hasNextLine()) {
+	        scan.nextLine();
+	    }
 	    // Leer contenido de la pregunta
 	    System.out.print("Ingrese el contenido de la pregunta: ");
 	    String contenido = scan.nextLine();
@@ -838,10 +860,6 @@ public class ConsolaProfesorCreadorLearningPaths {
 	
 	private void crearEncuesta(Profesor prof, Scanner scan, ManejoDatos datos, String titulo, String descripcion, int niv, int dur, boolean obligatorio, int tiempo, String tipo) {
 		
-
-	    if (scan.hasNextLine()) {
-	        scan.nextLine();
-	    }
 
 		String tipoPrueba = "Encuesta";
 
@@ -930,8 +948,12 @@ public class ConsolaProfesorCreadorLearningPaths {
 
 
 
+		System.out.print("Medio de entrega de la tarea: ");
+		String medioEntrega = scan.nextLine();
+
+
 		// Llamar al método del profesor para crear la tarea
-		Tarea tarea = prof.crearTarea(titulo, descripcion, niv, dur, obligatorio, tiempo, tipo, contenido);
+		Tarea tarea = prof.crearTarea(titulo, descripcion, niv, dur, obligatorio, tiempo, tipo, contenido, medioEntrega);
 
 		datos.addActividad(tarea);
 		datos.actualizarUsuario(prof);
@@ -1245,6 +1267,16 @@ public class ConsolaProfesorCreadorLearningPaths {
 				System.out.print("Por favor, ingresa un número entero válido: ");
 			}
 		}
+	}
+	
+	private static float leerFloat(Scanner scan) {
+	    while (true) {
+	        try {
+	            return Float.parseFloat(scan.nextLine());
+	        } catch (NumberFormatException e) {
+	            System.out.print("Por favor, ingresa un número decimal válido (float): ");
+	        }
+	    }
 	}
 
 
