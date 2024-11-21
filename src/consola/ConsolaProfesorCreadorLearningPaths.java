@@ -451,15 +451,15 @@ public class ConsolaProfesorCreadorLearningPaths {
 	}
 
 	
-	public void clonarActividad(Profesor prof, ImprimirConsola imprimir, Scanner scan, ManejoDatos datos) {
-	    String nomAct = "";
-
-	    while (nomAct.trim().isEmpty()) {
-	        System.out.println("Ingrese el nombre de la actividad que desea clonar: ");
-	        nomAct = scan.nextLine();
+	public void clonarActividad(Profesor prof, ImprimirConsola imprimir, Scanner scan, ManejoDatos datos) throws LearningPathOActividadNoEncontradoException {
+	    
+		if (scan.hasNextLine()) {
+	        scan.nextLine();
 	    }
 	    
-	    Actividad actClonar = datos.getActividad(nomAct);
+		System.out.println("Seleccione la actividad que desea clonar: ");
+		
+	    Actividad actClonar = seleccionarActividadDatos(prof,scan,datos);
 
 		
 		Actividad actClonada = prof.clonarActividad(actClonar);
@@ -1310,7 +1310,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 			while(!indexActs.containsKey(op))
 			{
 				System.out.println("Opción invalida");
-				System.out.println("Ingrese el número del Learning Path que desea: ");
+				System.out.println("Ingrese el número de la Actividad que desea: ");
 				op = scan.nextInt();
 			}
 			String nombreSeleccionado = indexActs.get(op);
@@ -1357,7 +1357,7 @@ public class ConsolaProfesorCreadorLearningPaths {
 			while(!indexActs.containsKey(op))
 			{
 				System.out.println("Opción invalida");
-				System.out.println("Ingrese el número del Learning Path que desea: ");
+				System.out.println("Ingrese el número de la Actividad Path que desea: ");
 				op = scan.nextInt();
 			}
 			String nombreSeleccionado = indexActs.get(op);
