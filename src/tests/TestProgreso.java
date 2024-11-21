@@ -411,7 +411,6 @@ public class TestProgreso {
 		
 		assertTrue(progreso.getActPendientes().contains(actCompletar), "No se actualizaron las listas de actividades pendientes y completadas como era de esperarse");
 		assertFalse(progreso.getActObligatoriasPendientes().contains(actCompletar), "No se actualizaron las listas de actividades pendientes y completadas como era de esperarse");
-		
 		assertTrue(actCompletar.isCompletada(), "No se actualizó el estado de la actividad");
 	}
 	
